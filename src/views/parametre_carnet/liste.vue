@@ -4,7 +4,7 @@
       <a-col
         :span="24"
         :lg="12"
-        :xl="6"
+        :xl="8"
         class="mb-24"
         v-for="(stat, index) in stats"
         :key="index"
@@ -37,7 +37,7 @@
               style="margin-left: 20px"
               @click="showModal"
             >
-              Créer un produit
+              Créer un parametre de mise carnet
             </a-button>
           </div>
 
@@ -59,7 +59,7 @@
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="12" :md="12" class="">
-                  <a-form-item class="" label="Nom du produit" :colon="false">
+                  <a-form-item class="" label="Libelle de mise" :colon="false">
                     <a-input
                       v-decorator="[
                         'libelle',
@@ -67,13 +67,13 @@
                           rules: [
                             {
                               required: true,
-                              message: 'Nom du produit est vide!',
+                              message: 'Libelle de mise est vide!',
                             },
                           ],
                         },
                       ]"
                       type="text"
-                      placeholder="Nom produit"
+                      placeholder="Libelle de mise"
                     />
                   </a-form-item>
                 </a-col>
@@ -81,23 +81,23 @@
                 <a-col :span="12" :md="12" class="">
                   <a-form-item
                     class=""
-                    label="Montant du produit"
+                    label="Jour"
                     :colon="false"
                   >
                     <a-input
                       v-decorator="[
-                        'montant',
+                        'jour',
                         {
                           rules: [
                             {
                               required: true,
-                              message: 'Montant du produit est vide!',
+                              message: 'Jour est vide!',
                             },
                           ],
                         },
                       ]"
                       type="text"
-                      placeholder="Montant produit"
+                      placeholder="Jour"
                     />
                   </a-form-item>
                 </a-col>
@@ -189,7 +189,7 @@ export default {
   mounted() {
     this.stats = [
       {
-        title: "Nombre de produit",
+        title: "Nombre de mise carnet",
         value: 0,
         prefix: "",
         suffix: "",
@@ -209,14 +209,14 @@ export default {
         scopedSlots: { customRender: "name" },
       },
       {
-        title: "Libelle produit",
+        title: "Libelle",
         dataIndex: "libelle",
         key: "libelle",
       },
       {
-        title: "Montant (FCFA)",
-        dataIndex: "montant",
-        key: "montant",
+        title: "Jour",
+        dataIndex: "jour",
+        key: "jour",
       },
       {
         title: "Action",
@@ -241,9 +241,9 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.get(`${this.callback}/type-carnet/all`, headers).then(
+      this.$http.get(`${this.callback}/mise-carnet/all`, headers).then(
         (response) => {
-          let data = response.body.typeCarnets;
+          let data = response.body.miseCarnets;
 
           this.stats[0].value = data.length;
 
@@ -254,7 +254,7 @@ export default {
               key: data[i].id,
               createdAt: new Date(data[i].createdAt).toLocaleString(),
               libelle: data[i].libelle,
-              montant: data[i].montant,
+              jour: data[i].jour,
             });
           }
         },
@@ -383,7 +383,8 @@ export default {
               this.confirmLoading = false;
               this.visible = false;
               this.form.resetFields();
-            }, 1500);
+              this.listeProduit();
+            }, 1000);
           } else {
             this.showAlert("error", "Erreur", "Code secret incorrect");
           }
@@ -405,18 +406,17 @@ export default {
 
       let data_create = {
         libelle: data.libelle,
-        montant: parseInt(data.montant),
+        jour: parseInt(data.jour),
       };
 
       this.$http
-        .post(`${this.callback}/type-carnet/create`, data_create, headers)
+        .post(`${this.callback}/mise-carnet/create`, data_create, headers)
         .then(
           (response) => {
             console.log(response);
             this.showAlert("success", "Success", "Produit creer avec success");
 
             this.form.resetFields();
-            this.listeProduit();
           },
           (response) => {
             this.showAlert("error", "Error", response.body.message);

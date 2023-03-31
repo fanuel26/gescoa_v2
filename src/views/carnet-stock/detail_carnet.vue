@@ -24,7 +24,7 @@
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
                   <a-descriptions
-                    v-bind:title="'Date de creation: ' + new Date(carnet.created_at).toLocaleString()"
+                    v-bind:title="'Date de creation: ' + new Date(carnet.createdAt).toLocaleString()"
                     :column="2"
                   >
                     <a-descriptions-item label="Nom du carnet">

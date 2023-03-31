@@ -39,7 +39,7 @@
                 </a-button></router-link
               >
 
-              <a-button type="primary" @click="showModal">
+              <a-button type="primary" style="margin-left: 10px;" @click="showModal">
                 Créer une agence
               </a-button>
             </div>
@@ -65,6 +65,33 @@
                 >
                   <a-row type="flex" :gutter="24">
                     <!-- Billing Information Column -->
+
+                    <a-col :span="12" :md="12" class="">
+                      <a-form-item class="" label="Ville" :colon="false">
+                        <a-select
+                          v-decorator="[
+                            'ville',
+                            {
+                              initialValue: ville,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'ville est vide!',
+                                },
+                              ],
+                            },
+                          ]"
+                        >
+                          <a-select-option
+                            v-for="ville in villes"
+                            :value="ville.id"
+                            :key="ville.id"
+                          >
+                            {{ ville.libelle }}
+                          </a-select-option>
+                        </a-select>
+                      </a-form-item>
+                    </a-col>
                     <a-col :span="12" :md="12" class="">
                       <a-form-item label="Nom du agence" :colon="false">
                         <a-input
@@ -86,60 +113,6 @@
                       </a-form-item>
                     </a-col>
 
-                    <a-col :span="12" :md="12" class=""></a-col>
-                    <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Ville" :colon="false">
-                        <a-select
-                          v-decorator="[
-                            'ville',
-                            {
-                              initialValue: ville,
-                              rules: [
-                                {
-                                  required: true,
-                                  message: 'ville est vide!',
-                                },
-                              ],
-                            },
-                          ]"
-                          @change="listeQuartier"
-                        >
-                          <a-select-option
-                            v-for="ville in villes"
-                            :value="ville.id"
-                            :key="ville.id"
-                          >
-                            {{ ville.libelle }}
-                          </a-select-option>
-                        </a-select>
-                      </a-form-item>
-                    </a-col>
-                    <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Quartier" :colon="false">
-                        <a-select
-                          v-decorator="[
-                            'quartier',
-                            {
-                              initialValue: quartier,
-                              rules: [
-                                {
-                                  required: true,
-                                  message: 'quartier est vide!',
-                                },
-                              ],
-                            },
-                          ]"
-                        >
-                          <a-select-option
-                            v-for="quartier in quartiers"
-                            :value="quartier.id"
-                            :key="quartier.id"
-                          >
-                            {{ quartier.libelle }}
-                          </a-select-option>
-                        </a-select>
-                      </a-form-item>
-                    </a-col>
                   </a-row>
                 </a-form>
               </a-col>
@@ -156,7 +129,7 @@
               </a-col>
             </a-row>
           </a-modal>
-          <a-table :columns="columns" :data-source="data" :pagination="false">
+          <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
               <router-link
                 class="mx-2"
@@ -168,7 +141,7 @@
             </template>
           </a-table>
 
-          <div class="d-flex justify-content-between align-items-center mt-4">
+          <!-- <div class="d-flex justify-content-between align-items-center mt-4">
             <div>
               <p>Page {{ page }}/{{ total_page }}</p>
             </div>
@@ -176,7 +149,7 @@
               <a-button class="mx-2" @click="preview()"> Retour </a-button>
               <a-button class="mx-2" @click="next()"> Suivant </a-button>
             </div>
-          </div>
+          </div> -->
         </a-card>
       </a-col>
     </a-row>
@@ -239,8 +212,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -282,9 +255,9 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/ville/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/ville/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.allVille;
 
           this.villes = data;
         },
@@ -294,50 +267,29 @@ export default {
       );
     },
 
-    listeQuartier(id) {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.$http.post(`${this.callback}/quartier/liste?all=true`, {}, headers).then(
-        (response) => {
-          let data = response.body.data;
-
-          this.quartiers = [];
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].id_ville == id) {
-              this.quartiers.push(data[i]);
-            }
-          }
-        },
-        (response) => {
-          this.showAlert("error", "Erreur", response.body.message);
-        }
-      );
-    },
 
     listeAgence() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
+
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/agence/list?row=${this.row}&page=${this.page}`, {}, headers).then(
+      this.$http.get(`${this.callback}/agence/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.agences;
 
           console.log(response)
 
-          this.stats[0].value = response.body.total;
-          this.total_page = response.body.total_pages;
+          this.stats[0].value = data.length;
           this.data = [];
           for (let i = data.length - 1; i >= 0; i--) {
             this.data.push({
               key: data[i].id,
-              created_at: new Date(data[i].created_at).toLocaleString(),
-              nom: data[i].nom_agence,
-              ville: data[i].quartier.ville.libelle,
-              quartier: data[i].quartier.libelle,
+              createdAt: new Date(data[i].createdAt).toLocaleString(),
+              nom: data[i].libelle,
+              ville: data[i].ville,
+              quartier: data[i].quartier?.libelle,
             });
 
             this.data_s = this.data;
@@ -366,7 +318,7 @@ export default {
           for (let i = data.length - 1; i >= 0; i--) {
             this.data.push({
               key: data[i].id,
-              created_at: new Date(data[i].created_at).toLocaleString(),
+              createdAt: new Date(data[i].createdAt).toLocaleString(),
               nom: data[i].nom_agence,
               ville: data[i].quartier.ville.libelle,
               quartier: data[i].quartier.libelle,
@@ -397,7 +349,7 @@ export default {
           for (let i = data.length - 1; i >= 0; i--) {
             this.data.push({
               key: data[i].id,
-              created_at: new Date(data[i].created_at).toLocaleString(),
+              createdAt: new Date(data[i].createdAt).toLocaleString(),
               nom: data[i].nom_agence,
               ville: data[i].quartier.ville.libelle,
               quartier: data[i].quartier.libelle,
@@ -422,6 +374,7 @@ export default {
         if (!err) {
           this.ModalText = "The modal will be closed after two seconds";
           this.confirmLoading = true;
+          console.log(values)
           this.agenceSubmit(values);
 
           this.nom = null;
@@ -447,7 +400,7 @@ export default {
       this.token_admin = session.getItem("token");
       console.log(data);
       let headers = { headers: { Authorization: this.token_admin } };
-      let data_use = { nom_agence: data.nom, id_quartier: data.quartier };
+      let data_use = { libelle: data.nom, ville: data.ville };
 
       this.$http.post(`${this.callback}/agence/create`, data_use, headers).then(
         (response) => {
@@ -489,7 +442,7 @@ export default {
           for (let i = data.length - 1; i >= 0; i--) {
             this.data.push({
               key: data[i].id,
-              created_at: new Date(data[i].created_at).toLocaleString(),
+              createdAt: new Date(data[i].createdAt).toLocaleString(),
               nom: data[i].nom_agence,
               ville: data[i].quartier.ville.libelle,
               quartier: data[i].quartier.libelle,

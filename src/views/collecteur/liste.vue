@@ -14,13 +14,13 @@
         <a-card class="card card-body border-0">
           <div class="mb-4 d-flex justify-content-between align-items-center">
             <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
-            <router-link :to="{ name: 'Collecteur_ville' }">
+            <!-- <router-link :to="{ name: 'Collecteur_ville' }">
               <a-button> Liste de collecteur par ville </a-button></router-link>
               <router-link :to="{ name: 'Collecteur_classement' }">
               <a-button> Classement des collecteurs </a-button></router-link>
             <router-link :to="{ name: 'Collecteur_archived' }">
-              <a-button> Liste de collecteur archiver </a-button></router-link>
-            <a-button type="primary" @click="showModal">
+              <a-button> Liste de collecteur archiver </a-button></router-link> -->
+            <a-button type="primary" style="margin-left: 15px;" @click="showModal">
               Créer un agent collecteur
             </a-button>
           </div>
@@ -147,7 +147,7 @@
               </a-col>
             </a-row>
           </a-modal>
-          <a-table :columns="columns" :data-source="data" :pagination="false">
+          <a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
             <template slot="etat" slot-scope="text, record">
               <span v-if="record.etat == 0" class="text-success">Online</span>
               <span v-if="record.etat == 1" class="text-danger">Offline</span>
@@ -180,7 +180,7 @@
             </template>
           </a-table>
 
-          <div class="d-flex justify-content-between align-items-center mt-4">
+          <!-- <div class="d-flex justify-content-between align-items-center mt-4">
             <div>
               <p>Page {{ page }}/{{ total_page }}</p>
             </div>
@@ -192,7 +192,7 @@
                 Suivant
               </a-button>
             </div>
-          </div>
+          </div> -->
         </a-card>
       </a-col>
     </a-row>
@@ -240,15 +240,15 @@ export default {
     };
   },
   mounted() {
-    this.password = `gescapro@${Math.floor(
+    this.password = `gescoa@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -343,7 +343,7 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/ville/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/ville/all`, headers).then(
         (response) => {
           let data = response.body.data;
 
@@ -361,7 +361,7 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/quartier/liste?all=true`, {}, headers)
+        .get(`${this.callback}/quartiers/all`, headers)
         .then(
           (response) => {
             let data = response.body.data;
@@ -386,9 +386,8 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/agent_collecteur/list?row=${this.row}&page=${this.page}`,
-          {},
+        .get(
+          `${this.callback}/collecteur/all`,
           headers
         )
         .then(
@@ -396,13 +395,12 @@ export default {
             let data = response.body.data;
 
             console.log(response.body);
-            this.stats[0].value = response.body.total;
-            this.total_page = response.body.total_pages;
+            this.stats[0].value = data.length;
             this.data = [];
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agc_name,
@@ -448,7 +446,7 @@ export default {
               console.log(data[i]);
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agc_name,
@@ -492,7 +490,7 @@ export default {
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agc_name,
@@ -632,7 +630,7 @@ export default {
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agc_name,

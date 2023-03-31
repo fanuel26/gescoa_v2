@@ -26,7 +26,7 @@
                   <a-descriptions
                     :title="
                       'Date de creation: ' +
-                      new Date(client.created_at).toLocaleString()
+                      new Date(client.createdAt).toLocaleString()
                     "
                     :column="4"
                   >
@@ -193,8 +193,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {

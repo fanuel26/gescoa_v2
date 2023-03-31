@@ -119,8 +119,8 @@ export default {
     this.columns = [
       {
         title: "Date de depot",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -187,7 +187,7 @@ export default {
             for (let i = data.length - 1; i >=0 ; i--) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 somme: `${data[i].montant} Fcfa`,
                 somme_a: `${data[i].montant + data[i].reste} Fcfa`,
                 nom: `${data[i].collecteurs.nom} ${data[i].collecteurs.prenom}`,

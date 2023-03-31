@@ -17,12 +17,10 @@
     :style="{ backgroundColor: 'transparent' }"
   >
     <div class="brand">
-      <router-link :to="{ name: 'Dashboard' }"
-        >
-        
-				<!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
-				<h3 class="text-primary">GESCOA</h3>
-        </router-link>
+      <router-link :to="{ name: 'Dashboard' }">
+        <!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
+        <h3 class="text-primary">GESCOA</h3>
+      </router-link>
     </div>
     <hr />
 
@@ -77,7 +75,7 @@
               />
             </svg>
           </span>
-          <span class="label">Carnets</span>
+          <span class="label">Clients</span>
         </router-link>
       </a-menu-item>
       <!-- <a-menu-item v-if="type.carnet == true">
@@ -106,7 +104,7 @@
         </router-link>
       </a-menu-item> -->
 
-      <!-- <a-menu-item v-if="type.produit == true">
+      <a-menu-item v-if="type.produit == true">
         <router-link :to="{ name: 'Produit' }">
           <span class="icon">
             <svg
@@ -131,7 +129,7 @@
           <span class="label">Produits</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item v-if="type.produit == true">
+      <!-- <a-menu-item v-if="type.produit == true">
         <router-link :to="{ name: 'Produit_stock' }">
           <span class="icon">
             <svg
@@ -255,7 +253,7 @@
           <span class="label">Entreprises</span>
         </router-link>
       </a-menu-item> -->
-      <!-- <a-menu-item
+      <a-menu-item
         class="menu-item-header"
         v-if="
           type.collecteur == true ||
@@ -265,8 +263,8 @@
         "
       >
         Agences & Agents
-      </a-menu-item> -->
-      <!-- <a-menu-item v-if="type.collecteur == true">
+      </a-menu-item>
+      <a-menu-item v-if="type.collecteur == true">
         <router-link :to="{ name: 'Collecteur' }">
           <span class="icon">
             <svg
@@ -288,17 +286,9 @@
               />
             </svg> </span
           ><span class="label">Collecteurs </span>
-          <a-badge
-            class="mx-2"
-            :number-style="{
-              backgroundColor: '#1890ff',
-              color: '#fff',
-            }"
-            :count="statistique.agent_collecteur"
-          ></a-badge>
         </router-link>
       </a-menu-item>
-      <a-menu-item v-if="type.superviseur == true">
+      <!-- <a-menu-item v-if="type.superviseur == true">
         <router-link :to="{ name: 'Superviseur' }">
           <span class="icon">
             <svg
@@ -347,7 +337,7 @@
           </span>
           <span class="label">Agents livreur</span>
         </router-link>
-      </a-menu-item>
+      </a-menu-item> -->
       <a-menu-item v-if="type.agence == true">
         <router-link :to="{ name: 'Agence' }">
           <span class="icon">
@@ -381,7 +371,7 @@
           >
           </a-badge>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <a-menu-item
         class="menu-item-header"
         v-if="type.chef == true || type.admin == true || type.ville == true"
@@ -423,7 +413,7 @@
           </a-badge>
         </router-link>
       </a-menu-item> -->
-      <a-menu-item v-if="type.admin == true">
+      <!-- <a-menu-item v-if="type.admin == true">
         <router-link :to="{ name: 'Admin' }">
           <span class="icon">
             <svg
@@ -447,7 +437,7 @@
           </span>
           <span class="label">Administration</span>
         </router-link>
-      </a-menu-item>
+      </a-menu-item> -->
       <a-menu-item v-if="type.ville == true">
         <router-link :to="{ name: 'Deploiement' }">
           <span class="icon">
@@ -469,7 +459,7 @@
           <span class="label">Déploiement Ville</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item class="menu-item-header"> CARNETS & LIVRAISONS </a-menu-item>
+      <!-- <a-menu-item class="menu-item-header"> CARNETS & LIVRAISONS </a-menu-item> -->
       <!-- <a-menu-item v-if="type.launship == true">
         <router-link :to="{ name: 'Livraison' }">
           <span class="icon">
@@ -555,6 +545,58 @@
           <span class="label">Launship-Box</span>
         </router-link>
       </a-menu-item> -->
+      <a-menu-item>
+        <router-link :to="{ name: 'Parametre_carnet' }">
+          <span class="icon">
+            <svg
+              width="14px"
+              height="14px"
+              viewBox="0 0 14 14"
+              version="1.1"
+              xmlns="http://www.w3.org/2000/svg"
+              xmlns:xlink="http://www.w3.org/1999/xlink"
+            >
+              <title>duplicate</title>
+              <g
+                id="Page-1"
+                stroke="none"
+                stroke-width="1"
+                fill="none"
+                fill-rule="evenodd"
+              >
+                <g
+                  id="Tables"
+                  transform="translate(-58.000000, -507.000000)"
+                  fill="#BFBFBF"
+                  fill-rule="nonzero"
+                >
+                  <g id="sidebar" transform="translate(33.000000, 43.000000)">
+                    <g
+                      id="sign-up"
+                      transform="translate(16.000000, 455.000000)"
+                    >
+                      <g
+                        id="duplicate"
+                        transform="translate(9.000000, 9.000000)"
+                      >
+                        <path
+                          d="M4,6 C4,4.89543 4.89543,4 6,4 L12,4 C13.1046,4 14,4.89543 14,6 L14,12 C14,13.1046 13.1046,14 12,14 L6,14 C4.89543,14 4,13.1046 4,12 L4,6 Z"
+                          id="Path"
+                        ></path>
+                        <path
+                          d="M2,0 C0.89543,0 0,0.89543 0,2 L0,8 C0,9.1046 0.89543,10 2,10 L2,4 C2,2.8954305 2.8954305,2 4,2 L10,2 L10,2 C10,0.89543 9.1046,0 8,0 L2,0 Z"
+                          id="Path"
+                        ></path>
+                      </g>
+                    </g>
+                  </g>
+                </g>
+              </g>
+            </svg>
+          </span>
+          <span class="label">Parametre carnet</span>
+        </router-link>
+      </a-menu-item>
       <a-menu-item>
         <router-link :to="{ name: 'Compte' }">
           <span class="icon">
@@ -652,66 +694,35 @@ export default {
   },
 
   mounted() {
-    let t = localStorage.getItem("type");
-
-    console.log(t);
-    if (t == null) {
-      this.type = {
-        carnet: false,
-        epargne: false,
-        pret: false,
-        produit: false,
-        client: false,
-        collecteur: false,
-        superviseur: false,
-        livreur: false,
-        agence: false,
-        chef: false,
-        admin: false,
-        ville: false,
-        launship: false,
-        dashboard: false,
-      };
-    } else {
-      this.type = JSON.parse(t);
-    }
+    this.type = {
+      carnet: true,
+      epargne: true,
+      pret: true,
+      produit: true,
+      client: true,
+      collecteur: true,
+      superviseur: true,
+      livreur: true,
+      agence: true,
+      chef: true,
+      admin: true,
+      ville: true,
+      launship: true,
+      dashboard: true,
+    };
 
     let session = localStorage;
     this.token_admin = session.getItem("token");
 
     let headers = { headers: { Authorization: this.token_admin } };
 
-    this.$http
-      .post(`${this.callback}/statistique`, {}, headers)
-      .then((response) => {
-        let data = response.body;
-        console.log(data)
-        this.statistique = data;
-      });
-
-    this.$http
-      .post(`${this.callback}/agent/transaction/request/liste`, {}, headers)
-      .then((response) => {
-        let data = response.body.data;
-
-        if (data.length != 0) {
-          this.trans == data.length;
-        }
-      });
-
-      this.$http
-        .post(
-          `${this.callback}/agent_collecteur/list?all=true`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-
-            console.log(response.body);
-            this.statistique.agent_collecteur = response.body.total;
-          })
+    // this.$http
+    //   .post(`${this.callback}/statistique`, {}, headers)
+    //   .then((response) => {
+    //     let data = response.body;
+    //     console.log(data)
+    //     this.statistique = data;
+    //   });
   },
 };
 </script>

@@ -24,7 +24,7 @@
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
                   <a-descriptions
-                    :title="'date de création: ' + new Date(superviseur.created_at).toLocaleString()"
+                    :title="'date de création: ' + new Date(superviseur.createdAt).toLocaleString()"
                     :column="2"
                   >
                     <a-descriptions-item label="Nom">
@@ -235,7 +235,7 @@ export default {
 
   mounted() {
     this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
-    this.password = `gescapro@${Math.floor(
+    this.password = `gescoa@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -385,7 +385,7 @@ export default {
                           "Success",
                           `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                         );
-                        this.password = `gescapro@${Math.floor(
+                        this.password = `gescoa@${Math.floor(
                           Math.random() * (9999 - 1000) + 1000
                         )}`;
                       } else {

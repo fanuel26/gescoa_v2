@@ -187,8 +187,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -222,7 +222,7 @@ export default {
     this.data = [
       {
         key: "1",
-        created_at: "12/04/2022 à 15:30",
+        createdAt: "12/04/2022 à 15:30",
         nom: "Franck",
         numero: "(+228) 92580305",
         prenom: "K. Louis",
@@ -230,7 +230,7 @@ export default {
       },
       {
         key: "2",
-        created_at: "12/04/2022 à 15:30",
+        createdAt: "12/04/2022 à 15:30",
         nom: "Franck",
         numero: "(+228) 92580305",
         prenom: "K. Louis",

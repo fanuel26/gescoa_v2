@@ -24,7 +24,7 @@
               </a-button>
             </div>
             <div class="mt-4">
-              <a-button type="primary" v-if="nbr_pays == 0" style="margin-left: 10px;" @click="showModalPays()">
+              <a-button type="primary" style="margin-left: 10px;" @click="showModalPays()">
                 Créer un pays
               </a-button>
               <a-button type="primary" style="margin-left: 10px;" @click="showModalVille()">
@@ -176,7 +176,7 @@
                               ],
                             },
                           ]">
-                            <a-select-option v-for="dt in dataVilles" :key="dt.id" :value="dt.id">
+                            <a-select-option v-for="dt in villes" :key="dt.id" :value="dt.id">
                               {{ dt.ville }}
                             </a-select-option>
                           </a-select>
@@ -376,8 +376,8 @@ export default {
     this.columnsPays = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
       },
       {
         title: "Nom pays",
@@ -388,8 +388,8 @@ export default {
     this.columnsVilles = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
       },
       {
         title: "Nom pays",
@@ -405,8 +405,8 @@ export default {
     this.columnsQuartier = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
       },
       {
         title: "Nom pays",
@@ -444,9 +444,11 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/pays/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/pays/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.allPays;
+
+          console.log(data)
 
           this.stats[0].value = data.length;
           this.nbr_pays = data.length;
@@ -454,7 +456,7 @@ export default {
           this.dataPays = data.map((item) => ({
             id: item.id,
             key: item.id,
-            created_at: new Date(item.created_at).toLocaleString(),
+            createdAt: new Date(item.createdAt).toLocaleString(),
             pays: item.libelle,
           }));
         },
@@ -470,9 +472,9 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/ville/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/ville/all`, {}, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.allVille;
 
           console.log(data);
           this.stats[1].value = data.length;
@@ -480,8 +482,9 @@ export default {
           this.dataVilles = data.map((item) => ({
             id: item.id,
             key: item.id,
-            created_at: new Date(item.created_at).toLocaleString(),
-            pays: item.pays.libelle,
+            createdAt: new Date(item.createdAt).toLocaleString(),
+            pays: item.pays?.libelle,
+            id_pays: item.pays,
             ville: item.libelle,
             data: item.cotisationEnCours
           }));
@@ -499,10 +502,10 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/quartier/liste?all=true`, {}, headers)
+        .get(`${this.callback}/quartiers/all`, {}, headers)
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.allQuartier;
 
             console.log(data);
             this.stats[2].value = data.length;
@@ -511,9 +514,9 @@ export default {
               this.dataQuartier.push({
                 id: data[i].id,
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
-                pays: data[i].ville.pays.libelle,
-                ville: data[i].ville.libelle,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                pays: data[i].ville?.pays?.libelle,
+                ville: data[i].ville?.libelle,
                 quartier: data[i].libelle,
               })
 
@@ -530,11 +533,16 @@ export default {
     },
 
     changePays(value) {
-      let data = this.dataPays;
-
+      console.log(value)
+      let data = this.dataVilles;
+      console.log(data)
+      this.villes = []
       for (let i = 0; i < data.length; i++) {
-        if (data[i].id == value) {
-          this.villes = data[i].children;
+      console.log(data[i])
+        if (data[i].id_pays == value) {
+          console.log(data[i])
+          this.villes.push(data[i]);
+          console.log(this.villes)
         }
       }
     },
@@ -610,6 +618,7 @@ export default {
 
       let data_create = {
         libelle: data.libelle,
+        indicatif: "228"
       };
 
       this.$http
@@ -655,7 +664,7 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       let data_create = {
-        id_pays: data.id_pays,
+        pays: data.id_pays,
         libelle: data.libelle,
       };
 
@@ -702,12 +711,12 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       let data_create = {
-        id_ville: data.id_ville,
+        ville: data.id_ville,
         libelle: data.libelle,
       };
 
       this.$http
-        .post(`${this.callback}/quartier/create`, data_create, headers)
+        .post(`${this.callback}/quartiers/create`, data_create, headers)
         .then(
           (response) => {
             if (response) {

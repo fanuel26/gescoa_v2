@@ -1,22 +1,51 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="24"
+        :lg="12"
+        :xl="6"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <!-- Widget 1 Card -->
-        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-          :icon="stat.icon" :status="stat.status"></WidgetCounter>
+        <WidgetCounter
+          :title="stat.title"
+          :value="stat.value"
+          :prefix="stat.prefix"
+          :suffix="stat.suffix"
+          :icon="stat.icon"
+          :status="stat.status"
+        ></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
 
     <a-row :gutter="24">
-      <a-col :span="12" :lg="12" :xl="24" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="12"
+        :lg="12"
+        :xl="24"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <a-card class="card card-body border-0">
-          <div class="mb-4 d-flex justify-content-between align-items-center">
-            <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
+          <div
+            style="display: flex; justify-content: between; align-items: center"
+          >
+            <div>
+              <a-input-search
+                v-model="value"
+                placeholder="Recherche ici"
+                style="width: 300px"
+                @change="onSearch"
+              />
+            </div>
             <div>
               <!-- Carnets_classement -->
-              <router-link :to="{ name: 'Carnets_desactivate' }">
+              <!-- <router-link :to="{ name: 'Carnets_desactivate' }">
                 <a-button type="primary" class="mx-2">
                   Carnets descactiver
                 </a-button>
@@ -25,8 +54,8 @@
                 <a-button type="danger" class="mx-2">
                   Classement carnets
                 </a-button>
-              </router-link>
-              <router-link :to="{ name: 'Carnets_terminer' }">
+              </router-link> -->
+              <!-- <router-link :to="{ name: 'Carnets_terminer' }">
                 <a-button type="primary" class="mx-2">
                   Carnets terminés
                 </a-button>
@@ -40,26 +69,45 @@
                 <a-button type="danger" class="mx-2">
                   Carnets non livrés
                 </a-button>
-              </router-link>
-              <router-link :to="{ name: 'Carnets_ville' }">
+              </router-link> -->
+              <!-- <router-link :to="{ name: 'Carnets_ville' }">
                 <a-button class="mx-2"> Liste carnet par ville </a-button>
-              </router-link>
+              </router-link> -->
 
-              <a-button type="primary" class="m-2" @click="showModal">
+              <!-- <a-button
+                type="primary"
+                style="margin-left: 10px"
+                @click="showModal"
+              >
                 Créer un carnet
-              </a-button>
+              </a-button> -->
             </div>
           </div>
 
-          <a-modal :width="width" title="Creer un carnet" :visible="visible" :confirm-loading="confirmLoading"
-            @ok="handleOk" @cancel="handleCancel">
-            <a-form :form="form" class="carnet-form" @submit="CarnetSubmit" :hideRequiredMark="true">
+          <a-modal
+            :width="width"
+            title="Creer un carnet"
+            :visible="visible"
+            :confirm-loading="confirmLoading"
+            @ok="handleOk"
+            @cancel="handleCancel"
+          >
+            <a-form
+              :form="form"
+              class="carnet-form"
+              @submit="CarnetSubmit"
+              :hideRequiredMark="true"
+            >
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="24" :md="24" class="">
                   <a-form-item label="Produits">
-                    <a-select mode="multiple" v-model="produit" search-placeholder="Selectionnez le produit"
-                      :options="produitData">
+                    <a-select
+                      mode="multiple"
+                      v-model="produit"
+                      search-placeholder="Selectionnez le produit"
+                      :options="produitData"
+                    >
                       <!-- <a-select-option
                         v-for="dt in produitData"
                         :key="dt.key"
@@ -72,88 +120,128 @@
                 </a-col>
                 <a-col :span="8" :md="8" class="">
                   <a-form-item class="" label="Nom du carnet" :colon="false">
-                    <a-input v-decorator="[
-                      'libelle',
-                      {
-                        initialValue: null,
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Nom du carnet est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="text" placeholder="Nom carnet" />
+                    <a-input
+                      v-decorator="[
+                        'libelle',
+                        {
+                          initialValue: null,
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Nom du carnet est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="text"
+                      placeholder="Nom carnet"
+                    />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8" :md="8" class="">
-                  <a-form-item class="" label="Mise du jour (Fcfa)" :colon="false">
-                    <a-input v-decorator="[
-                      'prix',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Prix définitive est vide!',
-                          },
-                        ],
-                      },
-                    ]" v-model="prix_w" @change="calcule_total" type="number" placeholder="Prix définitive" />
+                  <a-form-item
+                    class=""
+                    label="Mise du jour (Fcfa)"
+                    :colon="false"
+                  >
+                    <a-input
+                      v-decorator="[
+                        'prix',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Prix définitive est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      v-model="prix_w"
+                      @change="calcule_total"
+                      type="number"
+                      placeholder="Prix définitive"
+                    />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8" :md="8" class="">
                   <a-form-item class="" label="Gain carnet" :colon="false">
-                    <a-input v-model="gain" v-decorator="[
-                      'benefice_carnet',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Gain carnet est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="number" placeholder="Gain carnet" />
+                    <a-input
+                      v-model="gain"
+                      v-decorator="[
+                        'benefice_carnet',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Gain carnet est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="number"
+                      placeholder="Gain carnet"
+                    />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="8" :md="8" class="">
                   <a-form-item class="" label="Code secret" :colon="false">
-                    <a-input v-decorator="[
-                      'code_secret',
-                      {
-                        initialValue: null,
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Code secret est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="number" placeholder="Code secret" />
+                    <a-input
+                      v-decorator="[
+                        'code_secret',
+                        {
+                          initialValue: null,
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Code secret est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="number"
+                      placeholder="Code secret"
+                    />
                   </a-form-item>
                 </a-col>
               </a-row>
             </a-form>
           </a-modal>
-          <a-table :columns="columns" :data-source="data">
+          <a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
             <template slot="operation" slot-scope="text, record">
               <div class="d-flex">
-                <router-link :to="{
-                  name: 'Carnets_detail',
-                  params: { id: record.key },
-                }"><a-button type="primary" size="small">Détail</a-button></router-link>
-                <a-popconfirm v-if="record.status == 1" title="Sûre de descactiver?" cancel-text="annuler"
-                  ok-text="Valider" @confirm="() => block(record.key)"><a-button type="danger" class="mx-2"
-                    size="small">Descactiver</a-button>
+                <router-link
+                  :to="{
+                    name: 'Carnets_detail',
+                    params: { id: record.key },
+                  }"
+                  ><a-button type="primary" size="small"
+                    >Détail</a-button
+                  ></router-link
+                >
+                <!-- <a-popconfirm
+                  v-if="record.status == 1"
+                  title="Sûre de descactiver?"
+                  cancel-text="annuler"
+                  ok-text="Valider"
+                  @confirm="() => block(record.key)"
+                  ><a-button type="danger" class="mx-2" size="small"
+                    >Descactiver</a-button
+                  >
                 </a-popconfirm>
 
-                <a-popconfirm v-if="record.status == 0" title="Sûre d'activé?" cancel-text="annuler" ok-text="Valider"
-                  @confirm="() => block(record.key)"><a-button type="success" class="mx-2"
-                    size="small">Activé</a-button>
-                </a-popconfirm>
+                <a-popconfirm
+                  v-if="record.status == 0"
+                  title="Sûre d'activé?"
+                  cancel-text="annuler"
+                  ok-text="Valider"
+                  @confirm="() => block(record.key)"
+                  ><a-button type="success" class="mx-2" size="small"
+                    >Activé</a-button
+                  > 
+                </a-popconfirm> -->
               </div>
             </template>
           </a-table>
@@ -212,8 +300,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -273,7 +361,7 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/produit/list?all=true`, {}, headers)
+        .get(`${this.callback}/type-carnet/all`, headers)
         .then(
           (response) => {
             let data = response.body.data;
@@ -302,10 +390,13 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/carnet/list?all=true`, {}, headers)
+        .get(`${this.callback}/collecteur/carnet/all`, headers)
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.carnets;
+
+            console.log(data)
+            
             this.stats[0].value = data.length;
 
             this.data = [];
@@ -317,7 +408,7 @@ export default {
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 libelle: data[i].libelle,
                 nbr_mois: data[i].period / 31,
                 prix_jour: data[i].tarif,

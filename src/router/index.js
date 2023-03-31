@@ -22,6 +22,12 @@ let routes = [
 		component: () => import('../views/dashboard/Dashboard.vue'),
 	},
 	{
+		path: '/parametre/carnet',
+		name: 'Parametre_carnet',
+		layout: "dashboard",
+		component: () => import('../views/parametre_carnet/liste.vue'),
+	},
+	{
 		path: '/dashboard/classement/collecteur',
 		name: 'Classement_collecteur',
 		layout: "dashboard",
@@ -269,7 +275,7 @@ let routes = [
 		layout: "dashboard",
 		component: () => import('../views/collecteur/client_n.vue'),
 	},
-	
+
 	{
 		path: '/collecteur/:id/classement',
 		name: 'Collecteur_classement',

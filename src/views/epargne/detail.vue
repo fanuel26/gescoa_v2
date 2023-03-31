@@ -26,7 +26,7 @@
                   <a-descriptions
                     :title="
                       'Date de creation: ' +
-                      new Date(client.created_at).toLocaleString()
+                      new Date(client.createdAt).toLocaleString()
                     "
                     :column="2"
                   >
@@ -229,7 +229,7 @@ export default {
                   } | Prix du carnet: ${
                     dd[i].mise
                   } Fcfa | date de création: ${new Date(
-                    dd[i].created_at
+                    dd[i].createdAt
                   ).toLocaleString()}`,
                   amount: dd[i].recette,
                   type: dd[i].state == 0 ? -1 : 1, // 0 is for pending, 1 is for deposit, -1 is for withdrawal.

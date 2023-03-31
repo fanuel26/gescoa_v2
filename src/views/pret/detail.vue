@@ -101,7 +101,7 @@
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
                   <a-descriptions
-                    :title="'Date de creation: ' + new Date(client.created_at).toLocaleString()"
+                    :title="'Date de creation: ' + new Date(client.createdAt).toLocaleString()"
                     :column="2"
                   >
                     <a-descriptions-item label="Nom/Prénoms">

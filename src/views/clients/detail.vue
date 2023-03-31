@@ -31,7 +31,7 @@
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
                   <a-descriptions
-                    :title="'Date de creation: ' + new Date(client.created_at).toLocaleString()"
+                    :title="'Date de creation: ' + new Date(client.createdAt).toLocaleString()"
                     :column="2"
                   >
                     <a-descriptions-item label="Nom/Prénoms">
@@ -241,7 +241,7 @@ export default {
                 title: `${dd[i].carnet.libelle.substr(0, 30)} ..., N° ${
                   dd[i].ids
                 }`,
-                description: `Nbr de cotisation: ${dd[i].nbcotisattion} | Prix du carnet: ${frais} Fcfa | date de création: ${new Date(dd[i].created_at).toLocaleString()}`,
+                description: `Nbr de cotisation: ${dd[i].nbcotisattion} | Prix du carnet: ${frais} Fcfa | date de création: ${new Date(dd[i].createdAt).toLocaleString()}`,
                 amount: dd[i].recette,
                 type: dd[i].state == 0 ? -1 : 1,
                 case: dd[i].id_pack, // 0 is for pending, 1 is for deposit, -1 is for withdrawal.

@@ -10,7 +10,7 @@
       <div style="width: 100vw; display: flex; justify-content: center">
         <a-col :span="24" :md="12" :lg="6" :xl="6" class="col-form mt-4">
           <a-card>
-            <h3 class="mb-15 text-center text-primary mt-4">GesCaPro</h3>
+            <h3 class="mb-15 text-center text-primary mt-4">GESCOA</h3>
             <h5 class="font-regular text-center text-muted">
               Entrez le numero de téléphone et le mot de passe pour se connecter
             </h5>
@@ -104,15 +104,14 @@ export default {
               let session = localStorage;
 
               console.log(response);
-              if (response.body.status == true) {
+              if (response.body.status == 200) {
                 session.setItem(
                   "token",
-                  `${response.body.token_type} ${response.body.access_token}`
+                  `Bearer ${response.body.adminInfo.token}`
                 );
-                session.setItem("id", response.body.info.id);
-                session.setItem("username", response.body.info.username);
-                session.setItem("code_secret", response.body.info.code_secret);
-                session.setItem("type", response.body.info.adminAttributes);
+                session.setItem("id", response.body.adminInfo.admin.id);
+                session.setItem("username", `${response.body.adminInfo.admin.nom} ${response.body.adminInfo.admin.prenoms}`);
+                session.setItem("code_secret", response.body.adminInfo.admin.codeSecret);
 
                 this.$router.push({ name: "Dashboard" });
               } else {

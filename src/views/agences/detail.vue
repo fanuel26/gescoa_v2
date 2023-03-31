@@ -28,7 +28,7 @@
                   <a-descriptions
                     :title="
                       'Date de création: ' +
-                      new Date(agence.created_at).toLocaleString()
+                      new Date(agence.createdAt).toLocaleString()
                     "
                     :column="3"
                   >
@@ -469,7 +469,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `gescapro@${Math.floor(
+    this.password = `gescoa@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -566,8 +566,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -697,7 +697,7 @@ export default {
             for (let i = data.length - 1; i >= 0; i--) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
               });
@@ -722,7 +722,7 @@ export default {
             for (let i = data.length - 1; i >= 0; i--) {
               this.data_c.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
               });

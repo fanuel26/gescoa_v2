@@ -200,8 +200,8 @@ export default {
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -338,7 +338,7 @@ export default {
       for (let i = d.length - 1; i >= 0; i--) {
         console.log(d[i]);
         this.data_f.push({
-          created_at: d[i].date_cotisation,
+          createdAt: d[i].date_cotisation,
           nbr: d[i].nb,
           mise: `${d[i].mise} Fcfa`,
           total: `${d[i].mise * d[i].nb} Fcfa`,

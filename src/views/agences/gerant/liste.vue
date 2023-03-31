@@ -42,11 +42,11 @@
               style="width: 300px"
               @change="onSearch"
             />
-            <a-button type="primary" class="mx-2" @click="showModal">
+            <a-button type="primary" style="margin-left: 10px" @click="showModal">
               Créer un agent caissier
             </a-button>
 
-            <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
+            <a-button style="margin-left: 10px" @click="$router.go(-1)">Retour</a-button>
           </div>
 
           <a-modal
@@ -69,6 +69,62 @@
                 >
                   <a-row type="flex" :gutter="24">
                     <!-- Billing Information Column -->
+
+                    <a-col :span="12" :md="12" class="">
+                      <a-form-item class="" label="Selectionner l'agence" :colon="false">
+                        <a-select
+                          v-decorator="[
+                            'agence',
+                            {
+                              initialValue: agence,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Agence est vide!',
+                                },
+                              ],
+                            },
+                          ]"
+                        >
+                          <a-select-option
+                            v-for="agence in agences"
+                            :value="agence.id"
+                            :key="agence.id"
+                          >
+                            {{ agence.libelle }}
+                          </a-select-option>
+                        </a-select>
+                      </a-form-item>
+                    </a-col>
+
+
+                    <a-col :span="12" :md="12" class="">
+                      <a-form-item class="" label="Selectionner le quartier" :colon="false">
+                        <a-select
+                          v-decorator="[
+                            'quartier',
+                            {
+                              initialValue: quartier,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Quartier est vide!',
+                                },
+                              ],
+                            },
+                          ]"
+                        >
+                          <a-select-option
+                            v-for="quartier in quartiers"
+                            :value="quartier.id"
+                            :key="quartier.id"
+                          >
+                            {{ quartier.libelle }}
+                          </a-select-option>
+                        </a-select>
+                      </a-form-item>
+                    </a-col>
+
                     <a-col :span="12" :md="12" class="">
                       <a-form-item
                         class=""
@@ -145,56 +201,28 @@
                       </a-form-item>
                     </a-col>
                     <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Ville" :colon="false">
-                        <a-select
+                      <a-form-item
+                        class=""
+                        label="Adresse email"
+                        :colon="false"
+                      >
+                        <a-input
+                          v-model="email"
                           v-decorator="[
-                            'ville',
+                            'email',
                             {
-                              initialValue: ville,
+                              initialValue: email,
                               rules: [
                                 {
                                   required: true,
-                                  message: 'ville est vide!',
+                                  message: 'Email est vide!',
                                 },
                               ],
                             },
                           ]"
-                          @change="listeQuartier"
-                        >
-                          <a-select-option
-                            v-for="ville in villes"
-                            :value="ville.id"
-                            :key="ville.id"
-                          >
-                            {{ ville.libelle }}
-                          </a-select-option>
-                        </a-select>
-                      </a-form-item>
-                    </a-col>
-                    <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Quartier" :colon="false">
-                        <a-select
-                          v-decorator="[
-                            'quartier',
-                            {
-                              initialValue: quartier,
-                              rules: [
-                                {
-                                  required: true,
-                                  message: 'quartier est vide!',
-                                },
-                              ],
-                            },
-                          ]"
-                        >
-                          <a-select-option
-                            v-for="quartier in quartiers"
-                            :value="quartier.id"
-                            :key="quartier.id"
-                          >
-                            {{ quartier.libelle }}
-                          </a-select-option>
-                        </a-select>
+                          type="email"
+                          placeholder="Adresse email"
+                        />
                       </a-form-item>
                     </a-col>
                   </a-row>
@@ -213,6 +241,9 @@
                       <a-descriptions-item label="Numéro de téléphone">
                         (+228) {{ numero }}
                       </a-descriptions-item>
+                      <a-descriptions-item label="Email">
+                        {{ email }}
+                      </a-descriptions-item>
                       <a-descriptions-item label="Mot de passe">
                         {{ password }}
                       </a-descriptions-item>
@@ -222,7 +253,7 @@
               </a-col>
             </a-row>
           </a-modal>
-          <a-table :columns="columns" :data-source="data" :pagination="false">
+          <a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
             <template slot="operation" slot-scope="text, record">
               <div class="d-flex">
                 <router-link
@@ -251,11 +282,11 @@
               </div>
             </template>
           </a-table>
-
+<!-- 
           <div class="text-right mt-4">
             <a-button class="mx-2" @click="preview()"> Retour </a-button>
             <a-button class="mx-2" @click="next()"> Suivant </a-button>
-          </div>
+          </div> -->
         </a-card>
       </a-col>
     </a-row>
@@ -286,8 +317,7 @@ export default {
       visible: false,
       confirmLoading: false,
 
-      villes: null,
-      quartiers: null,
+      agences: null,
 
       row: 5,
       page: 1,
@@ -296,21 +326,21 @@ export default {
       nom: null,
       prenom: null,
       numero: null,
+      email: null,
       ville: null,
-      quartier: null,
       password: null,
     };
   },
   mounted() {
-    this.password = `gescapro@${Math.floor(
+    this.password = `gescoa@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
     this.columns = [
       {
         title: "Date de creation",
-        dataIndex: "created_at",
-        key: "created_at",
+        dataIndex: "createdAt",
+        key: "createdAt",
         scopedSlots: { customRender: "name" },
       },
       {
@@ -349,7 +379,8 @@ export default {
       },
     ];
 
-    this.listeVille();
+    this.listeAgence();
+    this.listeQuartier();
     this.listecaissier();
   },
   methods: {
@@ -360,18 +391,18 @@ export default {
       });
     },
 
-    listeVille() {
+    listeAgence() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/ville/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/agence/all`, headers).then(
         (response) => {
           console.log(response);
-          let data = response.body.data;
+          let data = response.body.agences;
 
-          this.villes = data;
+          this.agences = data;
         },
         (response) => {
           this.showAlert("error", "Erreur", response.body.message);
@@ -379,22 +410,17 @@ export default {
       );
     },
 
-    listeQuartier(id) {
+    listeQuartier() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/quartier/liste?all=true`, {}, headers).then(
+      this.$http.get(`${this.callback}/quartiers/all`, headers).then(
         (response) => {
           console.log(response);
-          let data = response.body.data;
+          let data = response.body.allQuartier;
 
-          this.quartiers = [];
-          for (let i = 0; i < data.length; i++) {
-            if (data[i].id_ville == id) {
-              this.quartiers.push(data[i]);
-            }
-          }
+          this.quartiers = data;
         },
         (response) => {
           this.showAlert("error", "Erreur", response.body.message);
@@ -409,26 +435,25 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/agent/list?row=${this.row}&page=${this.page}`,
-          {},
+        .get(
+          `${this.callback}/agent/all`,
           headers
         )
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.agents;
 
             console.log(response);
-            this.stats[0].value = response.body.total;
+            this.stats[0].value = data.length;
             this.data = [];
             console.log(data);
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
-                nom: `${data[i].nom} ${data[i].prenom}`,
-                numero: `(+228) ${data[i].numero}`,
-                agence: data[i].agence ? data[i].agence.nom_agence : "",
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].nom} ${data[i].prenoms}`,
+                numero: `(+228) ${data[i].telephone}`,
+                agence: data[i].agence ? data[i].agence.libelle : "",
                 status: data[i].is_active,
               });
             }
@@ -462,7 +487,7 @@ export default {
             for (let i = data.length - 1; i >= 0; i--) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agence.nom_agence,
@@ -499,8 +524,8 @@ export default {
             for (let i = data.length - 1; i >= 0; i--) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
-                nom: `${data[i].nom} ${data[i].prenom}`,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].nom} ${data[i].prenoms}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agence.nom_agence,
                 status: data[i].is_active,
@@ -569,11 +594,12 @@ export default {
       console.log(data);
       let data_create = {
         nom: data.nom,
-        prenom: data.prenom,
-        numero: data.numero,
-        id_quartier: data.quartier,
+        prenoms: data.prenom,
+        telephone: data.numero,
+        quartier: data.quartier,
         password: this.password,
-        username: data.nom,
+        agence: data.agence,
+        email: data.email
       };
 
       console.log(data_create);
@@ -619,7 +645,7 @@ export default {
             for (let i = data.length - 1; i >= 0; i--) {
               this.data.push({
                 key: data[i].id,
-                created_at: new Date(data[i].created_at).toLocaleString(),
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenom}`,
                 numero: `(+228) ${data[i].numero}`,
                 agence: data[i].agence.nom_agence,
