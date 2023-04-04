@@ -12,7 +12,7 @@
     <a-row :gutter="24">
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
-          <div class="mb-4 d-flex justify-content-between align-items-center">
+          <div class="mb-4" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
             <!-- <router-link :to="{ name: 'Collecteur_ville' }">
               <a-button> Liste de collecteur par ville </a-button></router-link>

@@ -53,7 +53,7 @@
           <span class="label">Tableau de bord</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item v-if="type.carnet == true">
+      <!-- <a-menu-item v-if="type.carnet == true">
         <router-link :to="{ name: 'Carnets' }">
           <span class="icon">
             <svg
@@ -75,9 +75,9 @@
               />
             </svg>
           </span>
-          <span class="label">Clients</span>
+          <span class="label">Carnet</span>
         </router-link>
-      </a-menu-item>
+      </a-menu-item> -->
       <!-- <a-menu-item v-if="type.carnet == true">
         <router-link :to="{ name: 'Carnets_stock' }">
           <span class="icon">
@@ -207,7 +207,7 @@
           <span class="label">Prêts</span>
         </router-link>
       </a-menu-item> -->
-      <!-- <a-menu-item v-if="type.client == true">
+      <a-menu-item v-if="type.client == true">
         <router-link :to="{ name: 'Client' }">
           <span class="icon">
             <svg
@@ -227,7 +227,7 @@
           </span>
           <span class="label">Clients</span>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <!-- <a-menu-item>
         <router-link :to="{ name: 'Entreprise' }">
           <span class="icon">
