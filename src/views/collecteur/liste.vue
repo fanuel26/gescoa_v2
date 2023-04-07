@@ -83,21 +83,37 @@
                       </a-form-item>
                     </a-col>
                     <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Ville" :colon="false">
-                        <a-select v-decorator="[
-                          'ville',
+                      <a-form-item class="" label="Adresse email" :colon="false">
+                        <a-input v-model="email" v-decorator="[
+                          'email',
                           {
-                            initialValue: ville,
+                            initialValue: email,
                             rules: [
                               {
                                 required: true,
-                                message: 'ville est vide!',
+                                message: 'Email est vide!',
                               },
                             ],
                           },
-                        ]" @change="listeQuartier">
-                          <a-select-option v-for="ville in villes" :value="ville.id" :key="ville.id">
-                            {{ ville.libelle }}
+                        ]" type="email" placeholder="Adresse email" />
+                      </a-form-item>
+                    </a-col>
+                    <a-col :span="12" :md="12" class="">
+                      <a-form-item class="" label="Agence" :colon="false">
+                        <a-select v-decorator="[
+                          'agence',
+                          {
+                            initialValue: agence,
+                            rules: [
+                              {
+                                required: true,
+                                message: 'agence est vide!',
+                              },
+                            ],
+                          },
+                        ]">
+                          <a-select-option v-for="agence in agences" :value="agence.id" :key="agence.id">
+                            {{ agence.libelle }}
                           </a-select-option>
                         </a-select>
                       </a-form-item>
@@ -137,6 +153,9 @@
                       </a-descriptions-item>
                       <a-descriptions-item label="Numéro de téléphone">
                         (+228) {{ numero }}
+                      </a-descriptions-item>
+                      <a-descriptions-item label="Adresse email">
+                         {{ email }}
                       </a-descriptions-item>
                       <a-descriptions-item label="Mot de passe">
                         {{ password }}
@@ -224,7 +243,7 @@ export default {
       visible: false,
       confirmLoading: false,
 
-      villes: null,
+      agences: null,
       quartiers: null,
 
       row: 5,
@@ -234,6 +253,7 @@ export default {
       nom: null,
       prenom: null,
       numero: null,
+      email: null,
       ville: null,
       quartier: null,
       password: null,
@@ -326,7 +346,8 @@ export default {
       // },
     ];
 
-    this.listeVille();
+    this.listeQuartier();
+    this.listeAgence();
     this.listeCollecteur();
   },
   methods: {
@@ -337,17 +358,18 @@ export default {
       });
     },
 
-    listeVille() {
+    listeAgence() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
+
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.get(`${this.callback}/ville/all`, headers).then(
+      this.$http.get(`${this.callback}/agence/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.agences;
 
-          this.villes = data;
+          this.agences = data;
         },
         (response) => {
           this.showAlert("error", "Erreur", response.body.message);
@@ -355,29 +377,24 @@ export default {
       );
     },
 
-    listeQuartier(id) {
+    listeQuartier() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http
-        .get(`${this.callback}/quartiers/all`, headers)
-        .then(
-          (response) => {
-            let data = response.body.data;
+      this.$http.get(`${this.callback}/quartiers/all`, headers).then(
+        (response) => {
+          console.log(response);
+          let data = response.body.allQuartier;
 
-            this.quartiers = [];
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].id_ville == id) {
-                this.quartiers.push(data[i]);
-              }
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Erreur", response.body.message);
-          }
-        );
+          this.quartiers = data;
+        },
+        (response) => {
+          this.showAlert("error", "Erreur", response.body.message);
+        }
+      );
     },
+
 
     listeCollecteur() {
       let session = localStorage;
@@ -392,7 +409,7 @@ export default {
         )
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.collecteurs;
 
             console.log(response.body);
             this.stats[0].value = data.length;
@@ -401,9 +418,9 @@ export default {
               this.data.push({
                 key: data[i].id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom: `${data[i].nom} ${data[i].prenom}`,
-                numero: `(+228) ${data[i].numero}`,
-                agence: data[i].agc_name,
+                nom: `${data[i].nom} ${data[i].prenoms}`,
+                numero: `(+228) ${data[i].telephone}`,
+                agence: data[i].agence.libelle,
                 status: data[i].is_active,
                 etat: data[i].is_disconnect,
               });
@@ -585,14 +602,16 @@ export default {
 
       let data_create = {
         nom: data.nom,
-        prenom: data.prenom,
-        numero: data.numero,
-        id_quartier: data.quartier,
+        prenoms: data.prenom,
+        telephone: data.numero,
+        email: data.email,
+        quartier: data.quartier,
         password: this.password,
+        agence: data.agence
       };
 
       this.$http
-        .post(`${this.callback}/agent_collecteur/create`, data_create, headers)
+        .post(`${this.callback}/collecteur/create`, data_create, headers)
         .then(
           (response) => {
             this.showAlert(

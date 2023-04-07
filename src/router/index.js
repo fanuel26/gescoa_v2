@@ -52,6 +52,12 @@ let routes = [
 		component: () => import('../views/carnets/carnets.vue'),
 	},
 	{
+		path: '/carnets/byclient/:id',
+		name: 'Carnets_by_client',
+		layout: "dashboard",
+		component: () => import('../views/carnets/list.vue'),
+	},
+	{
 		path: '/carnets/byville',
 		name: 'Carnets_ville',
 		layout: "dashboard",

@@ -61,6 +61,12 @@
                   >Détail</a-button
                 ></router-link
               >
+              <router-link
+                :to="{ name: 'Carnets_by_client', params: { id: record.key } }"
+                ><a-button type="primary" size="small" style="margin-left: 10px;"
+                  >Liste carnet</a-button
+                ></router-link
+              >
             </template>
           </a-table>
 
