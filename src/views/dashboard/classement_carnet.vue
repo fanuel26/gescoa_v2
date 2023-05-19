@@ -1,92 +1,23 @@
 <template>
-  
   <div>
     <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <!-- Widget 1 Card -->
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
+        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
+          :icon="stat.icon" :status="stat.status"></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
 
     <a-row :gutter="24">
-      <a-col
-        :span="12"
-        :lg="12"
-        :xl="24"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="12" :lg="12" :xl="24" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <a-card class="card card-body border-0">
-          <div class="mb-4 d-flex justify-content-between align-items-center">
-            <a-input-search
-              v-model="value"
-              placeholder="Recherche ici"
-              style="width: 300px"
-              @change="onSearch"
-            />
-            <a-form-item label="Classement par ville" class="" :colon="false">
-                <a-select style="width: 300px" v-decorator="[
-                  'ville',
-                  {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'ville est vide!',
-                      },
-                    ],
-                  },
-                ]" @change="listeCarnetVille">
-                  <a-select-option v-for="ville in villes" :value="ville.id" :key="ville.id">
-                    {{ ville.libelle }}
-                  </a-select-option>
-                </a-select>
-              </a-form-item>
-              <!-- <a-form-item label="Classement par agence" :colon="false">
-                <a-select style="width: 300px" v-decorator="[
-                  'agence',
-                  {
-                    rules: [
-                      {
-                        required: true,
-                        message: 'agence est vide!',
-                      },
-                    ],
-                  },
-                ]" @change="listeCarnetAgence">
-                  <a-select-option v-for="agence in Agences" :value="agence.id" :key="agence.id">
-                    {{ agence.nom_agence }}
-                  </a-select-option>
-                </a-select>
-              </a-form-item> -->
-          </div>
-
           <a-table :columns="columns" :data-source="data">
             <template slot="operation" slot-scope="text, record">
-              <router-link
-                :to="{
-                  name: 'Carnets_detail',
-                  params: { id: record.key },
-                }"
-                ><a-button type="primary" size="small"
-                  >Détail</a-button
-                ></router-link
-              >
+              <router-link :to="{
+                name: 'Carnets_detail',
+                params: { id: record.key },
+              }"><a-button type="primary" size="small">Détail</a-button></router-link>
             </template>
           </a-table>
         </a-card>
@@ -110,7 +41,7 @@ export default {
   },
   data() {
     return {
-      
+
       callback: process.env.VUE_APP_API_BASE_URL,
       token_admin: null,
       stats: [],
@@ -157,24 +88,14 @@ export default {
         key: "libelle",
       },
       {
-        title: "Nombre mois",
-        dataIndex: "nbr_mois",
-        key: "nbr_mois",
-      },
-      {
-        title: "Prix par jour (Fcfa)",
-        dataIndex: "prix_jour",
-        key: "prix_jour",
+        title: "Nombre vendus",
+        dataIndex: "nbr_sell",
+        key: "nbr_sell",
       },
       {
         title: "Somme total (Fcfa)",
         dataIndex: "somme",
         key: "somme",
-      },
-      {
-        title: "Nombre vendus",
-        dataIndex: "nbr_sell",
-        key: "nbr_sell",
       },
       {
         title: "Action",
@@ -199,12 +120,12 @@ export default {
 
     console.log(localStorage.getItem("code_secret"));
 
-    this.listeVille();
-    this.listeAgence();
+    // this.listeVille();
+    // this.listeAgence();
     this.listeCarnet();
   },
   methods: {
-    
+
     listeVille() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
@@ -250,59 +171,53 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/classement/carnet?all=true`, {}, headers).then(
-        (response) => {
-          let data = response.body.data;
-          this.stats[0].value = data.length;
+      this.$http
+        .get(`${this.callback}/statistic/classement/typeCarnetsByBestSell`, headers)
+        .then((response) => {
+          let data = response.body.topTypeCarnetsByBestSell;
 
-          this.data = [];
-
-          for (let i = 0; i < data.length; i++) {
+          console.log(data);
+          this.stats[0].value = data.length
+          this.dataCarnet = [];
+          for (let i = 0; i < 10; i++) {
             this.data.push({
-              key: data[i].id,
-              createdAt: new Date(data[i].createdAt).toLocaleString(),
-              libelle: data[i].libelle,
-              nbr_mois: data[i].period / 31,
-              prix_jour: data[i].tarif,
-              somme: data[i].tarif * data[i].period,
-              nbr_sell: data[i].vendu,
+              key: data[i]._id[0]._id[0].id,
+              createdAt: new Date(data[i]._id[0].createdAt).toLocaleString(),
+              libelle: data[i]._id[0].libelle,
+              somme: data[i]._id[0].__v * data[i]._id[0].montant,
+              nbr_sell: data[i]._id[0].__v,
             });
-
-            this.data_s = this.data;
           }
-        },
-        (response) => {
-          this.showAlert("error", "Error", response.body.message);
-        }
-      );
+        });
+
     },
 
     listeCarnetVille(id) {
-        // alert(id)
+      // alert(id)
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      
+
       this.$http
         .post(`${this.callback}/classement/carnet/ville/${id}`, {}, headers)
         .then((response) => {
           let data = response.body.data;
-          console.log(data)          
+          console.log(data)
           this.stats[0].value = data.length;
 
           this.data = [];
 
           for (let i = 0; i < data.length; i++) {
             this.data.push({
-              key: data[i].id,
-              createdAt: new Date(data[i].createdAt).toLocaleString(),
-              libelle: data[i].libelle,
-              nbr_mois: data[i].period / 31,
-              prix_jour: data[i].tarif,
-              somme: data[i].tarif * data[i].period,
-              nbr_sell: data[i].vendu,
+              key: data[i]._id[0].id,
+              createdAt: new Date(data[i]._id[0].createdAt).toLocaleString(),
+              libelle: data[i]._id[0].libelle,
+              nbr_mois: data[i]._id[0].period / 31,
+              prix_jour: data[i]._id[0].tarif,
+              somme: data[i]._id[0].tarif * data[i]._id[0].period,
+              nbr_sell: data[i]._id[0].vendu,
             });
 
             this.data_s = this.data;
@@ -316,7 +231,7 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      
+
       this.$http
         .post(`${this.callback}/classement/carnet/agence/${id}`, {}, headers)
         .then((response) => {
@@ -328,13 +243,13 @@ export default {
 
           for (let i = 0; i < data.length; i++) {
             this.data.push({
-              key: data[i].id,
-              createdAt: new Date(data[i].createdAt).toLocaleString(),
-              libelle: data[i].libelle,
-              nbr_mois: data[i].period / 31,
-              prix_jour: data[i].tarif,
-              somme: data[i].tarif * data[i].period,
-              nbr_sell: data[i].vendu,
+              key: data[i]._id[0].id,
+              createdAt: new Date(data[i]._id[0].createdAt).toLocaleString(),
+              libelle: data[i]._id[0].libelle,
+              nbr_mois: data[i]._id[0].period / 31,
+              prix_jour: data[i]._id[0].tarif,
+              somme: data[i]._id[0].tarif * data[i]._id[0].period,
+              nbr_sell: data[i]._id[0].vendu,
             });
 
             this.data_s = this.data;
@@ -349,7 +264,7 @@ export default {
 
       this.data = [];
       for (let i = 0; i < data.length; i++) {
-        let libelle = data[i].libelle.toLowerCase();
+        let libelle = data[i]._id[0].libelle.toLowerCase();
         if (libelle.indexOf(this.value) > -1) {
           this.data.push(data[i]);
         }

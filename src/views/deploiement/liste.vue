@@ -10,18 +10,18 @@
     </a-row>
 
     <a-row :gutter="24">
-      <a-col :span="12" :lg="18" :xl="18" class="mb-24">
+      <a-col :span="12" :lg="24" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <div style="display: flex; justify-content: space-between;">
             <div>
-              <a-select style="width: 220px" v-model="ville_select">
+              <!-- <a-select style="width: 220px" v-model="ville_select">
                 <a-select-option v-for="dt in dataVilles" :key="dt.id" :value="dt.id">
                   {{ dt.ville }}
                 </a-select-option>
               </a-select>
               <a-button type="primary" style="margin-left: 10px;" @click="showModalStatistique()">
                 Lancer les statistiques
-              </a-button>
+              </a-button> -->
             </div>
             <div class="mt-4">
               <a-button type="primary" style="margin-left: 10px;" @click="showModalPays()">
@@ -408,11 +408,11 @@ export default {
         dataIndex: "createdAt",
         key: "createdAt",
       },
-      {
-        title: "Nom pays",
-        dataIndex: "pays",
-        key: "pays",
-      },
+      // {
+      //   title: "Nom pays",
+      //   dataIndex: "pays",
+      //   key: "pays",
+      // },
       {
         title: "Nom villes",
         dataIndex: "ville",
@@ -501,11 +501,10 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http
-        .get(`${this.callback}/quartiers/all`, {}, headers)
-        .then(
+      console.log(headers)
+      this.$http.get(`${this.callback}/quartiers/all`, {}, headers).then(
           (response) => {
-            let data = response.body.allQuartier;
+            let data = response.body.allQuartier.quartiers;
 
             console.log(data);
             this.stats[2].value = data.length;
@@ -533,18 +532,17 @@ export default {
     },
 
     changePays(value) {
-      console.log(value)
       let data = this.dataVilles;
-      console.log(data)
+      alert(data)
       this.villes = []
       for (let i = 0; i < data.length; i++) {
-      console.log(data[i])
-        if (data[i].id_pays == value) {
-          console.log(data[i])
+        if (data[i].id_pays?.id == value) {
+          alert(data[i].id)
           this.villes.push(data[i]);
-          console.log(this.villes)
         }
       }
+      
+      console.log(this.villes)
     },
 
     // visibleStat

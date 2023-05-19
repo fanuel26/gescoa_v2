@@ -1,23 +1,10 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="24" :lg="12" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <!-- Widget 1 Card -->
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
+        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
+          :icon="stat.icon" :status="stat.status"></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
@@ -27,7 +14,7 @@
         <a-card class="card card-body border-0">
           <template #title>
             <div class="d-flex justify-content-between">
-              <h6>Liste de tous les clients terminer</h6>
+              <h6>Liste de tous les carnets terminer</h6>
               <!-- <a-input-search
                 v-model="value"
                 placeholder="Recherche ici"
@@ -38,12 +25,9 @@
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
-              <router-link
-                :to="{ name: 'Client_detail', params: { id: record.key } }"
-                ><a-button type="primary" size="small"
-                  >Détail</a-button
-                ></router-link
-              >
+              <a-popconfirm title="Sûre de livrer?" @confirm="() => deliver(record.key)"><a-button
+                  type="primary" class="mx-2" size="small">Livrer</a-button>
+              </a-popconfirm>
             </template>
           </a-table>
         </a-card>
@@ -52,7 +36,7 @@
         <a-card class="card card-body border-0">
           <template #title>
             <div class="d-flex justify-content-between">
-              <h6>Liste de tous les clients livrés</h6>
+              <h6>Liste de tous les carnets livrés</h6>
               <!-- <a-input-search
                 v-model="value"
                 placeholder="Recherche ici"
@@ -61,19 +45,24 @@
               /> -->
             </div>
           </template>
-          <a-table
-            :columns="columns_l"
-            :data-source="data_l"
-            :pagination="true"
-          >
-            <template slot="operation" slot-scope="text, record">
-              <router-link
-                :to="{ name: 'Client_detail', params: { id: record.key } }"
-                ><a-button type="primary" size="small"
-                  >Détail</a-button
-                ></router-link
-              >
-            </template>
+          <a-table :columns="columns_l" :data-source="data_l" :pagination="true">
+          </a-table>
+        </a-card>
+      </a-col>
+      <a-col :span="24" :lg="24" :xl="24" class="mb-24">
+        <a-card class="card card-body border-0">
+          <template #title>
+            <div class="d-flex justify-content-between">
+              <h6>Liste de tous les carnets a 2/3 terminer</h6>
+              <!-- <a-input-search
+                v-model="value"
+                placeholder="Recherche ici"
+                style="width: 300px"
+                @change="onSearch"
+              /> -->
+            </div>
+          </template>
+          <a-table :columns="columns_p" :data-source="data_p" :pagination="true">
           </a-table>
         </a-card>
       </a-col>
@@ -109,7 +98,7 @@ export default {
   mounted() {
     this.stats = [
       {
-        title: "Clients Terminés",
+        title: "carnets Terminés",
         value: 0,
         prefix: "",
         suffix: "",
@@ -120,7 +109,7 @@ export default {
 						</svg>`,
       },
       {
-        title: "Clients Livrés",
+        title: "carnets Livrés",
         value: 0,
         prefix: "",
         suffix: "",
@@ -130,17 +119,17 @@ export default {
 							<path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 5C11 4.44772 10.5523 4 10 4C9.44772 4 9 4.44772 9 5V5.09199C8.3784 5.20873 7.80348 5.43407 7.32398 5.75374C6.6023 6.23485 6 7.00933 6 8C6 8.99067 6.6023 9.76515 7.32398 10.2463C7.80348 10.5659 8.37841 10.7913 9.00001 10.908L9.00002 12.8492C8.60902 12.7223 8.31917 12.5319 8.15667 12.3446C7.79471 11.9275 7.16313 11.8827 6.74599 12.2447C6.32885 12.6067 6.28411 13.2382 6.64607 13.6554C7.20855 14.3036 8.05956 14.7308 9 14.9076L9 15C8.99999 15.5523 9.44769 16 9.99998 16C10.5523 16 11 15.5523 11 15L11 14.908C11.6216 14.7913 12.1965 14.5659 12.676 14.2463C13.3977 13.7651 14 12.9907 14 12C14 11.0093 13.3977 10.2348 12.676 9.75373C12.1965 9.43407 11.6216 9.20873 11 9.09199L11 7.15075C11.391 7.27771 11.6808 7.4681 11.8434 7.65538C12.2053 8.07252 12.8369 8.11726 13.254 7.7553C13.6712 7.39335 13.7159 6.76176 13.354 6.34462C12.7915 5.69637 11.9405 5.26915 11 5.09236V5Z" fill="#111827"/>
 						</svg>`,
       },
-      /*{
-        title: "Clients inactifs",
+      {
+        title: "carnets presque terminer",
         value: 0,
         prefix: "",
         suffix: "",
         icon: `<svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-							<path d="M8.43338 7.41784C8.58818 7.31464 8.77939 7.2224 9 7.15101L9.00001 8.84899C8.77939 8.7776 8.58818 8.68536 8.43338 8.58216C8.06927 8.33942 8 8.1139 8 8C8 7.8861 8.06927 7.66058 8.43338 7.41784Z" fill="#111827"/>
-							<path d="M11 12.849L11 11.151C11.2206 11.2224 11.4118 11.3146 11.5666 11.4178C11.9308 11.6606 12 11.8861 12 12C12 12.1139 11.9308 12.3394 11.5666 12.5822C11.4118 12.6854 11.2206 12.7776 11 12.849Z" fill="#111827"/>
-							<path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 5C11 4.44772 10.5523 4 10 4C9.44772 4 9 4.44772 9 5V5.09199C8.3784 5.20873 7.80348 5.43407 7.32398 5.75374C6.6023 6.23485 6 7.00933 6 8C6 8.99067 6.6023 9.76515 7.32398 10.2463C7.80348 10.5659 8.37841 10.7913 9.00001 10.908L9.00002 12.8492C8.60902 12.7223 8.31917 12.5319 8.15667 12.3446C7.79471 11.9275 7.16313 11.8827 6.74599 12.2447C6.32885 12.6067 6.28411 13.2382 6.64607 13.6554C7.20855 14.3036 8.05956 14.7308 9 14.9076L9 15C8.99999 15.5523 9.44769 16 9.99998 16C10.5523 16 11 15.5523 11 15L11 14.908C11.6216 14.7913 12.1965 14.5659 12.676 14.2463C13.3977 13.7651 14 12.9907 14 12C14 11.0093 13.3977 10.2348 12.676 9.75373C12.1965 9.43407 11.6216 9.20873 11 9.09199L11 7.15075C11.391 7.27771 11.6808 7.4681 11.8434 7.65538C12.2053 8.07252 12.8369 8.11726 13.254 7.7553C13.6712 7.39335 13.7159 6.76176 13.354 6.34462C12.7915 5.69637 11.9405 5.26915 11 5.09236V5Z" fill="#111827"/>
-						</svg>`,
-      },*/
+              <path d="M8.43338 7.41784C8.58818 7.31464 8.77939 7.2224 9 7.15101L9.00001 8.84899C8.77939 8.7776 8.58818 8.68536 8.43338 8.58216C8.06927 8.33942 8 8.1139 8 8C8 7.8861 8.06927 7.66058 8.43338 7.41784Z" fill="#111827"/>
+              <path d="M11 12.849L11 11.151C11.2206 11.2224 11.4118 11.3146 11.5666 11.4178C11.9308 11.6606 12 11.8861 12 12C12 12.1139 11.9308 12.3394 11.5666 12.5822C11.4118 12.6854 11.2206 12.7776 11 12.849Z" fill="#111827"/>
+              <path fill-rule="evenodd" clip-rule="evenodd" d="M10 18C14.4183 18 18 14.4183 18 10C18 5.58172 14.4183 2 10 2C5.58172 2 2 5.58172 2 10C2 14.4183 5.58172 18 10 18ZM11 5C11 4.44772 10.5523 4 10 4C9.44772 4 9 4.44772 9 5V5.09199C8.3784 5.20873 7.80348 5.43407 7.32398 5.75374C6.6023 6.23485 6 7.00933 6 8C6 8.99067 6.6023 9.76515 7.32398 10.2463C7.80348 10.5659 8.37841 10.7913 9.00001 10.908L9.00002 12.8492C8.60902 12.7223 8.31917 12.5319 8.15667 12.3446C7.79471 11.9275 7.16313 11.8827 6.74599 12.2447C6.32885 12.6067 6.28411 13.2382 6.64607 13.6554C7.20855 14.3036 8.05956 14.7308 9 14.9076L9 15C8.99999 15.5523 9.44769 16 9.99998 16C10.5523 16 11 15.5523 11 15L11 14.908C11.6216 14.7913 12.1965 14.5659 12.676 14.2463C13.3977 13.7651 14 12.9907 14 12C14 11.0093 13.3977 10.2348 12.676 9.75373C12.1965 9.43407 11.6216 9.20873 11 9.09199L11 7.15075C11.391 7.27771 11.6808 7.4681 11.8434 7.65538C12.2053 8.07252 12.8369 8.11726 13.254 7.7553C13.6712 7.39335 13.7159 6.76176 13.354 6.34462C12.7915 5.69637 11.9405 5.26915 11 5.09236V5Z" fill="#111827"/>
+            </svg>`,
+      },
     ];
 
     this.columns = [
@@ -156,19 +145,14 @@ export default {
         key: "nom",
       },
       {
-        title: "Numéro de téléphone",
+        title: "N° de téléphone",
         dataIndex: "numero",
         key: "numero",
       },
       {
-        title: "Profession",
-        dataIndex: "profession",
-        key: "profession",
-      },
-      {
-        title: "Quartier",
-        dataIndex: "quartier",
-        key: "quartier",
+        title: "Info carnet",
+        dataIndex: "carnet",
+        key: "carnet",
       },
       {
         title: "Collecteur en charge",
@@ -195,34 +179,55 @@ export default {
         key: "nom",
       },
       {
-        title: "Numéro de téléphone",
+        title: "N° de téléphone",
         dataIndex: "numero",
         key: "numero",
       },
       {
-        title: "Profession",
-        dataIndex: "profession",
-        key: "profession",
-      },
-      {
-        title: "Quartier",
-        dataIndex: "quartier",
-        key: "quartier",
+        title: "Info carnet",
+        dataIndex: "carnet",
+        key: "carnet",
       },
       {
         title: "Collecteur en charge",
         dataIndex: "collecteur",
         key: "collecteur",
       },
+    ];
+
+    
+    this.columns_p = [
       {
-        title: "Action",
-        key: "Action",
-        scopedSlots: { customRender: "operation" },
+        title: "Date de creation",
+        dataIndex: "createdAt",
+        key: "createdAt",
+        scopedSlots: { customRender: "name" },
+      },
+      {
+        title: "Nom/Prénom client",
+        dataIndex: "nom",
+        key: "nom",
+      },
+      {
+        title: "N° de téléphone",
+        dataIndex: "numero",
+        key: "numero",
+      },
+      {
+        title: "Info carnet",
+        dataIndex: "carnet",
+        key: "carnet",
+      },
+      {
+        title: "Collecteur en charge",
+        dataIndex: "collecteur",
+        key: "collecteur",
       },
     ];
 
     this.listeClient();
     this.listeClientlivrés();
+    this.listeClientPresque();
   },
   methods: {
     showAlert(type, title, description) {
@@ -239,25 +244,27 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/clients/carnet/finished`, {}, headers)
+        .get(`${this.callback}/collecteur/carnet/ending`, headers)
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.carnetsEnding;
 
-            this.stats[0].value = data.length;
+            this.stats[0].value = 0;
 
             this.data = [];
 
             for (let i = 0; i < data.length; i++) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom: data[i].nom,
-                numero: data[i].numero,
-                profession: data[i].profession,
-                quartier: data[i].quartier,
-                collecteur: data[i].collecteur,
-              });
+              if (data[i].isDeliver == false) {
+                this.stats[0].value += 1
+                this.data.push({
+                  key: data[i].id,
+                  createdAt: new Date(data[i].createdAt).toLocaleString(),
+                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                  numero: data[i].client[0].telephone,
+                  carnet: data[i].uuid,
+                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+                });
+              }
             }
 
             console.log(this.data);
@@ -274,26 +281,94 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
+      
       this.$http
-        .post(`${this.callback}/clients/carnet/delivered`, {}, headers)
+        .get(`${this.callback}/collecteur/carnet/ending`, headers)
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.carnetsEnding;
 
-            this.stats[1].value = data.length;
+            this.stats[1].value = 0;
+
             this.data_l = [];
 
             for (let i = 0; i < data.length; i++) {
-              this.data_l.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom: data[i].nom,
-                numero: data[i].numero,
-                profession: data[i].profession,
-                quartier: data[i].quartier,
-                collecteur: data[i].collecteur,
-              });
+              if (data[i].isDeliver == true) {
+                this.stats[1].value += 1
+                this.data_l.push({
+                  key: data[i].id,
+                  createdAt: new Date(data[i].createdAt).toLocaleString(),
+                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                  numero: data[i].client[0].telephone,
+                  carnet: data[i].uuid,
+                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+                });
+              }
             }
+
+            console.log(this.data);
+          },
+          (response) => {
+            this.showAlert("error", "Error", response.body.message);
+          }
+        );
+    },
+
+    listeClientPresque() {
+      let session = localStorage;
+      this.token_admin = session.getItem("token");
+
+      let headers = { headers: { Authorization: this.token_admin } };
+
+      
+      this.$http
+        .get(`${this.callback}/collecteur/carnet/endingPresque`, headers)
+        .then(
+          (response) => {
+            let data = response.body.carnetsEndingPresque;
+
+            this.stats[2].value = 0;
+
+            this.data_l = [];
+
+            for (let i = 0; i < data.length; i++) {
+              if (data[i].isDeliver == true) {
+                this.stats[1].value += 1
+                this.data_l.push({
+                  key: data[i].id,
+                  createdAt: new Date(data[i].createdAt).toLocaleString(),
+                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                  numero: data[i].client[0].telephone,
+                  carnet: data[i].uuid,
+                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+                });
+              }
+            }
+
+            console.log(this.data);
+          },
+          (response) => {
+            this.showAlert("error", "Error", response.body.message);
+          }
+        );
+    },
+    
+    deliver(id) {
+      alert(id)
+
+      let session = localStorage;
+      this.token_admin = session.getItem("token");
+
+      let headers = { headers: { Authorization: this.token_admin } };
+
+      
+      this.$http
+        .put(`${this.callback}/collecteur/carnet/deliveredCarnet`, {}, headers)
+        .then(
+          (response) => {
+            let data = response.body;
+
+            console.log(data);
           },
           (response) => {
             this.showAlert("error", "Error", response.body.message);
@@ -308,7 +383,7 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
+        .get(
           `${this.callback}/client/list?search=${this.value}&row=${this.row}&page=1`,
           {},
           headers

@@ -34,6 +34,7 @@
             />
             <a-button
               type="primary"
+              v-if="data.length < 3"
               style="margin-left: 20px"
               @click="showModal"
             >
@@ -59,7 +60,7 @@
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="12" :md="12" class="">
-                  <a-form-item class="" label="Libelle de mise" :colon="false">
+                  <a-form-item class="" label="Nom de la période" :colon="false">
                     <a-input
                       v-decorator="[
                         'libelle',
@@ -67,13 +68,13 @@
                           rules: [
                             {
                               required: true,
-                              message: 'Libelle de mise est vide!',
+                              message: 'Nom de la période est vide!',
                             },
                           ],
                         },
                       ]"
                       type="text"
-                      placeholder="Libelle de mise"
+                      placeholder="Nom de la période"
                     />
                   </a-form-item>
                 </a-col>
@@ -81,7 +82,7 @@
                 <a-col :span="12" :md="12" class="">
                   <a-form-item
                     class=""
-                    label="Jour"
+                    label="Période"
                     :colon="false"
                   >
                     <a-input
@@ -91,13 +92,13 @@
                           rules: [
                             {
                               required: true,
-                              message: 'Jour est vide!',
+                              message: 'Période est vide!',
                             },
                           ],
                         },
                       ]"
                       type="text"
-                      placeholder="Jour"
+                      placeholder="Période (Jour)"
                     />
                   </a-form-item>
                 </a-col>
@@ -209,12 +210,12 @@ export default {
         scopedSlots: { customRender: "name" },
       },
       {
-        title: "Libelle",
+        title: "Nom de la période",
         dataIndex: "libelle",
         key: "libelle",
       },
       {
-        title: "Jour",
+        title: "Période",
         dataIndex: "jour",
         key: "jour",
       },

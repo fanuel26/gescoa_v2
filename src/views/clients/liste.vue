@@ -166,11 +166,11 @@ export default {
         dataIndex: "numero",
         key: "numero",
       },
-      {
-        title: "Adresse email",
-        dataIndex: "email",
-        key: "email",
-      },
+      // {
+      //   title: "Adresse email",
+      //   dataIndex: "email",
+      //   key: "email",
+      // },
       {
         title: "Quartier",
         dataIndex: "quartier",
@@ -224,7 +224,7 @@ export default {
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].nom} ${data[i].prenoms}`,
                 numero: data[i].telephone,
-                email: data[i].email,
+                // email: data[i].email,
                 quartier: data[i].quartier?.libelle,
                 collecteur: `${data[i].collecteur?.nom} ${data[i].collecteur?.prenoms}`,
               });

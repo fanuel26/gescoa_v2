@@ -243,7 +243,7 @@ export default {
 
       this.$http.get(`${this.callback}/type-carnet/all`, headers).then(
         (response) => {
-          let data = response.body.typeCarnets;
+          let data = response.body.typeCarnets.typeCarnets;
 
           this.stats[0].value = data.length;
 

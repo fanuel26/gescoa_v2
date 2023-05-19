@@ -309,11 +309,11 @@
           dataIndex: "libelle",
           key: "libelle",
         },
-        // {
-        //   title: "Nombre mois",
-        //   dataIndex: "nbr_mois",
-        //   key: "nbr_mois",
-        // },
+        {
+          title: "Nombre jours",
+          dataIndex: "nbr_mois",
+          key: "nbr_mois",
+        },
         {
           title: "Prix par jour (Fcfa)",
           dataIndex: "prix_jour",
@@ -410,7 +410,7 @@
                   key: data[i].id,
                   createdAt: new Date(data[i].createdAt).toLocaleString(),
                   libelle: data[i].uuid,
-                //   nbr_mois: data[i].period / 31,
+                  nbr_mois: data[i].typeMise,
                   prix_jour: data[i].mise,
                   somme: data[i].montant,
                   nbr_sell: data[i].nbrCotisation,

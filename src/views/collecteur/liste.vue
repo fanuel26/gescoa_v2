@@ -82,7 +82,7 @@
                         ]" type="number" placeholder="Numéro de téléphone" />
                       </a-form-item>
                     </a-col>
-                    <a-col :span="12" :md="12" class="">
+                    <!-- <a-col :span="12" :md="12" class="">
                       <a-form-item class="" label="Adresse email" :colon="false">
                         <a-input v-model="email" v-decorator="[
                           'email',
@@ -97,7 +97,7 @@
                           },
                         ]" type="email" placeholder="Adresse email" />
                       </a-form-item>
-                    </a-col>
+                    </a-col> -->
                     <a-col :span="12" :md="12" class="">
                       <a-form-item class="" label="Agence" :colon="false">
                         <a-select v-decorator="[
@@ -154,9 +154,9 @@
                       <a-descriptions-item label="Numéro de téléphone">
                         (+228) {{ numero }}
                       </a-descriptions-item>
-                      <a-descriptions-item label="Adresse email">
+                      <!-- <a-descriptions-item label="Adresse email">
                          {{ email }}
-                      </a-descriptions-item>
+                      </a-descriptions-item> -->
                       <a-descriptions-item label="Mot de passe">
                         {{ password }}
                       </a-descriptions-item>
@@ -168,32 +168,31 @@
           </a-modal>
           <a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
             <template slot="etat" slot-scope="text, record">
-              <span v-if="record.etat == 0" class="text-success">Online</span>
-              <span v-if="record.etat == 1" class="text-danger">Offline</span>
+              <span v-if="record.etat == true" class="text-success">Online</span>
+              <span v-if="record.etat == false" class="text-danger">Offline</span>
             </template>
             <template slot="operation" slot-scope="text, record">
               <a-row>
                 <a-col :span="12">
-                  <div class="d-flex justify-content-center">
-                    <router-link class="mx-2" :to="{
+                  <div class="d-flex justify-content-center" style="display: flex; justify-content: between">
+                    <router-link style="margin-right: 10px;" :to="{
                       name: 'Collecteur_detail',
                       params: { id: record.key },
                     }"><a-button type="primary" size="small">Détail</a-button></router-link>
-                    <a-popconfirm v-if="record.status == 1" title="Sûre de bloquer?"
-                      @confirm="() => block(record.key)"><a-button type="danger" class="mx-2"
+                    <a-popconfirm v-if="record.isActive == true" title="Sûre de bloquer?"
+                      @confirm="() => block(record.key, record.isActive)"><a-button type="danger" class="mx-2"
                         size="small">Bloquer</a-button>
                     </a-popconfirm>
 
-                    <a-popconfirm v-if="record.status == 0" title="Sûre de débloquer?"
-                      @confirm="() => block(record.key)"><a-button type="success" class="mx-2"
+                    <a-popconfirm v-if="record.isActive == false" title="Sûre de débloquer?"
+                      @confirm="() => block(record.key, record.isActive)"><a-button type="success" class="mx-2"
                         size="small">Debloquer</a-button>
                     </a-popconfirm>
-                    <a-popconfirm v-if="record.status == 1" title="Sûre d'archiver?"
+                    <!-- <a-popconfirm v-if="record.isActive == 1" title="Sûre d'archiver?"
                       @confirm="() => Archive(record.key)"><a-button type="warning" class="mx-2"
                         size="small">Archiver</a-button>
-                    </a-popconfirm>
+                    </a-popconfirm> -->
                   </div>
-
                 </a-col>
               </a-row>
             </template>
@@ -260,7 +259,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `gescoa@${Math.floor(
+    this.password = `GESCOV@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -385,7 +384,7 @@ export default {
       this.$http.get(`${this.callback}/quartiers/all`, headers).then(
         (response) => {
           console.log(response);
-          let data = response.body.allQuartier;
+          let data = response.body.allQuartier.quartiers;
 
           this.quartiers = data;
         },
@@ -404,7 +403,7 @@ export default {
 
       this.$http
         .get(
-          `${this.callback}/collecteur/all`,
+          `${this.callback}/collecteur/allByAdmin`,
           headers
         )
         .then(
@@ -421,8 +420,8 @@ export default {
                 nom: `${data[i].nom} ${data[i].prenoms}`,
                 numero: `(+228) ${data[i].telephone}`,
                 agence: data[i].agence.libelle,
-                status: data[i].is_active,
-                etat: data[i].is_disconnect,
+                isActive: data[i].isActive,
+                etat: data[i].isLogin,
               });
 
               this.data_s = this.data;
@@ -528,16 +527,16 @@ export default {
       this.visible = true;
     },
 
-    block(id) {
+    block(id, isActive) {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/agent_collecteur/${id}/state/change`,
-          {},
+        .put(
+          `${this.callback}/collecteur/toggleAccount`,
+          {collecteur: id, isActive: isActive == true ? false : true},
           headers
         )
         .then(
@@ -604,7 +603,7 @@ export default {
         nom: data.nom,
         prenoms: data.prenom,
         telephone: data.numero,
-        email: data.email,
+        email: 'admin@gmail.com',
         quartier: data.quartier,
         password: this.password,
         agence: data.agence

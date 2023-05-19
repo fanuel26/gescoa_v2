@@ -200,7 +200,7 @@
                         />
                       </a-form-item>
                     </a-col>
-                    <a-col :span="12" :md="12" class="">
+                    <!-- <a-col :span="12" :md="12" class="">
                       <a-form-item
                         class=""
                         label="Adresse email"
@@ -224,7 +224,7 @@
                           placeholder="Adresse email"
                         />
                       </a-form-item>
-                    </a-col>
+                    </a-col> -->
                   </a-row>
                 </a-form>
               </a-col>
@@ -241,9 +241,9 @@
                       <a-descriptions-item label="Numéro de téléphone">
                         (+228) {{ numero }}
                       </a-descriptions-item>
-                      <a-descriptions-item label="Email">
+                      <!-- <a-descriptions-item label="Email">
                         {{ email }}
-                      </a-descriptions-item>
+                      </a-descriptions-item> -->
                       <a-descriptions-item label="Mot de passe">
                         {{ password }}
                       </a-descriptions-item>
@@ -332,7 +332,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `gescoa@${Math.floor(
+    this.password = `GESCOV@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -418,7 +418,7 @@ export default {
       this.$http.get(`${this.callback}/quartiers/all`, headers).then(
         (response) => {
           console.log(response);
-          let data = response.body.allQuartier;
+          let data = response.body.allQuartier.quartiers;
 
           this.quartiers = data;
         },
@@ -599,7 +599,7 @@ export default {
         quartier: data.quartier,
         password: this.password,
         agence: data.agence,
-        email: data.email
+        email: "admin@gmail.com"
       };
 
       console.log(data_create);

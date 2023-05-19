@@ -49,7 +49,6 @@ export default ({
 	},
 
 	mounted() {
-		alert('is zooo 1')
 		listAgence()
 	},
 
@@ -64,7 +63,6 @@ export default ({
 				(response) => {
 					let data = response.body.data;
 
-					alert("is zooo")
 					console.log(data)
 
 					this.agences = data

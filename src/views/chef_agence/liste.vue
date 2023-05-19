@@ -27,32 +27,22 @@
         <a-card class="card card-body border-0">
           <template #title>
             <h6>
-              Liste des transactions 
-              <span v-if="type == 1">epargnes</span>
-              <span v-if="type == 0">produits</span>
+              Liste des transactions
             </h6>
           </template>
-          <div class="d-flex justify-content-between align-items-center mb-24">
-            <div>
-              <a-button class="mx-2" type="primary" v-if="type == 1"
-                >Transaction Epargnes</a-button
-              >
-              <a-button class="mx-2" type="primary" v-if="type == 0"
-                >Transaction Produits</a-button
-              >
-            </div>
-            <div>
-              <a-button class="mx-2" @click="showModal"
+          <div>
+            <div style="display: flex; justify-content: end; margin-bottom: 10px;">
+              <!-- <a-button class="mx-2" @click="showModal"
                 >Creation de chef agence</a-button
-              >
-              <router-link :to="{ name: 'Chef_agence_historique' }">
-                <a-button class="mx-2">Historique des demandes</a-button>
-              </router-link>
-              <router-link :to="{ name: 'Chef_agence_transaction' }">
+              > -->
+              <!-- <router-link :to="{ name: 'Chef_agence_transaction' }">
                 <a-button type="primary" class="mx-2"
                   >Liste des transaction</a-button
                 >
-              </router-link>
+              </router-link> -->
+              <!-- <router-link :to="{ name: 'Chef_agence_historique' }">
+                <a-button class="mx-2">Historique des demandes</a-button>
+              </router-link> -->
             </div>
             <a-modal
               :width="width"
@@ -180,19 +170,19 @@
               <div class="d-flex">
                 <a-popconfirm
                   title="Etes vous Sûr d'accepter?"
-                  @confirm="() => accepter(record.key)"
-                  ><a-button type="primary" class="mx-2" size="small"
+                  @confirm="() => accepter(record.key, record.agentId)"
+                  ><a-button type="primary" size="small" v-bind:disabled="record.isAdminValidate == true ? true : false"
                     >Accepter</a-button
                   >
                 </a-popconfirm>
-
+<!-- 
                 <a-popconfirm
                   title="Etes vous Sûr de rejeter?"
                   @confirm="() => rejeter(record.key)"
-                  ><a-button type="danger" size="small" class="mx-2"
+                  ><a-button type="danger" size="small" style="margin-left: 10px"
                     >Rejeter</a-button
                   >
-                </a-popconfirm>
+                </a-popconfirm> -->
               </div>
             </template>
           </a-table>
@@ -214,11 +204,6 @@ const columns = [
     scopedSlots: { customRender: "name" },
   },
   {
-    title: "Nom agence",
-    dataIndex: "nom_agence",
-    key: "nom_agence",
-  },
-  {
     title: "Nom/Prénom gerant",
     dataIndex: "nom",
     key: "nom",
@@ -229,19 +214,9 @@ const columns = [
     key: "numero",
   },
   {
-    title: "Montant réel (Fcfa)",
+    title: "Montant envoyé (Fcfa)",
     dataIndex: "montant",
     key: "montant",
-  },
-  {
-    title: "Montant cotiser (Fcfa)",
-    dataIndex: "cotiser",
-    key: "cotiser",
-  },
-  {
-    title: "Type",
-    dataIndex: "type",
-    key: "type",
   },
   {
     title: "Action",
@@ -312,24 +287,24 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/agent/transaction/request/liste`, {}, headers)
+        .get(`${this.callback}/xender-admin/compteRendus`, headers)
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.compteRendus;
+
+            console.log(data)            
             this.stats[0].value = data.length;
 
             this.data = [];
-            console.log(data);
             for (let i = 0; i < data.length; i++) {
               this.data.push({
                 key: data[i].id,
+                agentId: data[i].agent.id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom_agence: data[i].agent.agence.nom_agence,
-                nom: `${data[i].agent.nom} ${data[i].agent.prenom}`,
-                numero: `(+228) ${data[i].agent.numero}`,
-                montant: data[i].reste + data[i].montant,
-                type: data[i].type == 1 ? "Epargne" : "Produit",
-                cotiser: data[i].montant,
+                nom: `${data[i].agent.nom} ${data[i].agent.prenoms}`,
+                numero: `(+228) ${data[i].agent.telephone}`,
+                montant: data[i].montant,
+                isAdminValidate: data[i].isAdminValidate
               });
             }
           },
@@ -362,7 +337,8 @@ export default {
           }
         );
     },
-    accepter(id) {
+    
+    accepter(id, agentId) {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
@@ -371,13 +347,12 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/agent/transaction/accept/${id}`, {}, headers)
+        .put(`${this.callback}/xender-admin/validateCompteRendu`, {xenderId: id, agent: agentId}, headers)
         .then(
           (response) => {
             let data = response.body;
             console.log(data);
-            console.log(data);
-            if (data.status == true) {
+            if (data.status == 200) {
               this.showAlert(
                 "success",
                 "Success",

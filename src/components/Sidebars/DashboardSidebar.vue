@@ -19,7 +19,7 @@
     <div class="brand">
       <router-link :to="{ name: 'Dashboard' }">
         <!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
-        <h3 class="text-primary">GESCOA</h3>
+        <h3 class="text-primary">GESCOV</h3>
       </router-link>
     </div>
     <hr />
@@ -378,7 +378,7 @@
       >
         Admin & Local
       </a-menu-item>
-      <!-- <a-menu-item v-if="type.chef == true">
+      <a-menu-item v-if="type.chef == true">
         <router-link :to="{ name: 'Chef_agence' }">
           <span class="icon">
             <svg
@@ -412,7 +412,7 @@
           >
           </a-badge>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <!-- <a-menu-item v-if="type.admin == true">
         <router-link :to="{ name: 'Admin' }">
           <span class="icon">
@@ -480,8 +480,8 @@
           </span>
           <span class="label">Livraison statistique</span>
         </router-link>
-      </a-menu-item>
-      <a-menu-item v-if="type.launship == true">
+      </a-menu-item> -->
+      <a-menu-item>
         <router-link :to="{ name: 'Etat' }">
           <span class="icon">
             <svg
@@ -501,7 +501,7 @@
           </span>
           <span class="label">Etat carnet</span>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <a-menu-item class="menu-item-header"> Paramêtre </a-menu-item>
       <!-- <a-menu-item>
         <router-link :to="{ name: 'Pret_parametre' }">

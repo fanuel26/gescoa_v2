@@ -46,7 +46,7 @@
 		<!-- Copyright Notice -->
 		<p class="copyright">
 			Copyright © 2022
-			by <a href="https://creative-tim.com">GESCAPRO</a>.
+			by <a href="https://creative-tim.com">GESCOV</a>.
 		</p>
 		<!-- / Copyright Notice -->
 

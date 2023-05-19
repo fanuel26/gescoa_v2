@@ -294,7 +294,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `gescoa@${Math.floor(
+    this.password = `GESCOV@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 

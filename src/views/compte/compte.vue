@@ -24,7 +24,7 @@
             <a-avatar :size="74" shape="square" src="/images/logo1.png" />
             <div class="avatar-info">
               <h4 class="font-semibold m-0">{{ compte.nom }}</h4>
-              <p>{{ compte.username }}</p>
+              <p>{{ compte.prenoms }}</p>
             </div>
           </a-col>
           <a-col
@@ -64,8 +64,11 @@
             <a-descriptions-item label="Adresse email">
               {{ compte.email }}
             </a-descriptions-item>
+            <a-descriptions-item label="N° de téléphone">
+              {{ compte.telephone }}
+            </a-descriptions-item>
             <a-descriptions-item label="Code secret">
-              {{ compte.code_secret }}
+              {{ compte.codeSecret }}
             </a-descriptions-item>
           </a-descriptions>
         </a-card>
@@ -340,7 +343,7 @@ export default {
   },
 
   mounted() {
-    this.password = `gescoa@${Math.floor(
+    this.password = `gescov@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -361,20 +364,22 @@ export default {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
-      let headers = { headers: { Authorization: this.token_admin } };
+      // let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/info`, {}, headers).then(
-        (response) => {
-          let data = response.body.data;
+      this.compte = JSON.parse(session.getItem('infoAdmin'))
 
-          this.compte = data;
+      // this.$http.post(`${this.callback}/info`, {}, headers).then(
+      //   (response) => {
+      //     let data = response.body.data;
 
-          console.log(data);
-        },
-        (response) => {
-          flash(response.body.message, "Erreur", "fa fa-times", "danger");
-        }
-      );
+      //     this.compte = data;
+
+      //     console.log(data);
+      //   },
+      //   (response) => {
+      //     flash(response.body.message, "Erreur", "fa fa-times", "danger");
+      //   }
+      // );
     },
 
     codeSubmit(e) {
@@ -459,7 +464,7 @@ export default {
                       "Success",
                       `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                     );
-                    this.password = `gescoa@${Math.floor(
+                    this.password = `gescov@${Math.floor(
                       Math.random() * (9999 - 1000) + 1000
                     )}`;
                   } else {

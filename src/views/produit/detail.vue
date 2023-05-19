@@ -13,7 +13,7 @@
           class="header-solid h-full"
           :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
         >
-          <div class="text-right mb-4">
+          <div class="text-right mb-4" style="margin-bottom: 10px;">
             <a-button @click="$router.go(-1)">Retour</a-button>
           </div>
           <template #title>
@@ -24,11 +24,14 @@
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
                   <a-descriptions
-                    :title="'Date de creation: ' + new Date(produit.createdAt).toLocaleString()"
+                    :title="'Date de creation: ' + produit.createdAt"
                     :column="2"
                   >
                     <a-descriptions-item label="Nom du produit">
                       {{ produit.libelle }}
+                    </a-descriptions-item>
+                    <a-descriptions-item label="Montant">
+                      {{ produit.montant }} Fcfa
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>
@@ -55,7 +58,7 @@
                   >
                     <a-row type="flex" :gutter="24">
                       <!-- Billing Information Column -->
-                      <a-col :span="12" :md="12" class="">
+                      <a-col :span="16" :md="16" class="">
                         <a-form-item
                           class=""
                           label="Nom du produit"
@@ -79,7 +82,31 @@
                           />
                         </a-form-item>
                       </a-col>
-                      <a-col :span="12" :md="12" class="">
+                      <!-- <a-col :span="8" :md="8" class="">
+                        <a-form-item
+                          class=""
+                          label="Montant"
+                          :colon="false"
+                        >
+                          <a-input
+                            v-decorator="[
+                              'montant',
+                              {
+                                initialValue: produit.montant,
+                                rules: [
+                                  {
+                                    required: true,
+                                    message: 'Montant du produit est vide!',
+                                  },
+                                ],
+                              },
+                            ]"
+                            type="number"
+                            placeholder="Montant produit"
+                          />
+                        </a-form-item>
+                      </a-col> -->
+                      <a-col :span="8" :md="8" class="">
                         <a-form-item
                           class=""
                           label="Code secret"
@@ -172,17 +199,22 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/produit/list`, {}, headers).then(
+      this.$http.get(`${this.callback}/type-carnet/all`, {}, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.typeCarnets.typeCarnets;
+        
+          
+          console.log(data)
           for (let i = data.length - 1; i >= 0; i--) {
-            if ((data[i].id == this.$route.params.id)) {
-              console.log(data[i])
+            if (data[i].id == this.$route.params.id) {
               this.produit = {
                 key: data[i].id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
                 libelle: data[i].libelle,
+                montant: data[i].montant,
               };
+
+              console.log(this.produit)
 
               break;
             }
@@ -206,11 +238,12 @@ export default {
             const data = { libelle: values.libelle };
 
             this.$http
-              .post(`${this.callback}/produit/update/${this.$route.params.id}`, data, headers)
+              .put(`${this.callback}/type-carnet/update/${this.$route.params.id}`, data, headers)
               .then(
                 (response) => {
                   console.log(response)
                   if (response) {
+                    this.form.resetFields();
                     this.detailProduit();
                     this.showAlert('success', 'Success', "Modification de produit effectuer avec success");
                   }

@@ -226,11 +226,11 @@ export default {
         dataIndex: "ville",
         key: "ville",
       },
-      {
-        title: "Quartier",
-        dataIndex: "quartier",
-        key: "quartier",
-      },
+      // {
+      //   title: "Quartier",
+      //   dataIndex: "quartier",
+      //   key: "quartier",
+      // },
       {
         title: "Action",
         key: "Action",
@@ -288,8 +288,8 @@ export default {
               key: data[i].id,
               createdAt: new Date(data[i].createdAt).toLocaleString(),
               nom: data[i].libelle,
-              ville: data[i].ville,
-              quartier: data[i].quartier?.libelle,
+              ville: data[i].ville?.libelle,
+              // quartier: data[i].quartier?.libelle,
             });
 
             this.data_s = this.data;

@@ -8,18 +8,14 @@
     <a-row type="flex" :gutter="24">
       <!-- Billing Information Column -->
       <a-col :span="24" :md="16" class="mb-24">
-        <a-card
-          :bordered="false"
-          class="header-solid h-full"
-          :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
-        >
+        <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }">
           <div class="text-right mb-4">
-            <router-link
+            <!-- <router-link
               :to="{ name: 'Agence_depot', params: { id: caissier.id } }"
             >
               <a-button type="primary" class="mx-2">Liste des dépots</a-button>
-            </router-link>
-            <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
+            </router-link> -->
+            <a-button style="margin-left: 10px; margin-top: 10px" @click="$router.go(-1)">Retour</a-button>
           </div>
           <template #title>
             <h6 class="font-semibold m-0">Information du caissier</h6>
@@ -28,38 +24,35 @@
             <a-col :span="24">
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
-                  <a-descriptions
-                    :title="'date de création: ' + caissier.createdAt"
-                    :column="2"
-                  >
+                  <a-descriptions :title="'date de création: ' + caissier.createdAt" :column="2">
                     <a-descriptions-item label="Nom">
                       {{ caissier.nom }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Prenom">
-                      {{ caissier.prenom }}
+                      {{ caissier.prenoms }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Numéro de téléphone">
-                      (+228) {{ caissier.numero }}
+                      (+228) {{ caissier.telephone }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Agence">
-                      {{ caissier.agence.nom_agence }}
+                      {{ caissier.agence.libelle }}
                     </a-descriptions-item>
-                    <a-descriptions-item> </a-descriptions-item>
-                    <a-descriptions-item label="Ville">
+                    <!-- <a-descriptions-item> </a-descriptions-item> -->
+                    <!-- <a-descriptions-item label="Ville">
                       {{ ville }}
-                    </a-descriptions-item>
+                    </a-descriptions-item> -->
                     <a-descriptions-item label="Quartier">
-                      {{ quartier }}
+                      {{ caissier.quartier.libelle }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Code secret">
-                      {{ caissier.code_secret }}
+                      {{ caissier.codeSecret }}
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>
               </a-card>
             </a-col>
           </a-row>
-          <a-col :span="24" :md="24" class="mb-24">
+          <!-- <a-col :span="24" :md="24" class="mb-24">
             <a-card
               :bordered="false"
               class="header-solid h-full"
@@ -77,7 +70,6 @@
                   v-for="(stat, index) in stats"
                   :key="index"
                 >
-                  <!-- Widget 1 Card -->
                   <WidgetCounter
                     :title="stat.title"
                     :value="stat.value"
@@ -86,57 +78,38 @@
                     :icon="stat.icon"
                     :status="stat.status"
                   ></WidgetCounter>
-                  <!-- / Widget 1 Card -->
                 </a-col>
               </a-row>
             </a-card>
-          </a-col>
+          </a-col> -->
         </a-card>
       </a-col>
       <!-- Billing Information Column -->
 
       <!-- Your Transactions Column -->
       <a-col :span="8" :md="8" class="mb-24">
-        <a-card
-          :bordered="false"
-          class="header-solid h-full"
-          :bodyStyle="{ paddingTop: '16px', paddingBottom: '16px' }"
-        >
+        <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '16px', paddingBottom: '16px' }">
           <template>
             <h6 class="font-semibold m-0">Generer code secret</h6>
           </template>
-          <a-form
-            id="components-form-demo-normal-login"
-            :form="form_code"
-            class="login-form"
-            @submit="changeCode"
-            :hideRequiredMark="true"
-          >
+          <a-form id="components-form-demo-normal-login" :form="form_code" class="login-form" @submit="changeCode"
+            :hideRequiredMark="true">
             <a-form-item class="" label="Code secret generer" :colon="false">
-              <a-input
-                v-decorator="[
-                  'code_secret',
-                  {
-                    initialValue: code_secret,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Code secret generer incorrect!',
-                      },
-                    ],
-                  },
-                ]"
-                disabled
-                type="text"
-                placeholder="Code secret"
-              />
+              <a-input v-decorator="[
+                'code_secret',
+                {
+                  initialValue: code_secret,
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Code secret generer incorrect!',
+                    },
+                  ],
+                },
+              ]" disabled type="text" placeholder="Code secret" />
             </a-form-item>
             <div class="mb-4 text-right">
-              <a-button
-                type="primary"
-                html-type="submit"
-                class="login-form-button"
-              >
+              <a-button type="primary" html-type="submit" class="login-form-button">
                 Generer
               </a-button>
             </div>
@@ -144,43 +117,29 @@
           <template>
             <h6 class="font-semibold m-0">Generer mot de passe</h6>
           </template>
-          <a-form
-            id="components-form-demo-normal-login"
-            :form="form_password"
-            class="login-form"
-            @submit="passwordSubmit"
-            :hideRequiredMark="true"
-          >
+          <a-form id="components-form-demo-normal-login" :form="form_password" class="login-form" @submit="passwordSubmit"
+            :hideRequiredMark="true">
             <a-form-item class="" label="Mot de passe generer" :colon="false">
-              <a-input
-                v-decorator="[
-                  'password',
-                  {
-                    initialValue: password,
-                    rules: [
-                      {
-                        required: true,
-                        message: 'Mot de passe generer incorrect!',
-                      },
-                    ],
-                  },
-                ]"
-                disabled
-                type="text"
-                placeholder="Mot de passe"
-              />
+              <a-input v-decorator="[
+                'password',
+                {
+                  initialValue: password,
+                  rules: [
+                    {
+                      required: true,
+                      message: 'Mot de passe generer incorrect!',
+                    },
+                  ],
+                },
+              ]" disabled type="text" placeholder="Mot de passe" />
             </a-form-item>
             <div class="mb-4 text-right">
-              <a-button
-                type="primary"
-                html-type="submit"
-                class="login-form-button"
-              >
+              <a-button type="primary" html-type="submit" class="login-form-button">
                 Generer
               </a-button>
             </div>
           </a-form>
-          <template>
+          <!-- <template>
             <h6 class="font-semibold m-0">Deconnectez le caissier</h6>
           </template>
           <a-form
@@ -216,7 +175,7 @@
                 Deconnexion
               </a-button>
             </div>
-          </a-form>
+          </a-form> -->
         </a-card>
       </a-col>
       <!-- / Your Transactions Column -->
@@ -251,7 +210,7 @@ export default {
   },
   data() {
     return {
-      
+
       callback: process.env.VUE_APP_API_BASE_URL,
       token_admin: null,
       stats: [],
@@ -266,7 +225,7 @@ export default {
 
   mounted() {
     this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
-    this.password = `gescoa@${Math.floor(
+    this.password = `gescov@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -296,7 +255,7 @@ export default {
     ];
 
     this.listecaissier();
-    this.detailcaissier();
+    // this.detailcaissier();
   },
 
   methods: {
@@ -313,10 +272,16 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/agent/list`, {}, headers).then(
+      this.$http.get(`${this.callback}/agent/all`, headers).then(
         (response) => {
-          let data = response.body.data;
-          this.caissiers = data;
+          let data = response.body.agents;
+          // this.caissiers = data;
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].id = this.$route.params.id) {
+              console.log(data[i])
+              this.caissier = data[i];
+            }
+          }
         },
         (response) => {
           this.showAlert("error", "Erreur", response.body.message);
@@ -324,47 +289,47 @@ export default {
       );
     },
 
-    detailcaissier() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
+    // detailcaissier() {
+    //   let session = localStorage;
+    //   this.token_admin = session.getItem("token");
 
-      let headers = { headers: { Authorization: this.token_admin } };
+    //   let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http
-        .post(
-          `${this.callback}/agent/info/${this.$route.params.id}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-            this.caissier = data;
-            this.ville = data.quartier.ville.libelle;
-            this.quartier = data.quartier.libelle;
-          },
-          (response) => {
-            this.showAlert("error", "Erreur", response.body.message);
-          }
-        );
+    //   this.$http
+    //     .post(
+    //       `${this.callback}/agent/info/${this.$route.params.id}`,
+    //       {},
+    //       headers
+    //     )
+    //     .then(
+    //       (response) => {
+    //         let data = response.body.data;
+    //         this.caissier = data;
+    //         this.ville = data.quartier.ville.libelle;
+    //         this.quartier = data.quartier.libelle;
+    //       },
+    //       (response) => {
+    //         this.showAlert("error", "Erreur", response.body.message);
+    //       }
+    //     );
 
-      this.$http
-        .post(
-          `${this.callback}/transaction/agent/${this.$route.params.id}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-            console.log(data);
-            this.stats[0].value = data.length;
-          },
-          (response) => {
-            this.showAlert("error", "Erreur", response.body.message);
-          }
-        );
-    },
+    //   this.$http
+    //     .post(
+    //       `${this.callback}/transaction/agent/${this.$route.params.id}`,
+    //       {},
+    //       headers
+    //     )
+    //     .then(
+    //       (response) => {
+    //         let data = response.body.data;
+    //         console.log(data);
+    //         this.stats[0].value = data.length;
+    //       },
+    //       (response) => {
+    //         this.showAlert("error", "Erreur", response.body.message);
+    //       }
+    //     );
+    // },
 
     changeCode(e) {
       e.preventDefault();
@@ -376,13 +341,13 @@ export default {
           let headers = { headers: { Authorization: this.token_admin } };
 
           let data_param = {
-            code_secret: this.caissier.code_secret,
-            newcode_secret: values.code_secret,
+            oldCodeSecret: this.caissier.codeSecret,
+            newCodeSecret: `${values.code_secret}`,
           };
 
           this.$http
-            .post(
-              `${this.callback}/agent/${this.$route.params.id}/code/change`,
+            .put(
+              `${this.callback}/agent/updateCSAgent/${this.$route.params.id}`,
               data_param,
               headers
             )
@@ -390,13 +355,13 @@ export default {
               (response) => {
                 let data = response.body;
 
-                if (data.status == true) {
+                if (data.status == 200) {
                   this.showAlert(
                     "success",
                     "Success",
                     `Code secret générer avec success! Code secret: ${values.code_secret}`
                   );
-                  this.detailcaissier();
+                  this.listecaissier();
 
                   this.code_secret = Math.floor(
                     Math.random() * (9999 - 1000) + 1000
@@ -424,56 +389,39 @@ export default {
 
           let headers = { headers: { Authorization: this.token_admin } };
 
+          let data_param = {
+            newPassword: values.password,
+          };
+
           this.$http
-            .post(
-              `${this.callback}/agent/${this.$route.params.id}/password/change/token`,
-              {},
+            .put(
+              `${this.callback}/agent/generateMdpAgent/${this.$route.params.id}`,
+              data_param,
               headers
             )
             .then(
               (response) => {
-                let data = response.body.data;
+                let data = response.body;
+                console.log(data);
 
-                let token_password = data;
-
-                let headers = { headers: { Authorization: token_password } };
-
-                let data_param = {
-                  newpassword: values.password,
-                };
-
-                this.$http
-                  .post(
-                    `${this.callback}/agent/${this.$route.params.id}/password/change/operation`,
-                    data_param,
-                    headers
-                  )
-                  .then(
-                    (response) => {
-                      let data = response.body;
-
-                      if (data.status == true) {
-                        this.showAlert(
-                          "success",
-                          "Success",
-                          `Mot de passe generer avec succes! Mot de passe: ${values.password}`
-                        );
-                        this.password = `gescoa@${Math.floor(
-                          Math.random() * (9999 - 1000) + 1000
-                        )}`;
-                      } else {
-                        this.showAlert("error", "Erreur", data.message);
-                      }
-                    },
-                    (response) => {
-                      this.showAlert("error", "Erreur", response.body.message);
-                    }
+                if (data.status == 200) {
+                  this.showAlert(
+                    "success",
+                    "Success",
+                    `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                   );
+                  this.password = `gescov@${Math.floor(
+                    Math.random() * (9999 - 1000) + 1000
+                  )}`;
+                } else {
+                  this.showAlert("error", "Erreur", data.message);
+                }
               },
               (response) => {
                 this.showAlert("error", "Erreur", response.body.message);
               }
             );
+
         } else {
           console.log("error");
         }
@@ -519,10 +467,9 @@ export default {
       });
     },
 
-    handleSubmit() {},
+    handleSubmit() { },
   },
 };
 </script>
 
-<style lang="scss">
-</style>
+<style lang="scss"></style>
