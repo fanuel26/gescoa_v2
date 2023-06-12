@@ -685,7 +685,7 @@ export default {
 
       this.$http
         .get(
-          `${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}`,
+          `${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}s`,
           {},
           headers
         )
