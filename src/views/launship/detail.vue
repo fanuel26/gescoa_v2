@@ -37,7 +37,7 @@
                       Totsi
                     </a-descriptions-item>
                     <a-descriptions-item label="Mot de passe">
-                      GESCOV@1234
+                      n2a@1234
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>
