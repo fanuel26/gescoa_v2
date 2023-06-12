@@ -1,23 +1,10 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <!-- Widget 1 Card -->
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
+        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
+          :icon="stat.icon" :status="stat.status"></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
@@ -26,99 +13,68 @@
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <div class="mb-4 text-right">
-            <a-input-search
-              v-model="value"
-              placeholder="Recherche ici"
-              style="width: 300px"
-              @change="onSearch"
-            />
-            <a-button
-              type="primary"
-              style="margin-left: 20px"
-              @click="showModal"
-            >
+            <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
+            <router-link :to="{ name: 'Produit_classement'}">
+              <a-button type="primary" style="margin-left: 20px">
+                Classement produit
+              </a-button>
+            </router-link>
+            <a-button type="primary" style="margin-left: 20px" @click="showModal">
               Créer un produit
             </a-button>
           </div>
 
-          <a-modal
-            :width="width"
-            title="Creer un produit"
-            :visible="visible"
-            :confirm-loading="confirmLoading"
-            @ok="handleOk"
-            @cancel="handleCancel"
-          >
-            <a-form
-              id="components-form-demo-normal-login"
-              :form="form"
-              class="login-form"
-              @submit="produitSubmit"
-              :hideRequiredMark="true"
-            >
+          <a-modal :width="width" title="Creer un produit" :visible="visible" :confirm-loading="confirmLoading"
+            @ok="handleOk" @cancel="handleCancel">
+            <a-form id="components-form-demo-normal-login" :form="form" class="login-form" @submit="produitSubmit"
+              :hideRequiredMark="true">
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="12" :md="12" class="">
                   <a-form-item class="" label="Nom du produit" :colon="false">
-                    <a-input
-                      v-decorator="[
-                        'libelle',
-                        {
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Nom du produit est vide!',
-                            },
-                          ],
-                        },
-                      ]"
-                      type="text"
-                      placeholder="Nom produit"
-                    />
+                    <a-input v-decorator="[
+                      'libelle',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Nom du produit est vide!',
+                          },
+                        ],
+                      },
+                    ]" type="text" placeholder="Nom produit" />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12" :md="12" class="">
-                  <a-form-item
-                    class=""
-                    label="Montant du produit"
-                    :colon="false"
-                  >
-                    <a-input
-                      v-decorator="[
-                        'montant',
-                        {
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Montant du produit est vide!',
-                            },
-                          ],
-                        },
-                      ]"
-                      type="text"
-                      placeholder="Montant produit"
-                    />
+                  <a-form-item class="" label="Montant du produit" :colon="false">
+                    <a-input v-decorator="[
+                      'montant',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Montant du produit est vide!',
+                          },
+                        ],
+                      },
+                    ]" type="text" placeholder="Montant produit" />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12" :md="12" class="">
                   <a-form-item class="" label="Code secret" :colon="false">
-                    <a-input
-                      v-decorator="[
-                        'code_secret',
-                        {
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Code secret est vide!',
-                            },
-                          ],
-                        },
-                      ]"
-                      type="number"
-                      placeholder="Code secret"
-                    />
+                    <a-input v-decorator="[
+                      'code_secret',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Code secret est vide!',
+                          },
+                        ],
+                      },
+                    ]" type="number" placeholder="Code secret" />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -127,11 +83,8 @@
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
               <div class="d-flex">
-                <router-link
-                  :to="{ name: 'Produit_detail', params: { id: record.key } }"
-                  ><a-button type="primary" class="mx-2" size="small"
-                    >Detail</a-button
-                  >
+                <router-link :to="{ name: 'Produit_detail', params: { id: record.key } }"><a-button type="primary"
+                    class="mx-2" size="small">Detail</a-button>
                 </router-link>
 
                 <!-- <a-popconfirm

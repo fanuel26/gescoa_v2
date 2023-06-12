@@ -40,12 +40,12 @@
                     >clients non visité</a-button
                   ></router-link
                 > -->
-                <!-- <router-link type="primary" :to="{ name: 'Client_classement' }"
+                <router-link type="primary" :to="{ name: 'Client_classement' }"
                   ><a-button class="mx-2"
                     >Classement clients</a-button
                   ></router-link
                 >
-                <router-link type="primary" :to="{ name: 'Client_new' }"
+                <!--  <router-link type="primary" :to="{ name: 'Client_new' }"
                   ><a-button class="mx-2"
                     >Nouveaux clients</a-button
                   ></router-link

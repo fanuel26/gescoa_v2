@@ -15,10 +15,12 @@
           <div class="mb-4" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
             <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
             <!-- <router-link :to="{ name: 'Collecteur_ville' }">
-              <a-button> Liste de collecteur par ville </a-button></router-link>
+              <a-button> Liste de collecteur par ville </a-button></router-link> -->
               <router-link :to="{ name: 'Collecteur_classement' }">
               <a-button> Classement des collecteurs </a-button></router-link>
-            <router-link :to="{ name: 'Collecteur_archived' }">
+              <router-link :to="{ name: 'Collecteur_cotisation' }">
+              <a-button> Classement par cotisation </a-button></router-link>
+            <!-- <router-link :to="{ name: 'Collecteur_archived' }">
               <a-button> Liste de collecteur archiver </a-button></router-link> -->
             <a-button type="primary" style="margin-left: 15px;" @click="showModal">
               Créer un agent collecteur
