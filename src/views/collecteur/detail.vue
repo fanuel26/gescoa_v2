@@ -686,12 +686,15 @@ export default {
       this.$http
         .get(
           `${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}`,
-          {},
           headers
         )
         .then(
           (response) => {
-            let data = response.body.clients;
+            let data = response.body.clients.clients;
+            // statistic/classement/collecteur/byTopTotalCotisationUnik
+            // ${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}
+
+            console.log(response.body)
 
             this.data = [];
 

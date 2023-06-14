@@ -141,21 +141,22 @@ export default {
 				.then((response) => {
 					let data = response.body;
 
+          console.log(data)
 
 					if (data.status == 200) {
-						let dt = data.topCollecteurByCarnetSell[0]._id
+						let dt = data.topCollecteurByCarnetSell
 
 						for (let i = 0; i < dt.length; i++) {
-							console.log(dt[i]);
+							console.log(dt[i]._id);
 							this.data_c.push({
-								key: dt[i].id,
-								nom: `${dt[i].nom} ${dt[i].prenoms}`,
-								numero: dt[i].telephone,
-								frais: dt[i].compte_agent_collecteur + dt[i].total_cotisation,
-								somme: `${dt[i].compte_agent_collecteur + dt[i].total_cotisation}`,
-								agence: dt[i].agc_name,
-								carnet_vendu: dt[i].carnet_vendu,
-								client: dt[i].nbr_cli,
+								key: dt[i]._id.id,
+								nom: `${dt[i]._id.nom} ${dt[i]._id.prenoms}`,
+								numero: dt[i]._id.telephone,
+								frais: dt[i].sommeTotalCotiser,
+								somme: dt[i].sommeTotalCotiser,
+								agence: dt[i]._id.agence[0].libelle,
+								carnet_vendu: dt[i]._id.__v,
+								client: dt[i]._id.nbr_cli,
 							});
 						}
 					}
@@ -169,20 +170,19 @@ export default {
 
 					console.log(data);
 
-
 					if (data.status == 200) {
-						let dt = data.topCollecteurByCotisations[0]._id
+						let dt = data.topCollecteurByCotisations
 						console.log(dt)
 						for (let i = 0; i < dt.length; i++) {
 							this.data.push({
-								key: dt[i].id,
-								nom: `${dt[i].nom} ${dt[i].prenoms}`,
-								numero: dt[i].telephone,
-								frais: dt[i].compte_agent_collecteur + dt[i].total_cotisation,
-								somme: `${dt[i].compte_agent_collecteur + dt[i].total_cotisation}`,
-								agence: dt[i].agc_name,
-								carnet_vendu: dt[i].carnet_vendu,
-								client: dt[i].nbr_cli,
+								key: dt[i]._id.id,
+								nom: `${dt[i]._id.nom} ${dt[i]._id.prenoms}`,
+								numero: dt[i]._id.telephone,
+								frais: dt[i].sommeTotalCotiser,
+								somme: dt[i].sommeTotalCotiser,
+								agence: dt[i]._id.agence[0].libelle,
+								carnet_vendu: dt[i]._id.__v,
+								client: dt[i]._id.nbr_cli,
 							});
 						}
 
