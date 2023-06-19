@@ -23,7 +23,7 @@
             <a-col :span="24">
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
-                  <a-descriptions title="12/03/2022 à 15:30" :column="2">
+                  <a-descriptions title="12/03/2023 à 15:30" :column="2">
                     <a-descriptions-item label="Nom">
                       Franck
                     </a-descriptions-item>

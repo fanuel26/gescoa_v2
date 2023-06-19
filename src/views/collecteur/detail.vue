@@ -749,14 +749,14 @@ export default {
             console.log(data);
             // this.ville = data.quartier.ville.libelle;
             // this.quartier = data.quartier.libelle;
-            this.stats[0].value = data.deversementsTotalConfondus;
+            this.stats[0].value = data.deversementsDepuisJour0;
             this.stats[1].value = data.sommeCotisationDepuisJour0;
-            this.stats[2].value = data.totalCotisationduJour;
+            this.stats[2].value = data.deversementEnCours;
             this.stats[3].value = data.fraisTotalCarnetConfondu;
             this.stats[4].value = data.clientTotal;
             this.stats[5].value = data.carnetTotalConfonduVendu;
             this.stats[6].value = data.carnetVenduDuJour;
-            this.stats[7].value = data.carnetVenduDuJour * 200;
+            this.stats[7].value = data.carnetVenduDuJour * 100;
             this.stats[8].value = data.totalCotisationDepuisJour0
             this.stats[9].value = data.nbrTotalCotisationduJour
             // this.stats[10].value = data.dette;

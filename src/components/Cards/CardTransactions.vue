@@ -16,10 +16,10 @@
     >
       <a-list-item slot="renderItem" slot-scope="item">
         <template>
-          <a-list-item-meta :title="item.title" :description="item.description">
+          <a-list-item-meta :title="item.uuid" :description="`Mise: ${item.mise} Fcfa`">
             <a-avatar
               size="small"
-              v-if="item.type == 1"
+              v-if="item.isSuspend == false"
               slot="avatar"
               style="background-color: #edf9e7"
             >
@@ -40,49 +40,25 @@
             </a-avatar>
             <a-avatar
               size="small"
-              v-if="item.type == 0"
+              v-if="item.isSuspend == true"
               slot="avatar"
               style="background-color: #fffce7"
             >
               <strong class="text-warning"> ! </strong>
             </a-avatar>
-            <a-avatar
-              size="small"
-              v-if="item.type == -1"
-              slot="avatar"
-              style="background-color: #fee9ea"
-            >
-              <svg
-                width="10"
-                height="10"
-                viewBox="0 0 20 20"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <path
-                  class="fill-danger"
-                  fill-rule="evenodd"
-                  clip-rule="evenodd"
-                  d="M5 10C5 9.44772 5.44772 9 6 9L14 9C14.5523 9 15 9.44772 15 10C15 10.5523 14.5523 11 14 11L6 11C5.44772 11 5 10.5523 5 10Z"
-                />
-              </svg>
-            </a-avatar>
           </a-list-item-meta>
           <div>
             <div class="amount">
-              <span v-if="item.case != 1" class="text-danger">
-                {{ item.amount }} Fcfa
-              </span>
-              <span v-if="item.case == 1" class="text-warning">
-                {{ item.amount }} Fcfa
+              <span class="text-danger">
+                {{ item.montant }} Fcfa
               </span>
             </div>
 
-            <a-button size="small" class="mx-2" @click="showModal(item)"
+            <!-- <a-button size="small" class="mx-2" @click="showModal(item)"
               >Detail</a-button
-            >
+            > -->
 
-            <a-button size="small" @click="confirm(item.id)">Action</a-button>
+            <!-- <a-button size="small" @click="confirm(item.id)">Action</a-button> -->
 
             <a-drawer
               title="Actions"
@@ -133,8 +109,8 @@
                   </p>
                   <p>
                     <small>Somme: <strong>{{ data_suppr.montant }} Fcfa</strong></small><br>
-                    <small>Nbr cotisation: <strong>{{ data_suppr.nbCotisation }}</strong></small><br>
-                    <small>Mise du jour: <strong>{{ data_suppr.unit }} Fcfa</strong></small><br>
+                    <small>Nbr cotisation: <strong>{{ data_suppr.nbrCotisation }}</strong></small><br>
+                    <small>Mise du jour: <strong>{{ data_suppr.mise }} Fcfa</strong></small><br>
                   </p>
                   <a-popconfirm
                     title="Voulez vous vraiment supprimer la dernière cotisation?"

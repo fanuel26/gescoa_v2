@@ -32,7 +32,7 @@
 					<a-timeline>
 						<a-timeline-item v-for="dc in dataCollecteur_actif" :key="dc" color="green">
 							{{ dc._id.nom }} {{ dc._id.prenoms }}
-							<p><strong style="color: #000">{{ dc.montantCotisation }}</strong> mises</p>
+							<p><strong style="color: #000">{{ dc.nbrCotisation }}</strong> mises | <strong style="color: #000">{{ dc.montantCotisation }}</strong> Fcfa </p>
 						</a-timeline-item>
 					</a-timeline>
 
@@ -55,8 +55,8 @@
 					</template>
 					<a-timeline>
 						<a-timeline-item v-for="dc in dataCarnet" :key="dc" color="green">
-							{{ dc.libelle }}
-							<p>{{ dc.__v }} ventes | {{ dc.__v * dc.montant }} Fcfa </p>
+							{{ dc._id.libelle }}
+							<p>{{ dc.totalCarnetVendu }} ventes | {{ dc.totalCarnetVendu * dc._id.montant }} Fcfa </p>
 						</a-timeline-item>
 					</a-timeline>
 					<div class="d-flex justify-content-end">
@@ -642,7 +642,7 @@ export default {
 					for (let i = 0; i < 10; i++) {
 						if (data[i] != null) {
 							console.log(data[i])
-							this.dataCarnet.push(data[i]._id);
+							this.dataCarnet.push(data[i]);
 						}
 					}
 				});

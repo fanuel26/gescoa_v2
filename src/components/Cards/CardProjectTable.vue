@@ -155,7 +155,7 @@ export default {
 								frais: dt[i].sommeTotalCotiser,
 								somme: dt[i].sommeTotalCotiser,
 								agence: dt[i]._id.agence[0].libelle,
-								carnet_vendu: dt[i]._id.__v,
+								carnet_vendu: dt[i].totalCarnetVendu,
 								client: dt[i]._id.nbr_cli,
 							});
 						}
@@ -181,7 +181,7 @@ export default {
 								frais: dt[i].sommeTotalCotiser,
 								somme: dt[i].sommeTotalCotiser,
 								agence: dt[i]._id.agence[0].libelle,
-								carnet_vendu: dt[i]._id.__v,
+								carnet_vendu: dt[i].totalCarnetVendu,
 								client: dt[i]._id.nbr_cli,
 							});
 						}

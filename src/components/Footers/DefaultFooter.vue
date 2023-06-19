@@ -45,7 +45,7 @@
 		
 		<!-- Copyright Notice -->
 		<p class="copyright">
-			Copyright © 2022
+			Copyright © 2023
 			by <a href="https://creative-tim.com">n2a</a>.
 		</p>
 		<!-- / Copyright Notice -->
