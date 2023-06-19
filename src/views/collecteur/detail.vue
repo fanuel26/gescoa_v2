@@ -13,13 +13,14 @@
             <a-button type="primary" class="mr-2" @click="changeState()">
               Modifier le collecteur
             </a-button>
-            <!-- <router-link class="mx-2" :to="{
+            <router-link  style="margin-left: 10px" :to="{
               name: 'Collecteur_depot',
               params: { id: this.$route.params.id },
             }">
               <a-button type="primary">Deversement collecteur</a-button>
             </router-link>
-            <router-link class="mx-2" :to="{
+
+            <!-- <router-link class="mx-2" :to="{
               name: 'Collecteur_client',
               params: { id: this.$route.params.id },
             }">
@@ -68,18 +69,9 @@
                       (+228) {{ collecteur.telephone }}
                     </a-descriptions-item>
                     <a-descriptions-item> </a-descriptions-item>
-                    <!-- <a-descriptions-item label="Ville">
-                        {{ ville }}
-                      </a-descriptions-item>
-                      <a-descriptions-item label="Quartier">
-                        {{ quartier }}
-                    </a-descriptions-item> -->
                     <a-descriptions-item label="Code secret">
                       {{ collecteur.codeSecret }}
                     </a-descriptions-item>
-                    <!-- <a-descriptions-item label="Nom d'agence">
-                        {{ collecteur.agc_name }}
-                      </a-descriptions-item> -->
                   </a-descriptions>
                 </div>
               </a-card>

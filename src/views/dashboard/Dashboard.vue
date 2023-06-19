@@ -18,7 +18,6 @@
 
 		<!-- Charts -->
 		<a-row :gutter="24" type="flex" align="stretch">
-			
 			<a-col :span="24" :lg="12" class="mb-24">
 				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
 					:bodyStyle="{ paddingTop: '12px' }">
@@ -32,22 +31,18 @@
 					<a-timeline>
 						<a-timeline-item v-for="dc in dataCollecteur_actif" :key="dc" color="green">
 							{{ dc._id.nom }} {{ dc._id.prenoms }}
-							<p><strong style="color: #000">{{ dc.nbrCotisation }}</strong> mises | <strong style="color: #000">{{ dc.montantCotisation }}</strong> Fcfa </p>
+							<p><strong style="color: #000">{{ dc.nbrCotisation }}</strong> mises | <strong
+									style="color: #000">{{ dc.montantCotisation }}</strong> Fcfa </p>
 						</a-timeline-item>
 					</a-timeline>
-
+					<!-- 
 					<div class="d-flex justify-content-center align-items-center" style="height: 300px;" v-if="load">
 						<a-spin v-if="load" size="large" tip="Chargement..." />
-					</div>
+					</div> -->
 				</a-card>
 			</a-col>
 
-			
-			<!-- Timeline -->
 			<a-col :span="24" :lg="12" class="mb-24">
-				<!-- Orders History Timeline Card -->
-
-				<!-- Orders History Timeline Card -->
 				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
 					<template #title>
 						<h6>Produit les plus vendus</h6>
@@ -56,7 +51,7 @@
 					<a-timeline>
 						<a-timeline-item v-for="dc in dataCarnet" :key="dc" color="green">
 							{{ dc._id.libelle }}
-							<p>{{ dc.totalCarnetVendu }} ventes | {{ dc.totalCarnetVendu * dc._id.montant }} Fcfa </p>
+							<p>{{ dc.totalCarnetVendu }} ventes | {{ dc._id.montant }} Fcfa </p>
 						</a-timeline-item>
 					</a-timeline>
 					<div class="d-flex justify-content-end">
@@ -65,13 +60,31 @@
 						</router-link>
 					</div>
 				</a-card>
-				<!-- / Orders History Timeline Card -->
-
-				<!-- / Orders History Timeline Card -->
 			</a-col>
 		</a-row>
 		<!-- / Charts -->
 
+
+		<a-row :gutter="24" type="flex" align="stretch">
+			<a-col :span="24" :lg="24" class="mb-24">
+				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
+					:bodyStyle="{ paddingTop: '12px' }">
+					<template #title>
+						<div class="d-flex justify-content-between align-items-start">
+							<h6>Collecteurs inactif du jour</h6>
+						</div>
+					</template>
+
+
+					<a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
+						<template slot="etat" slot-scope="text, record">
+							<span v-if="record.etat == true" class="text-success">Online</span>
+							<span v-if="record.etat == false" class="text-danger">Offline</span>
+						</template>
+					</a-table>
+				</a-card>
+			</a-col>
+		</a-row>
 
 		<a-modal :width="width" title="Deversement encour dans les agences" :visible="visible" @cancel="handleCancel"
 			:confirm-loading="confirmLoading" @ok="handleOk">
@@ -144,6 +157,9 @@ export default {
 	data() {
 		return {
 			callback: process.env.VUE_APP_API_BASE_URL,
+			columns: [],
+			data: [],
+			data_d: [],
 			token_admin: null,
 			dataCollecteur: null,
 			columnCollecteur: null,
@@ -285,6 +301,37 @@ export default {
 				title: "Agence",
 				dataIndex: "agence",
 				key: "agence",
+			},
+		];
+
+
+		this.columns = [
+			{
+				title: "Date de creation",
+				dataIndex: "createdAt",
+				key: "createdAt",
+				scopedSlots: { customRender: "name" },
+			},
+			{
+				title: "Nom/Prénom collecteur",
+				dataIndex: "nom",
+				key: "nom",
+			},
+			{
+				title: "Numéro de téléphone",
+				dataIndex: "numero",
+				key: "numero",
+			},
+			{
+				title: "Agence",
+				dataIndex: "agence",
+				key: "agence",
+			},
+			{
+				title: "Etat",
+				dataIndex: "etat",
+				key: "etat",
+				scopedSlots: { customRender: "etat" },
 			},
 		];
 
@@ -440,13 +487,12 @@ export default {
 			},
 		];
 
+		this.listeCollecteur();
 		this.statistique();
 		//   this.listeVille();
 		//   this.listeAgence();
 		// this.classementCollecteur();
 		this.classementCarnet();
-		this.relanchCollecter();
-		// this.listeCollecteur();
 	},
 
 	methods: {
@@ -649,25 +695,41 @@ export default {
 		},
 
 		listeCollecteur() {
-			this.load = true
 			let session = localStorage;
 			this.token_admin = session.getItem("token");
 
 			let headers = { headers: { Authorization: this.token_admin } };
 
 			this.$http
-				.post(`${this.callback}/agent_collecteur/list?all=true`, {}, headers)
+				.get(
+					`${this.callback}/collecteur/allByAdmin`,
+					headers
+				)
 				.then(
 					(response) => {
-						let data = response.body.data;
+						let data = response.body.collecteurs;
 
-						this.dataC = data
-						console.log(this.dataC.length)
-						this.getValueCollecteur(this.dataC[this.i].id)
+						console.log(response.body);
+						this.data_d = [];
+						for (let i = 0; i < data.length; i++) {
+							this.data_d.push({
+								key: data[i].id,
+								createdAt: new Date(data[i].createdAt).toLocaleString(),
+								nom: `${data[i].nom} ${data[i].prenoms}`,
+								numero: `(+228) ${data[i].telephone}`,
+								agence: data[i].agence.libelle,
+								isActive: data[i].isActive,
+								etat: data[i].isLogin,
+							});
 
+							this.data_s = this.data;
+						}
+
+
+						this.relanchCollecter();
 					},
 					(response) => {
-						this.showAlert("error", "Erreur", response.body.message);
+						this.showAlert("error", "Error", response.body.message);
 					}
 				);
 		},
@@ -683,17 +745,35 @@ export default {
 				.get(`${this.callback}/statistic/classement/collecteur/topCotisationByCollecteurForDay`, headers)
 				.then(
 					(response) => {
-						let data = response.body.topCotisationByCollecteurDay	;
+						let data = response.body.topCotisationByCollecteurDay;
 
 						console.log(data)
+						console.log(this.data_d)
+
 						this.nb_dataCollecteur_actif = data.length
 						this.dataCollecteur_actif = data
+
+						let dt = this.data_d
+						for (let i = 0; i < dt.length; i++) {
+							for (let y = 0; y < data.length; y++) {
+								if (dt[i].key != data[i]._id._id) {
+									this.data.push({
+										key: dt[i].id,
+										createdAt: new Date(dt[i].createdAt).toLocaleString(),
+										nom: `${dt[i].nom} ${dt[i].prenoms}`,
+										numero: `(+228) ${dt[i].telephone}`,
+										agence: dt[i].agence.libelle,
+										isActive: dt[i].isActive,
+										etat: dt[i].isLogin,
+									})
+								}
+							}
+						}
 					},
 					(response) => {
 						this.showAlert("error", "Erreur", response.body.message);
 					}
 				);
-
 		},
 
 		showModal(idAgence) {

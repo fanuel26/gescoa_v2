@@ -50,7 +50,7 @@
           <div>
             <div class="amount">
               <span class="text-danger">
-                {{ item.montant }} Fcfa
+                {{ item.mise * item.nbrCotisation }} Fcfa
               </span>
             </div>
 
