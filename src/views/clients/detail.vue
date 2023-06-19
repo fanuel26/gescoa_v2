@@ -184,6 +184,8 @@ export default {
             console.log(response)
             this.carnets = response.body.carnets.carnets
 
+            console.log(this.carnets)
+
             this.stats[0].value = this.carnets.length
           })
     },

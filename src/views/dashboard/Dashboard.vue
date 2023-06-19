@@ -55,7 +55,7 @@
 						</a-timeline-item>
 					</a-timeline>
 					<div class="d-flex justify-content-end">
-						<router-link :to="{ name: 'Classement_carnet' }">
+						<router-link :to="{ name: 'Produit_classement' }">
 							<a-button type="primary" size="small">Voire plus</a-button>
 						</router-link>
 					</div>
@@ -63,7 +63,6 @@
 			</a-col>
 		</a-row>
 		<!-- / Charts -->
-
 
 		<a-row :gutter="24" type="flex" align="stretch">
 			<a-col :span="24" :lg="24" class="mb-24">
