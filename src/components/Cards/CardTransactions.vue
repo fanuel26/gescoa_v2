@@ -7,7 +7,7 @@
     <a-list class="transactions-list" item-layout="horizontal" :split="false" :data-source="data">
       <a-list-item slot="renderItem" slot-scope="item">
         <template>
-          <a-list-item-meta :title="item.uuid" :description="`Mise: ${item.mise} Fcfa | Jour: ${item.nbrCotisation}`">
+          <a-list-item-meta :title="item.uuid" :description="`Mise: ${item.mise} Fcfa | Jour: ${item.nbrCotisation} / ${item.typeMise == 31 ? 'Mois' : item.typeMise == 7 ? 'Hebdo' : 'Quin'}`">
             <a-avatar size="small" v-if="item.isSuspend == false" slot="avatar" style="background-color: #edf9e7">
               <svg width="10" height="10" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path class="fill-success" fill-rule="evenodd" clip-rule="evenodd"
