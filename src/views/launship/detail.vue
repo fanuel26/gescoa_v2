@@ -23,7 +23,7 @@
             <a-col :span="24">
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
-                  <a-descriptions title="12/03/2022 à 15:30" :column="2">
+                  <a-descriptions title="12/03/2023 à 15:30" :column="2">
                     <a-descriptions-item label="Nom">
                       Franck
                     </a-descriptions-item>
@@ -37,7 +37,11 @@
                       Totsi
                     </a-descriptions-item>
                     <a-descriptions-item label="Mot de passe">
+<<<<<<< HEAD
                       dshfood@1234
+=======
+                      n2a@1234
+>>>>>>> n2a
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>

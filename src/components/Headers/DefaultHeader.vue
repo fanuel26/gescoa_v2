@@ -5,7 +5,11 @@
 		<div class="header-col header-brand">
 			<router-link :to="{name: 'Dashboard'}">
 				<!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
+<<<<<<< HEAD
 				<h5 class="text-primary mt-2">dshfood</h5>
+=======
+				<h5 class="text-primary mt-2">n2a</h5>
+>>>>>>> n2a
 			</router-link>
 
 			<!-- Trigger Button For Navigation Menu For Small Screens -->

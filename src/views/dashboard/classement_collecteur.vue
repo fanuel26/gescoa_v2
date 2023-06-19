@@ -87,7 +87,11 @@ export default {
     };
   },
   mounted() {
+<<<<<<< HEAD
     this.password = `dshfood@${Math.floor(
+=======
+    this.password = `n2a@${Math.floor(
+>>>>>>> n2a
       Math.random() * (9999 - 1000) + 1000
     )}`;
 

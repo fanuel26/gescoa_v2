@@ -15,18 +15,12 @@
           <template #title>
             <div class="d-flex justify-content-between">
               <h6>Liste de tous les carnets terminer</h6>
-              <!-- <a-input-search
-                v-model="value"
-                placeholder="Recherche ici"
-                style="width: 300px"
-                @change="onSearch"
-              /> -->
             </div>
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
-              <a-popconfirm title="Sûre de livrer?" @confirm="() => deliver(record.key)"><a-button
-                  type="primary" class="mx-2" size="small">Livrer</a-button>
+              <a-popconfirm title="Sûre de livrer?" @confirm="() => deliver(record.key)"><a-button type="primary"
+                  class="mx-2" size="small">Livrer</a-button>
               </a-popconfirm>
             </template>
           </a-table>
@@ -87,6 +81,8 @@ export default {
       data: [],
       columns_l: [],
       data_l: [],
+      columns_p: [],
+      data_p: [],
       row: 5,
       page: 1,
       nbr: 0,
@@ -195,7 +191,7 @@ export default {
       },
     ];
 
-    
+
     this.columns_p = [
       {
         title: "Date de creation",
@@ -249,6 +245,8 @@ export default {
           (response) => {
             let data = response.body.carnetsEnding;
 
+            console.log(data)
+
             this.stats[0].value = 0;
 
             this.data = [];
@@ -257,7 +255,7 @@ export default {
               if (data[i].isDeliver == false) {
                 this.stats[0].value += 1
                 this.data.push({
-                  key: data[i].id,
+                  key: data[i]._id,
                   createdAt: new Date(data[i].createdAt).toLocaleString(),
                   nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
                   numero: data[i].client[0].telephone,
@@ -281,13 +279,14 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      
+
       this.$http
         .get(`${this.callback}/collecteur/carnet/ending`, headers)
         .then(
           (response) => {
             let data = response.body.carnetsEnding;
 
+            console.log(data)
             this.stats[1].value = 0;
 
             this.data_l = [];
@@ -296,7 +295,7 @@ export default {
               if (data[i].isDeliver == true) {
                 this.stats[1].value += 1
                 this.data_l.push({
-                  key: data[i].id,
+                  key: data[i]._id,
                   createdAt: new Date(data[i].createdAt).toLocaleString(),
                   nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
                   numero: data[i].client[0].telephone,
@@ -305,8 +304,6 @@ export default {
                 });
               }
             }
-
-            console.log(this.data);
           },
           (response) => {
             this.showAlert("error", "Error", response.body.message);
@@ -320,55 +317,58 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      
+
       this.$http
         .get(`${this.callback}/collecteur/carnet/endingPresque`, headers)
         .then(
           (response) => {
             let data = response.body.carnetsEndingPresque;
 
+            console.log(data)
             this.stats[2].value = 0;
 
-            this.data_l = [];
+            this.data_p = [];
 
             for (let i = 0; i < data.length; i++) {
-              if (data[i].isDeliver == true) {
-                this.stats[1].value += 1
-                this.data_l.push({
-                  key: data[i].id,
-                  createdAt: new Date(data[i].createdAt).toLocaleString(),
-                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
-                  numero: data[i].client[0].telephone,
-                  carnet: data[i].uuid,
-                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
-                });
-              }
+              this.stats[1].value += 1
+              this.data_p.push({
+                key: data[i]._id,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                numero: data[i].client[0].telephone,
+                carnet: data[i].uuid,
+                collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+              });
             }
-
-            console.log(this.data);
           },
           (response) => {
             this.showAlert("error", "Error", response.body.message);
           }
         );
     },
-    
+
     deliver(id) {
-      alert(id)
+
+      console.log(id)
 
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      
+
       this.$http
-        .put(`${this.callback}/collecteur/carnet/deliveredCarnet`, {}, headers)
+        .put(`${this.callback}/collecteur/carnet/deliveredCarnet`, { carnet: id }, headers)
         .then(
           (response) => {
             let data = response.body;
 
             console.log(data);
+            if (data.status == 200) {
+              this.showAlert("success", "Success", response.body.message);
+            } else {
+              this.showAlert("error", "Error", response.body.message);
+            }
           },
           (response) => {
             this.showAlert("error", "Error", response.body.message);

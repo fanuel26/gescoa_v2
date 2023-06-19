@@ -10,7 +10,11 @@
       <div style="width: 100vw; display: flex; justify-content: center">
         <a-col :span="24" :md="12" :lg="6" :xl="6" class="col-form mt-4">
           <a-card>
+<<<<<<< HEAD
             <h3 class="mb-15 text-center text-primary mt-4">dshfood</h3>
+=======
+            <h3 class="mb-15 text-center text-primary mt-4">n2a</h3>
+>>>>>>> n2a
             <h5 class="font-regular text-center text-muted">
               Entrez le numero de téléphone et le mot de passe pour se connecter
             </h5>

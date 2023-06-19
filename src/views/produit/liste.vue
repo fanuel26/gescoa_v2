@@ -84,14 +84,20 @@
             <template slot="operation" slot-scope="text, record">
               <div class="d-flex">
                 <router-link :to="{ name: 'Produit_detail', params: { id: record.key } }"><a-button type="primary"
-                    class="mx-2" size="small">Detail</a-button>
+                   style="margin-right: 10px" size="small">Detail</a-button>
                 </router-link>
 
-                <!-- <a-popconfirm
-                  title="Etes vous Sûr de supprimer?"
-                  @confirm="() => deleteProduit(record.key)"
-                  ><a-button type="danger" size="small">Supprimer</a-button>
-                </a-popconfirm> -->
+                <a-popconfirm v-if="record.etat == false"
+                  title="Etes vous Sûr de bloquer?"
+                  @confirm="() => deleteProduit(record.key, record.etat)"
+                  ><a-button type="danger" size="small">Bloquer</a-button>
+                </a-popconfirm>
+                
+                <a-popconfirm v-if="record.etat == true"
+                  title="Etes vous Sûr de debloquer?"
+                  @confirm="() => deleteProduit(record.key, record.etat)"
+                  ><a-button type="success" size="small">Debloquer</a-button>
+                </a-popconfirm>
               </div>
             </template>
           </a-table>
@@ -172,6 +178,11 @@ export default {
         key: "montant",
       },
       {
+        title: "Etat",
+        dataIndex: "etat",
+        key: "etat",
+      },
+      {
         title: "Action",
         key: "Action",
         scopedSlots: { customRender: "operation" },
@@ -194,7 +205,7 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.get(`${this.callback}/type-carnet/all`, headers).then(
+      this.$http.get(`${this.callback}/type-carnet/allByAdmin`, headers).then(
         (response) => {
           let data = response.body.typeCarnets.typeCarnets;
 
@@ -208,6 +219,7 @@ export default {
               createdAt: new Date(data[i].createdAt).toLocaleString(),
               libelle: data[i].libelle,
               montant: data[i].montant,
+              etat: data[i].isBlocked,
             });
           }
         },
@@ -377,20 +389,20 @@ export default {
         );
     },
 
-    deleteProduit(id) {
+    deleteProduit(id, etat) {
       let session = localStorage;
       this.token_admin = session.getItem("token");
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(`${this.callback}/produit/delete/${id}`, {}, headers)
+        .put(`${this.callback}/type-carnet/toggleBlockTypeCarnet`, {typeCarnet : id, isBlocked : etat == true ? false : true}, headers)
         .then(
           (response) => {
             if (response) {
               this.showAlert(
                 "success",
                 "Success",
-                "Suppression de produit effectuer avec success"
+                "Operation effectuer avec success"
               );
               this.listeProduit();
             }
@@ -400,7 +412,7 @@ export default {
               this.showAlert(
                 "error",
                 "Erreur",
-                "Erreur lors de la suppression"
+                "Erreur lors de l'operation"
               );
             }
           }

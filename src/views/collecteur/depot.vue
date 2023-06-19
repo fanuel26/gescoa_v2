@@ -27,14 +27,14 @@
         <a-card class="card card-body border-0">
           
           <div class="d-flex justify-content-between align-items-center mb-24">
-            <div>
+            <!-- <div>
               <a-input-search
                 v-model="value"
                 placeholder="Recherche ici"
                 style="width: 300px"
                 @change="onSearch"
               />
-            </div>
+            </div> -->
             <div>
               <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
             </div>
@@ -129,21 +129,6 @@ export default {
         key: "somme",
       },
       {
-        title: "Somme à deposer",
-        dataIndex: "somme_a",
-        key: "somme_a",
-      },
-      {
-        title: "Nom collecteur",
-        dataIndex: "nom",
-        key: "nom",
-      },
-      {
-        title: "Numero collecteur",
-        dataIndex: "numero",
-        key: "numero",
-      },
-      {
         title: "Nom caissier",
         dataIndex: "nom_gerant",
         key: "nom_gerant",
@@ -172,28 +157,26 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/transaction/collecteur/${this.$route.params.id}`,
-          {},
+        .get(
+          `${this.callback}/deversement/agent/byCollecteur/${this.$route.params.id}`,
           headers
         )
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.deversements;
+
+            console.log(data)
 
             this.stats[0].value = data.length;
             this.data = [];
-            console.log(data);
+
             for (let i = data.length - 1; i >=0 ; i--) {
               this.data.push({
                 key: data[i].id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
                 somme: `${data[i].montant} Fcfa`,
-                somme_a: `${data[i].montant + data[i].reste} Fcfa`,
-                nom: `${data[i].collecteurs.nom} ${data[i].collecteurs.prenom}`,
-                numero: data[i].collecteurs.numero,
-                nom_gerant: `${data[i].agent.nom} ${data[i].agent.prenom}`,
-                numero_gerant: data[i].agent.numero,
+                nom_gerant: `${data[i].agent.nom} ${data[i].agent.prenoms}`,
+                numero_gerant: data[i].agent.telephone,
               });
 
               this.data_s = this.data;

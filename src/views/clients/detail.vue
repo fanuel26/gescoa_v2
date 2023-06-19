@@ -28,10 +28,10 @@
                 <div class="col-info">
                   <a-descriptions :title="'Date de creation: ' + new Date(client.createdAt).toLocaleString()" :column="2">
                     <a-descriptions-item label="Nom/Prénoms">
-                      {{ client.nom }} {{ client.prenom }}
+                      {{ client.nom }} {{ client.prenoms }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Numéro de téléphone">
-                      (+228){{ client.numero }}
+                      (+228){{ client.telephone }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Profession">
                       {{ client.profession }}
@@ -39,13 +39,13 @@
                     <a-descriptions-item label="Quartier">
                       {{ quartier }}
                     </a-descriptions-item>
-                    <a-descriptions-item label="Position géographique">
+                    <!-- <a-descriptions-item label="Position géographique">
                       {{ client.lat }}x{{ client.long }}
-                    </a-descriptions-item>
+                    </a-descriptions-item> -->
                     <a-descriptions-item label="Collecteur en charge">
                       {{ client.collecteur.nom }}
                       {{ client.collecteur.prenom }} - (+228)
-                      {{ client.collecteur.numero }}
+                      {{ client.collecteur.telephone }}
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>
@@ -163,9 +163,33 @@ export default {
     ];
     this.carnets = [];
     this.detailClient();
+    this.getCarnet();
   },
 
   methods: {
+
+    getCarnet() {
+      let session = localStorage;
+      this.token_admin = session.getItem("token");
+
+      let headers = { headers: { Authorization: this.token_admin } };
+
+      this.$http
+        .get(
+          `${this.callback}/collecteur/carnet/all/byClient/${this.$route.params.id}`,
+          headers
+        )
+        .then(
+          (response) => {
+            console.log(response)
+            this.carnets = response.body.carnets.carnets
+
+            console.log(this.carnets)
+
+            this.stats[0].value = this.carnets.length
+          })
+    },
+
     detailClient() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
@@ -199,10 +223,7 @@ export default {
                 this.collecteur = client.collecteur;  
               }
             }
-          })
-
-
-          
+          }) 
     },
   },
 };

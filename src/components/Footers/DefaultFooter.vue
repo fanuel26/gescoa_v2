@@ -45,8 +45,13 @@
 		
 		<!-- Copyright Notice -->
 		<p class="copyright">
+<<<<<<< HEAD
 			Copyright © 2022
 			by <a href="https://creative-tim.com">dshfood</a>.
+=======
+			Copyright © 2023
+			by <a href="https://creative-tim.com">n2a</a>.
+>>>>>>> n2a
 		</p>
 		<!-- / Copyright Notice -->
 

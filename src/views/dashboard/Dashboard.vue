@@ -17,55 +17,8 @@
 		<!-- / Counter Widgets -->
 
 		<!-- Charts -->
-		<!-- <a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :lg="10" class="mb-24">
-				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
-					:bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<div class="d-flex justify-content-between align-items-start">
-							<h6>Deversement encour dans les agences <strong style="color: #1890ff">( {{ Agences.length }}
-									)</strong></h6>
-						</div>
-					</template>
-
-					<div class="d-flex justify-content-center align-items-center" style="height: 300px;" v-if="load">
-						<a-spin v-if="load" size="large" tip="Chargement..." />
-					</div>
-					<a-timeline>
-						<a-timeline-item v-for="ag in Agences" :key="ag" color="red">
-							{{ ag.nom_agence }}
-							<p><a class="text-primary" style="cursor: pointer;" @click="showModal(ag.id)">cliquer ici</a>
-							</p>
-						</a-timeline-item>
-					</a-timeline>
-				</a-card>
-			</a-col>
-			<a-col :span="24" :lg="7" class="mb-24">
-				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
-					:bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<div class="d-flex justify-content-between align-items-start">
-							<h6>Collecteurs inactifs du jour <strong style="color: #1890ff">( {{ nb_dataCollecteur_inactif
-							}}
-									)</strong></h6>
-
-							<a-button @click="listeCollecteur()" size="small">Lancer</a-button>
-						</div>
-					</template>
-
-					<div class="d-flex justify-content-center align-items-center" style="height: 300px;" v-if="load">
-						<a-spin v-if="load" size="large" tip="Chargement..." />
-					</div>
-					<a-timeline>
-						<a-timeline-item v-for="dc in dataCollecteur_inactif" :key="dc" color="red">
-							{{ dc.nom }} {{ dc.prenom }}
-							<p><strong style="color: #000">{{ dc.collecte_journalier }}</strong> mises | <strong
-									style="color: #000">{{ dc.collecte_encour }}</strong> Fcfa non deversé</p>
-						</a-timeline-item>
-					</a-timeline>
-				</a-card>
-			</a-col>
-			<a-col :span="24" :lg="7" class="mb-24">
+		<a-row :gutter="24" type="flex" align="stretch">
+			<a-col :span="24" :lg="12" class="mb-24">
 				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
 					:bodyStyle="{ paddingTop: '12px' }">
 					<template #title>
@@ -77,20 +30,60 @@
 					</template>
 					<a-timeline>
 						<a-timeline-item v-for="dc in dataCollecteur_actif" :key="dc" color="green">
-							{{ dc.nom }} {{ dc.prenom }}
-							<p><strong style="color: #000">{{ dc.collecte_journalier }}</strong> mises | <strong
-									style="color: #000">{{ dc.collecte_encour }}</strong> Fcfa non deversé</p>
+							{{ dc._id.nom }} {{ dc._id.prenoms }}
+							<p><strong style="color: #000">{{ dc.nbrCotisation }}</strong> mises | <strong
+									style="color: #000">{{ dc.montantCotisation }}</strong> Fcfa </p>
 						</a-timeline-item>
 					</a-timeline>
-
+					<!-- 
 					<div class="d-flex justify-content-center align-items-center" style="height: 300px;" v-if="load">
 						<a-spin v-if="load" size="large" tip="Chargement..." />
+					</div> -->
+				</a-card>
+			</a-col>
+
+			<a-col :span="24" :lg="12" class="mb-24">
+				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
+					<template #title>
+						<h6>Produit les plus vendus</h6>
+						<p></p>
+					</template>
+					<a-timeline>
+						<a-timeline-item v-for="dc in dataCarnet" :key="dc" color="green">
+							{{ dc._id.libelle }}
+							<p>{{ dc.totalCarnetVendu }} ventes | {{ dc._id.montant }} Fcfa </p>
+						</a-timeline-item>
+					</a-timeline>
+					<div class="d-flex justify-content-end">
+						<router-link :to="{ name: 'Produit_classement' }">
+							<a-button type="primary" size="small">Voire plus</a-button>
+						</router-link>
 					</div>
 				</a-card>
 			</a-col>
-		</a-row> -->
+		</a-row>
 		<!-- / Charts -->
 
+		<a-row :gutter="24" type="flex" align="stretch">
+			<a-col :span="24" :lg="24" class="mb-24">
+				<a-card :bordered="false" class="header-solid h-full" style="height: 500px; overflow-y: auto;"
+					:bodyStyle="{ paddingTop: '12px' }">
+					<template #title>
+						<div class="d-flex justify-content-between align-items-start">
+							<h6>Collecteurs inactif du jour</h6>
+						</div>
+					</template>
+
+
+					<a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
+						<template slot="etat" slot-scope="text, record">
+							<span v-if="record.etat == true" class="text-success">Online</span>
+							<span v-if="record.etat == false" class="text-danger">Offline</span>
+						</template>
+					</a-table>
+				</a-card>
+			</a-col>
+		</a-row>
 
 		<a-modal :width="width" title="Deversement encour dans les agences" :visible="visible" @cancel="handleCancel"
 			:confirm-loading="confirmLoading" @ok="handleOk">
@@ -107,82 +100,12 @@
 				</a-col>
 			</a-row>
 		</a-modal>
-
-		<!-- Table & Timeline -->
-		<!-- <a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :lg="12" class="mb-24">
-				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<div class="d-flex justify-content-between align-items-start">
-							<h6>Carnets les plus vendus par ville</h6>
-
-							<a-form-item class="" :colon="false">
-								<a-select style="width: 300px" v-decorator="[
-										'ville',
-										{
-											initialValue: ville,
-											rules: [
-												{
-													required: true,
-													message: 'ville est vide!',
-												},
-											],
-										},
-									]" @change="listeCarnet">
-									<a-select-option v-for="ville in villes" :value="ville.id" :key="ville.id">
-										{{ ville.libelle }}
-									</a-select-option>
-								</a-select>
-							</a-form-item>
-						</div>
-					</template>
-					<a-timeline>
-						<a-timeline-item v-for="dc in dataCarnetsVilles" :key="dc" color="green">
-							{{ dc.libelle }}
-							<p>{{ dc.vendu }} ventes</p>
-						</a-timeline-item>
-					</a-timeline>
-					<div class="d-flex justify-content-center align-items-center" style="height: 300px;"
-						v-if="dataCarnetsVilles !== null && dataCarnetsVilles.length == 0">
-						<p>Aucune donnée</p>
-					</div>
-					<div class="d-flex justify-content-end"
-						v-if="dataCarnetsVilles !== null && dataCarnetsVilles.length > 0">
-						<router-link :to="{ name: 'Classement_carnet' }">
-							<a-button type="primary" size="small">Voire plus</a-button>
-						</router-link>
-					</div>
-				</a-card>
-			</a-col>
-			
-
-			<a-col :span="24" :lg="12" class="mb-24">
-				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<div class="d-flex justify-content-between align-items-start">
-							<h6>Vendeurs du jour</h6>
-						</div>
-					</template>
-					<a-timeline>
-						<a-timeline-item v-for="dc in dataCollecteur_vente_jour" :key="dc" color="green">
-							{{ dc.nom }}
-							<p>{{ dc.carnet_vendu_jour }} carnets vendus</p>
-						</a-timeline-item>
-					</a-timeline>
-					<div class="d-flex justify-content-end" v-if="dataCollecteur_vente_jour !== null">
-						<router-link :to="{ name: 'Classement_collecteur' }">
-							<a-button type="primary" size="small">Voire plus</a-button>
-						</router-link>
-					</div>
-				</a-card>
-			</a-col>
-		</a-row> -->
 		<!-- / Table & Timeline -->
 
 		<!-- Table & Timeline -->
 		<a-row :gutter="24" type="flex" align="stretch">
 			<!-- Table -->
-			<a-col :span="24" :lg="16" class="mb-24">
+			<a-col :span="24" :lg="24" class="mb-24">
 				<!-- Projects Table Card -->
 				<CardProjectTable :data="dataCollecteur" :columns="columnCollecteur" :data_c="dataCollecteur_c"
 					:columns_c="columnCollecteur_c" :data_cli="dataCollecteur_cli" :columns_cli="columnCollecteur_cli">
@@ -191,57 +114,10 @@
 			</a-col>
 			<!-- / Table -->
 
-			<!-- Timeline -->
-			<a-col :span="24" :lg="8" class="mb-24">
-				<!-- Orders History Timeline Card -->
-
-				<!-- Orders History Timeline Card -->
-				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<h6>Produit les plus vendus</h6>
-						<p></p>
-					</template>
-					<a-timeline>
-						<a-timeline-item v-for="dc in dataCarnet" :key="dc" color="green">
-							{{ dc.libelle }}
-							<p>{{ dc.__v }} ventes | {{ dc.__v * dc.montant }} Fcfa </p>
-						</a-timeline-item>
-					</a-timeline>
-					<div class="d-flex justify-content-end">
-						<router-link :to="{ name: 'Classement_carnet' }">
-							<a-button type="primary" size="small">Voire plus</a-button>
-						</router-link>
-					</div>
-				</a-card>
-				<!-- / Orders History Timeline Card -->
-
-				<!-- / Orders History Timeline Card -->
-			</a-col>
 			<!-- / Timeline -->
 		</a-row>
 		<!-- / Table & Timeline -->
 
-		<!-- <a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :xl="24" class="mb-24">
-				<a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '12px' }">
-					<template #title>
-						<h6>Livraison à 2 mois</h6>
-					</template>
-					<a-table :columns="columnsCarnet" :data-source="dataCarnets">
-					</a-table>
-				</a-card>
-			</a-col>
-		</a-row> -->
-		<!-- Cards -->
-		<!-- <a-row :gutter="24" type="flex" align="stretch">
-			<a-col :span="24" :xl="14" class="mb-24">
-				<CardInfo></CardInfo>
-			</a-col>
-			<a-col :span="24" :xl="10" class="mb-24">
-				<CardInfo2></CardInfo2>
-			</a-col>
-		</a-row> -->
-		<!-- / Cards -->
 	</div>
 </template>
   
@@ -280,6 +156,9 @@ export default {
 	data() {
 		return {
 			callback: process.env.VUE_APP_API_BASE_URL,
+			columns: [],
+			data: [],
+			data_d: [],
 			token_admin: null,
 			dataCollecteur: null,
 			columnCollecteur: null,
@@ -424,6 +303,37 @@ export default {
 			},
 		];
 
+
+		this.columns = [
+			{
+				title: "Date de creation",
+				dataIndex: "createdAt",
+				key: "createdAt",
+				scopedSlots: { customRender: "name" },
+			},
+			{
+				title: "Nom/Prénom collecteur",
+				dataIndex: "nom",
+				key: "nom",
+			},
+			{
+				title: "Numéro de téléphone",
+				dataIndex: "numero",
+				key: "numero",
+			},
+			{
+				title: "Agence",
+				dataIndex: "agence",
+				key: "agence",
+			},
+			{
+				title: "Etat",
+				dataIndex: "etat",
+				key: "etat",
+				scopedSlots: { customRender: "etat" },
+			},
+		];
+
 		this.columnCollecteur_cli = [
 			{
 				title: "Nom",
@@ -564,24 +474,24 @@ export default {
 							  <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C7.79086 2 6 3.79086 6 6V7H5C4.49046 7 4.06239 7.38314 4.00612 7.88957L3.00612 16.8896C2.97471 17.1723 3.06518 17.455 3.25488 17.6669C3.44458 17.8789 3.71556 18 4 18H16C16.2844 18 16.5554 17.8789 16.7451 17.6669C16.9348 17.455 17.0253 17.1723 16.9939 16.8896L15.9939 7.88957C15.9376 7.38314 15.5096 7 15 7H14V6C14 3.79086 12.2091 2 10 2ZM12 7V6C12 4.89543 11.1046 4 10 4C8.89543 4 8 4.89543 8 6V7H12ZM6 10C6 9.44772 6.44772 9 7 9C7.55228 9 8 9.44772 8 10C8 10.5523 7.55228 11 7 11C6.44772 11 6 10.5523 6 10ZM13 9C12.4477 9 12 9.44772 12 10C12 10.5523 12.4477 11 13 11C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9Z" fill="#111827"/>
 						  </svg>`,
 			},
-			// {
-			// 	title: "Total de ventes",
-			// 	value: 0,
-			// 	prefix: "",
-			// 	suffix: "Fcfa",
-			// 	icon: `
-			// 			  <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-			// 				  <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C7.79086 2 6 3.79086 6 6V7H5C4.49046 7 4.06239 7.38314 4.00612 7.88957L3.00612 16.8896C2.97471 17.1723 3.06518 17.455 3.25488 17.6669C3.44458 17.8789 3.71556 18 4 18H16C16.2844 18 16.5554 17.8789 16.7451 17.6669C16.9348 17.455 17.0253 17.1723 16.9939 16.8896L15.9939 7.88957C15.9376 7.38314 15.5096 7 15 7H14V6C14 3.79086 12.2091 2 10 2ZM12 7V6C12 4.89543 11.1046 4 10 4C8.89543 4 8 4.89543 8 6V7H12ZM6 10C6 9.44772 6.44772 9 7 9C7.55228 9 8 9.44772 8 10C8 10.5523 7.55228 11 7 11C6.44772 11 6 10.5523 6 10ZM13 9C12.4477 9 12 9.44772 12 10C12 10.5523 12.4477 11 13 11C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9Z" fill="#111827"/>
-			// 			  </svg>`,
-			// },
+			{
+				title: "Total de ventes",
+				value: 0,
+				prefix: "",
+				suffix: "Fcfa",
+				icon: `
+						  <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+							  <path fill-rule="evenodd" clip-rule="evenodd" d="M10 2C7.79086 2 6 3.79086 6 6V7H5C4.49046 7 4.06239 7.38314 4.00612 7.88957L3.00612 16.8896C2.97471 17.1723 3.06518 17.455 3.25488 17.6669C3.44458 17.8789 3.71556 18 4 18H16C16.2844 18 16.5554 17.8789 16.7451 17.6669C16.9348 17.455 17.0253 17.1723 16.9939 16.8896L15.9939 7.88957C15.9376 7.38314 15.5096 7 15 7H14V6C14 3.79086 12.2091 2 10 2ZM12 7V6C12 4.89543 11.1046 4 10 4C8.89543 4 8 4.89543 8 6V7H12ZM6 10C6 9.44772 6.44772 9 7 9C7.55228 9 8 9.44772 8 10C8 10.5523 7.55228 11 7 11C6.44772 11 6 10.5523 6 10ZM13 9C12.4477 9 12 9.44772 12 10C12 10.5523 12.4477 11 13 11C13.5523 11 14 10.5523 14 10C14 9.44772 13.5523 9 13 9Z" fill="#111827"/>
+						  </svg>`,
+			},
 		];
 
+		this.listeCollecteur();
 		this.statistique();
 		//   this.listeVille();
 		//   this.listeAgence();
 		// this.classementCollecteur();
 		this.classementCarnet();
-		// this.listeCollecteur();
 	},
 
 	methods: {
@@ -691,6 +601,8 @@ export default {
 					this.stats[6].value = data.totalCotisationsDuJour;
 					this.stats[7].value = data.totalCarnetsSuspendu;
 					this.stats[8].value = data.totalCarnetVenduJour;
+					this.stats[8].value = data.totalCarnetVenduJour;
+					this.stats[11].value = data.montantTotalCotisations;
 
 				});
 
@@ -774,92 +686,94 @@ export default {
 					this.dataCarnet = [];
 					for (let i = 0; i < 10; i++) {
 						if (data[i] != null) {
-							this.dataCarnet.push(data[i]._id[0]);
+							console.log(data[i])
+							this.dataCarnet.push(data[i]);
 						}
 					}
 				});
 		},
 
 		listeCollecteur() {
-			this.load = true
 			let session = localStorage;
 			this.token_admin = session.getItem("token");
 
 			let headers = { headers: { Authorization: this.token_admin } };
 
 			this.$http
-				.post(`${this.callback}/agent_collecteur/list?all=true`, {}, headers)
+				.get(
+					`${this.callback}/collecteur/allByAdmin`,
+					headers
+				)
 				.then(
 					(response) => {
-						let data = response.body.data;
+						let data = response.body.collecteurs;
 
-						this.dataC = data
-						console.log(this.dataC.length)
-						this.getValueCollecteur(this.dataC[this.i].id)
+						console.log(response.body);
+						this.data_d = [];
+						for (let i = 0; i < data.length; i++) {
+							this.data_d.push({
+								key: data[i].id,
+								createdAt: new Date(data[i].createdAt).toLocaleString(),
+								nom: `${data[i].nom} ${data[i].prenoms}`,
+								numero: `(+228) ${data[i].telephone}`,
+								agence: data[i].agence.libelle,
+								isActive: data[i].isActive,
+								etat: data[i].isLogin,
+							});
 
+							this.data_s = this.data;
+						}
+
+
+						this.relanchCollecter();
 					},
 					(response) => {
-						this.showAlert("error", "Erreur", response.body.message);
+						this.showAlert("error", "Error", response.body.message);
 					}
 				);
 		},
 
 		relanchCollecter() {
-			if (this.i < this.dataC.length - 1) {
-				this.i += 1
-				console.log(this.i)
-				setTimeout(() => {
-					this.getValueCollecteur(this.dataC[this.i].id)
-				}, 2000);
-			} else {
-				console.log('coooool')
-				console.log(this.dataC)
-				this.dataCollecteur_inactif = this.dataC.filter(value => parseInt(value.collecte_journalier) == 0 ? value : null);
-				this.dataCollecteur_actif = this.dataC.filter(value => parseInt(value.collecte_journalier) > 0 ? value : null);
-				this.dataCollecteur_actif.sort(function (a, b) {
-					return b.collecte_journalier - a.collecte_journalier;
-				})
-				this.nb_dataCollecteur_inactif = this.dataCollecteur_inactif.length
-				this.nb_dataCollecteur_actif = this.dataCollecteur_actif.length
-				let nbrC = this.dataCollecteur_actif.reduce((accumulator, currentValue) => accumulator + parseInt(currentValue.collecte_journalier), 0)
-				console.log(nbrC)
-				this.stats[10].value = nbrC;
-				console.log(this.dataCollecteur_inactif)
-				console.log(this.dataCollecteur_actif)
-				this.load = false
-			}
-		},
-
-
-		getValueCollecteur(id) {
-			console.log(id)
+			// statistic/classement/collecteur/topCotisationByCollecteurForDay
 			let session = localStorage;
 			this.token_admin = session.getItem("token");
 
 			let headers = { headers: { Authorization: this.token_admin } };
 
 			this.$http
-				.post(
-					`${this.callback}/agent_collecteur/info/${id}`,
-					{},
-					headers
-				)
+				.get(`${this.callback}/statistic/classement/collecteur/topCotisationByCollecteurForDay`, headers)
 				.then(
 					(response) => {
-						let data = response.body.data;
-						console.log(data);
-						this.dataC[this.i].collecte_journalier = data.collecte_journalier
-						this.dataC[this.i].collecte_encour = data.compte_epargne + data.compte_produit
-						this.relanchCollecter()
+						let data = response.body.topCotisationByCollecteurDay;
+
+						console.log(data)
+						console.log(this.data_d)
+
+						this.nb_dataCollecteur_actif = data.length
+						this.dataCollecteur_actif = data
+
+						let dt = this.data_d
+						for (let i = 0; i < dt.length; i++) {
+							for (let y = 0; y < data.length; y++) {
+								if (dt[i].key != data[i]._id._id) {
+									this.data.push({
+										key: dt[i].id,
+										createdAt: new Date(dt[i].createdAt).toLocaleString(),
+										nom: `${dt[i].nom} ${dt[i].prenoms}`,
+										numero: `(+228) ${dt[i].telephone}`,
+										agence: dt[i].agence.libelle,
+										isActive: dt[i].isActive,
+										etat: dt[i].isLogin,
+									})
+								}
+							}
+						}
 					},
 					(response) => {
 						this.showAlert("error", "Erreur", response.body.message);
 					}
 				);
-
-			return null
 		},
-
 
 		showModal(idAgence) {
 			this.load_m = true;

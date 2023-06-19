@@ -343,7 +343,11 @@ export default {
   },
 
   mounted() {
+<<<<<<< HEAD
     this.password = `dshfood@${Math.floor(
+=======
+    this.password = `n2a@${Math.floor(
+>>>>>>> n2a
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -464,7 +468,11 @@ export default {
                       "Success",
                       `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                     );
+<<<<<<< HEAD
                     this.password = `dshfood@${Math.floor(
+=======
+                    this.password = `n2a@${Math.floor(
+>>>>>>> n2a
                       Math.random() * (9999 - 1000) + 1000
                     )}`;
                   } else {

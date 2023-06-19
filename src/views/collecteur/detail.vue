@@ -13,13 +13,14 @@
             <a-button type="primary" class="mr-2" @click="changeState()">
               Modifier le collecteur
             </a-button>
-            <!-- <router-link class="mx-2" :to="{
+            <router-link  style="margin-left: 10px" :to="{
               name: 'Collecteur_depot',
               params: { id: this.$route.params.id },
             }">
               <a-button type="primary">Deversement collecteur</a-button>
             </router-link>
-            <router-link class="mx-2" :to="{
+
+            <!-- <router-link class="mx-2" :to="{
               name: 'Collecteur_client',
               params: { id: this.$route.params.id },
             }">
@@ -68,18 +69,9 @@
                       (+228) {{ collecteur.telephone }}
                     </a-descriptions-item>
                     <a-descriptions-item> </a-descriptions-item>
-                    <!-- <a-descriptions-item label="Ville">
-                        {{ ville }}
-                      </a-descriptions-item>
-                      <a-descriptions-item label="Quartier">
-                        {{ quartier }}
-                    </a-descriptions-item> -->
                     <a-descriptions-item label="Code secret">
                       {{ collecteur.codeSecret }}
                     </a-descriptions-item>
-                    <!-- <a-descriptions-item label="Nom d'agence">
-                        {{ collecteur.agc_name }}
-                      </a-descriptions-item> -->
                   </a-descriptions>
                 </div>
               </a-card>
@@ -445,7 +437,11 @@ export default {
 
   mounted() {
     this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
+<<<<<<< HEAD
     this.password = `dshfood@${Math.floor(
+=======
+    this.password = `n2a@${Math.floor(
+>>>>>>> n2a
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -686,12 +682,15 @@ export default {
       this.$http
         .get(
           `${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}`,
-          {},
           headers
         )
         .then(
           (response) => {
-            let data = response.body.clients;
+            let data = response.body.clients.clients;
+            // statistic/classement/collecteur/byTopTotalCotisationUnik
+            // ${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}
+
+            console.log(response.body)
 
             this.data = [];
 
@@ -746,14 +745,14 @@ export default {
             console.log(data);
             // this.ville = data.quartier.ville.libelle;
             // this.quartier = data.quartier.libelle;
-            this.stats[0].value = data.deversementsTotalConfondus;
+            this.stats[0].value = data.deversementsDepuisJour0;
             this.stats[1].value = data.sommeCotisationDepuisJour0;
-            this.stats[2].value = data.totalCotisationduJour;
+            this.stats[2].value = data.deversementEnCours;
             this.stats[3].value = data.fraisTotalCarnetConfondu;
             this.stats[4].value = data.clientTotal;
             this.stats[5].value = data.carnetTotalConfonduVendu;
             this.stats[6].value = data.carnetVenduDuJour;
-            this.stats[7].value = data.carnetVenduDuJour * 200;
+            this.stats[7].value = data.carnetVenduDuJour * 100;
             this.stats[8].value = data.totalCotisationDepuisJour0
             this.stats[9].value = data.nbrTotalCotisationduJour
             // this.stats[10].value = data.dette;
@@ -848,7 +847,11 @@ export default {
                     "Success",
                     `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                   );
+<<<<<<< HEAD
                   this.password = `dshfood@${Math.floor(
+=======
+                  this.password = `n2a@${Math.floor(
+>>>>>>> n2a
                     Math.random() * (9999 - 1000) + 1000
                   )}`;
                 } else {
