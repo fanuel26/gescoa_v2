@@ -19,7 +19,7 @@
     <div class="brand">
       <router-link :to="{ name: 'Dashboard' }">
         <!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
-        <h3 class="text-primary">n2a</h3>
+        <h3 class="text-primary">dshfood</h3>
       </router-link>
     </div>
     <hr />

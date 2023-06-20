@@ -46,7 +46,7 @@
 		<!-- Copyright Notice -->
 		<p class="copyright">
 			Copyright © 2023
-			by <a href="https://creative-tim.com">n2a</a>.
+			by <a href="https://creative-tim.com">dshfood</a>.
 		</p>
 		<!-- / Copyright Notice -->
 
