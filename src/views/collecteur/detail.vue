@@ -8,15 +8,22 @@
     <a-row type="flex" :gutter="24">
       <!-- Billing Information Column -->
       <a-col :span="24" :md="16" class="mb-24">
-        <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }">
-          <div class="text-left" style="margin-bottom: 10px;">
+        <a-card
+          :bordered="false"
+          class="header-solid h-full"
+          :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
+        >
+          <div class="text-left" style="margin-bottom: 10px">
             <a-button type="primary" class="mr-2" @click="changeState()">
               Modifier le collecteur
             </a-button>
-            <router-link  style="margin-left: 10px" :to="{
-              name: 'Collecteur_depot',
-              params: { id: this.$route.params.id },
-            }">
+            <router-link
+              style="margin-left: 10px"
+              :to="{
+                name: 'Collecteur_depot',
+                params: { id: this.$route.params.id },
+              }"
+            >
               <a-button type="primary">Deversement collecteur</a-button>
             </router-link>
 
@@ -46,7 +53,13 @@
                   </router-link> -->
           </div>
           <template #title>
-            <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div
+              style="
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+              "
+            >
               <h6 class="font-semibold m-0">Information du collecteur</h6>
 
               <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
@@ -56,9 +69,13 @@
             <a-col :span="24">
               <a-card :bordered="false" class="card-billing-info">
                 <div class="col-info">
-                  <a-descriptions :title="'date de création: ' +
-                    new Date(collecteur.createdAt).toLocaleString()
-                    " :column="2">
+                  <a-descriptions
+                    :title="
+                      'date de création: ' +
+                      new Date(collecteur.createdAt).toLocaleString()
+                    "
+                    :column="2"
+                  >
                     <a-descriptions-item label="Nom">
                       {{ collecteur.nom }}
                     </a-descriptions-item>
@@ -78,44 +95,69 @@
             </a-col>
           </a-row>
           <a-col :span="24" :md="24" class="mb-24" v-if="state == true">
-            <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }">
+            <a-card
+              :bordered="false"
+              class="header-solid h-full"
+              :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
+            >
               <template #title>
                 <h6 class="font-semibold m-0">Modification du collecteur</h6>
               </template>
-              <a-form id="components-form-demo-normal-login" :form="form_update" class="login-form"
-                @submit="collecteurUpdate" :hideRequiredMark="true">
+              <a-form
+                id="components-form-demo-normal-login"
+                :form="form_update"
+                class="login-form"
+                @submit="collecteurUpdate"
+                :hideRequiredMark="true"
+              >
                 <a-row type="flex" :gutter="24">
                   <!-- Billing Information Column -->
                   <a-col :span="12" :md="12" class="">
-                    <a-form-item class="" label="Nom du collecteur" :colon="false">
-                      <a-input v-decorator="[
-                        'nom',
-                        {
-                          initialValue: collecteur.nom,
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Nom du collecteur est vide!',
-                            },
-                          ],
-                        },
-                      ]" type="text" placeholder="Nom agent collecteur" />
+                    <a-form-item
+                      class=""
+                      label="Nom du collecteur"
+                      :colon="false"
+                    >
+                      <a-input
+                        v-decorator="[
+                          'nom',
+                          {
+                            initialValue: collecteur.nom,
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Nom du collecteur est vide!',
+                              },
+                            ],
+                          },
+                        ]"
+                        type="text"
+                        placeholder="Nom agent collecteur"
+                      />
                     </a-form-item>
                   </a-col>
                   <a-col :span="12" :md="12" class="">
-                    <a-form-item class="" label="Prénom du collecteur" :colon="false">
-                      <a-input v-decorator="[
-                        'prenom',
-                        {
-                          initialValue: collecteur.prenoms,
-                          rules: [
-                            {
-                              required: true,
-                              message: 'Prénom du collecteur est vide!',
-                            },
-                          ],
-                        },
-                      ]" type="text" placeholder="Prénom agent collecteur" />
+                    <a-form-item
+                      class=""
+                      label="Prénom du collecteur"
+                      :colon="false"
+                    >
+                      <a-input
+                        v-decorator="[
+                          'prenom',
+                          {
+                            initialValue: collecteur.prenoms,
+                            rules: [
+                              {
+                                required: true,
+                                message: 'Prénom du collecteur est vide!',
+                              },
+                            ],
+                          },
+                        ]"
+                        type="text"
+                        placeholder="Prénom agent collecteur"
+                      />
                     </a-form-item>
                   </a-col>
                   <a-col :span="24" :md="24">
@@ -130,15 +172,32 @@
             </a-card>
           </a-col>
           <a-col :span="24" :md="24" class="mb-24">
-            <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }">
+            <a-card
+              :bordered="false"
+              class="header-solid h-full"
+              :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
+            >
               <template #title>
                 <h6 class="font-semibold m-0">Statistique du collecteur</h6>
               </template>
               <a-row :gutter="24">
-                <a-col :span="12" :lg="12" :xl="12" class="mb-24" v-for="(stat, index) in stats" :key="index">
+                <a-col
+                  :span="12"
+                  :lg="12"
+                  :xl="12"
+                  class="mb-24"
+                  v-for="(stat, index) in stats"
+                  :key="index"
+                >
                   <!-- Widget 1 Card -->
-                  <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-                    :icon="stat.icon" :status="stat.status"></WidgetCounter>
+                  <WidgetCounter
+                    :title="stat.title"
+                    :value="stat.value"
+                    :prefix="stat.prefix"
+                    :suffix="stat.suffix"
+                    :icon="stat.icon"
+                    :status="stat.status"
+                  ></WidgetCounter>
                   <!-- / Widget 1 Card -->
                 </a-col>
               </a-row>
@@ -150,28 +209,46 @@
 
       <!-- Your Transactions Column -->
       <a-col :span="8" :md="8" class="mb-24">
-        <a-card :bordered="false" class="header-solid h-full" :bodyStyle="{ paddingTop: '16px', paddingBottom: '16px' }">
+        <a-card
+          :bordered="false"
+          class="header-solid h-full"
+          :bodyStyle="{ paddingTop: '16px', paddingBottom: '16px' }"
+        >
           <template>
             <h6 class="font-semibold m-0">Generer code secret</h6>
           </template>
-          <a-form id="components-form-demo-normal-login" :form="form_code" class="login-form" @submit="changeCode"
-            :hideRequiredMark="true">
+          <a-form
+            id="components-form-demo-normal-login"
+            :form="form_code"
+            class="login-form"
+            @submit="changeCode"
+            :hideRequiredMark="true"
+          >
             <a-form-item class="" label="Code secret generer" :colon="false">
-              <a-input v-decorator="[
-                'code_secret',
-                {
-                  initialValue: code_secret,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Code secret generer incorrect!',
-                    },
-                  ],
-                },
-              ]" disabled type="text" placeholder="Code secret" />
+              <a-input
+                v-decorator="[
+                  'code_secret',
+                  {
+                    initialValue: code_secret,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Code secret generer incorrect!',
+                      },
+                    ],
+                  },
+                ]"
+                disabled
+                type="text"
+                placeholder="Code secret"
+              />
             </a-form-item>
             <div class="mb-4 text-right">
-              <a-button type="primary" html-type="submit" class="login-form-button">
+              <a-button
+                type="primary"
+                html-type="submit"
+                class="login-form-button"
+              >
                 Generer
               </a-button>
             </div>
@@ -179,24 +256,38 @@
           <template>
             <h6 class="font-semibold m-0">Generer mot de passe</h6>
           </template>
-          <a-form id="components-form-demo-normal-login" :form="form_password" class="login-form" @submit="passwordSubmit"
-            :hideRequiredMark="true">
+          <a-form
+            id="components-form-demo-normal-login"
+            :form="form_password"
+            class="login-form"
+            @submit="passwordSubmit"
+            :hideRequiredMark="true"
+          >
             <a-form-item class="" label="Mot de passe generer" :colon="false">
-              <a-input v-decorator="[
-                'password',
-                {
-                  initialValue: password,
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Mot de passe generer incorrect!',
-                    },
-                  ],
-                },
-              ]" disabled type="text" placeholder="Mot de passe" />
+              <a-input
+                v-decorator="[
+                  'password',
+                  {
+                    initialValue: password,
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Mot de passe generer incorrect!',
+                      },
+                    ],
+                  },
+                ]"
+                disabled
+                type="text"
+                placeholder="Mot de passe"
+              />
             </a-form-item>
             <div class="mb-4 text-right">
-              <a-button type="primary" html-type="submit" class="login-form-button">
+              <a-button
+                type="primary"
+                html-type="submit"
+                class="login-form-button"
+              >
                 Generer
               </a-button>
             </div>
@@ -204,23 +295,36 @@
           <template>
             <h6 class="font-semibold m-0">Deconnectez le collecteur</h6>
           </template>
-          <a-form id="components-form-demo-normal-login" :form="form_disconnect" class="login-form"
-            @submit="disconnectSubmit" :hideRequiredMark="true">
+          <a-form
+            id="components-form-demo-normal-login"
+            :form="form_disconnect"
+            class="login-form"
+            @submit="disconnectSubmit"
+            :hideRequiredMark="true"
+          >
             <a-form-item class="" label="Code secret" :colon="false">
-              <a-input v-decorator="[
-                'code_secret',
-                {
-                  rules: [
-                    {
-                      required: true,
-                      message: 'Code secret est vide!',
-                    },
-                  ],
-                },
-              ]" type="text" placeholder="Code secret" />
+              <a-input
+                v-decorator="[
+                  'code_secret',
+                  {
+                    rules: [
+                      {
+                        required: true,
+                        message: 'Code secret est vide!',
+                      },
+                    ],
+                  },
+                ]"
+                type="text"
+                placeholder="Code secret"
+              />
             </a-form-item>
             <div class="mb-4 text-right">
-              <a-button type="danger" html-type="submit" class="login-form-button">
+              <a-button
+                type="danger"
+                html-type="submit"
+                class="login-form-button"
+              >
                 Deconnexion
               </a-button>
             </div>
@@ -345,7 +449,6 @@
       </a-col>
       <!-- / Your Transactions Column -->
 
-      
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <template #title>
@@ -354,6 +457,14 @@
             </div>
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
+            <template slot="operation" slot-scope="text, record">
+              <router-link
+                :to="{ name: 'Client_detail', params: { id: record.key } }"
+                ><a-button type="primary" size="small"
+                  >Détail</a-button
+                ></router-link
+              >
+            </template>
           </a-table>
 
           <!-- <div class="d-flex justify-content-between align-items-center mt-4">
@@ -373,12 +484,29 @@
       </a-col>
     </a-row>
 
-    <a-modal title="Statistique d'une periode daté" :visible="visible" @cancel="handleCancel">
+    <a-modal
+      title="Statistique d'une periode daté"
+      :visible="visible"
+      @cancel="handleCancel"
+    >
       <a-row :gutter="24">
-        <a-col :span="24" :lg="24" :xl="24" class="mb-24" v-for="(stat, index) in stats_date" :key="index">
+        <a-col
+          :span="24"
+          :lg="24"
+          :xl="24"
+          class="mb-24"
+          v-for="(stat, index) in stats_date"
+          :key="index"
+        >
           <!-- Widget 1 Card -->
-          <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-            :icon="stat.icon" :status="stat.status"></WidgetCounter>
+          <WidgetCounter
+            :title="stat.title"
+            :value="stat.value"
+            :prefix="stat.prefix"
+            :suffix="stat.suffix"
+            :icon="stat.icon"
+            :status="stat.status"
+          ></WidgetCounter>
           <!-- / Widget 1 Card -->
         </a-col>
       </a-row>
@@ -441,7 +569,6 @@ export default {
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
-    
     this.columns = [
       {
         title: "Date de creation",
@@ -473,6 +600,11 @@ export default {
         title: "Collecteur en charge",
         dataIndex: "collecteur",
         key: "collecteur",
+      },
+      {
+        title: "Action",
+        key: "Action",
+        scopedSlots: { customRender: "operation" },
       },
     ];
 
@@ -638,7 +770,7 @@ export default {
 
     this.listeCollecteur();
     this.detailCollecteur();
-    this.listClient()
+    this.listClient();
   },
 
   methods: {
@@ -655,18 +787,16 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http
-        .get(`${this.callback}/collecteur/allByAdmin`, headers)
-        .then(
-          (response) => {
-            let data = response.body.collecteurs;
-            console.log(data);
-            this.collecteurs = data;
-          },
-          (response) => {
-            this.showAlert("error", "Erreur", response.body.message);
-          }
-        );
+      this.$http.get(`${this.callback}/collecteur/allByAdmin`, headers).then(
+        (response) => {
+          let data = response.body.collecteurs;
+          console.log(data);
+          this.collecteurs = data;
+        },
+        (response) => {
+          this.showAlert("error", "Erreur", response.body.message);
+        }
+      );
     },
 
     listClient() {
@@ -686,7 +816,7 @@ export default {
             // statistic/classement/collecteur/byTopTotalCotisationUnik
             // ${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}
 
-            console.log(response.body)
+            console.log(response.body);
 
             this.data = [];
 
@@ -749,16 +879,14 @@ export default {
             this.stats[5].value = data.carnetTotalConfonduVendu;
             this.stats[6].value = data.carnetVenduDuJour;
             this.stats[7].value = data.carnetVenduDuJour * 100;
-            this.stats[8].value = data.totalCotisationDepuisJour0
-            this.stats[9].value = data.nbrTotalCotisationduJour
+            this.stats[8].value = data.totalCotisationDepuisJour0;
+            this.stats[9].value = data.nbrTotalCotisationduJour;
             // this.stats[10].value = data.dette;
           },
           (response) => {
             this.showAlert("error", "Erreur", response.body.message);
           }
         );
-
-
     },
 
     changeCode(e) {
@@ -770,7 +898,7 @@ export default {
 
           let headers = { headers: { Authorization: this.token_admin } };
 
-          console.log(this.collecteur)
+          console.log(this.collecteur);
           let data_param = {
             oldCodeSecret: this.collecteur.codeSecret,
             newCodeSecret: `${values.code_secret}`,
@@ -798,7 +926,6 @@ export default {
                   this.code_secret = Math.floor(
                     Math.random() * (9999 - 1000) + 1000
                   );
-
                 } else {
                   this.showAlert("danger", "Erreur", data.message);
                 }
@@ -854,7 +981,6 @@ export default {
                 this.showAlert("error", "Erreur", response.body.message);
               }
             );
-
         } else {
           console.log("error");
         }
@@ -1032,7 +1158,7 @@ export default {
       });
     },
 
-    handleSubmit() { },
+    handleSubmit() {},
   },
 };
 </script>
