@@ -354,6 +354,14 @@
             </div>
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
+            <template slot="operation" slot-scope="text, record">
+              <router-link
+                :to="{ name: 'Client_detail', params: { id: record.key } }"
+                ><a-button type="primary" size="small"
+                  >Détail</a-button
+                ></router-link
+              >
+            </template>
           </a-table>
 
           <!-- <div class="d-flex justify-content-between align-items-center mt-4">
@@ -473,6 +481,11 @@ export default {
         title: "Collecteur en charge",
         dataIndex: "collecteur",
         key: "collecteur",
+      },
+      {
+        title: "Action",
+        key: "Action",
+        scopedSlots: { customRender: "operation" },
       },
     ];
 
