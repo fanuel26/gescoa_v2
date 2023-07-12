@@ -572,7 +572,9 @@ export default {
             console.log(data)
             
             for (let i = 0; i < data.length; i++) {
-              this.agence = data[i];
+              if (data[i].id == this.$route.params.id) {
+                this.agence = data[i];
+              }
               // this.ville = data[i].quartier.ville.libelle;
               // this.quartier = data[i].quartier.libelle;
             }
@@ -581,6 +583,30 @@ export default {
             this.showAlert("error", "Erreur", response.body.message);
           }
         );
+
+        this.$http
+        .get(
+          `${this.callback}/statistic/global/agence/${this.$route.params.id}`,
+          headers
+        )
+        .then(
+          (response) => {
+            let data = response.body.globaStatisticAgence;
+            console.log(data)
+
+            if (response.status == 200) {
+              this.stats[0].value = data.totalDepot
+              this.stats[1].value = data.totalCollecteur
+              this.stats[2].value = data.totalAgent
+              this.stats[3].value = data.sommeTotalDeversements
+            }
+          },
+          (response) => {
+            this.showAlert("error", "Erreur", response.body.message);
+          }
+        );
+
+        
     },
 
     listeCollecteur() {

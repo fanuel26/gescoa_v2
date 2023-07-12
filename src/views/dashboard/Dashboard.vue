@@ -756,14 +756,15 @@ export default {
 						for (let i = 0; i < dt.length; i++) {
 							for (let y = 0; y < data.length; y++) {
 								if (dt[i].key != data[i]._id._id) {
+									console.log(dt[i])
 									this.data.push({
 										key: dt[i].id,
 										createdAt: new Date(dt[i].createdAt).toLocaleString(),
 										nom: `${dt[i].nom} ${dt[i].prenoms}`,
-										numero: `(+228) ${dt[i].telephone}`,
-										agence: dt[i].agence.libelle,
+										numero: `(+228) ${dt[i].numero}`,
+										agence: dt[i].agence,
 										isActive: dt[i].isActive,
-										etat: dt[i].isLogin,
+										etat: dt[i].etat,
 									})
 								}
 							}

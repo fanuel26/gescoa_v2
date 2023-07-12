@@ -329,8 +329,8 @@
               </a-button>
             </div>
           </a-form>
-          <!-- <template>
-            <h6 class="font-semibold m-0">
+          <template>
+            <h6 class="font-semibold m-0" style="padding-top: 20px">
               Changer ce collecteur par un autre collecteur
             </h6>
           </template>
@@ -361,7 +361,7 @@
                     :value="collect.id"
                     :key="collect.id"
                   >
-                    {{ collect.nom }} {{ collect.prenom }}
+                    {{ collect.nom }} {{ collect.prenoms }}
                   </a-select-option>
                 </a-select>
               </div>
@@ -389,11 +389,11 @@
                 type="primary"
                 html-type="submit"
                 class="login-form-button"
-                    >
-                      Affecter
-                    </a-button>
-                  </div>
-                </a-form> -->
+              >
+                Affecter
+              </a-button>
+            </div>
+          </a-form>
 
           <!-- <template>
             <h6 class="font-semibold m-0">Statistique par date</h6>
@@ -1043,8 +1043,11 @@ export default {
 
             this.$http
               .post(
-                `${this.callback}/agent_collecteur/affect/agent1/${this.$route.params.id}/client-to-agent2/${values.collecteur}`,
-                {},
+                `${this.callback}/affectation/create`,
+                {
+                  olderCollecteur: this.$route.params.id,
+                  newerCollecteur: values.collecteur,
+                },
                 headers
               )
               .then(
@@ -1052,12 +1055,16 @@ export default {
                   let data = response.body;
                   console.log(data);
 
-                  if (data.status == true) {
+                  if (data.status == 200) {
                     this.showAlert(
                       "success",
                       "Success",
                       "Agent collecteur deleguer avec success"
                     );
+
+                    this.listeCollecteur();
+                    this.detailCollecteur();
+                    this.listClient();
                   } else {
                     this.showAlert("error", "Erreur", data.message);
                   }

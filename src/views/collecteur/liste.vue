@@ -235,12 +235,12 @@ export default {
       callback: process.env.VUE_APP_API_BASE_URL,
       token_admin: null,
       stats: [],
-      width: 1000,
       columns: [],
       data: [],
       data_s: [],
       value: null,
       buttonText: "Détail",
+      width: 1000,
       visible: false,
       confirmLoading: false,
 
@@ -630,41 +630,7 @@ export default {
     },
 
     onSearch() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.$http
-        .post(
-          `${this.callback}/agent_collecteur/list?search=${this.value}&row=${this.row}&page=1`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-
-            console.log(response.body);
-            this.data = [];
-            for (let i = 0; i < data.length; i++) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom: `${data[i].nom} ${data[i].prenom}`,
-                numero: `(+228) ${data[i].numero}`,
-                agence: data[i].agc_name,
-                status: data[i].is_active,
-              });
-
-              this.data_s = this.data;
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-      /*this.value = this.value.toLowerCase();
+      this.value = this.value.toLowerCase();
 
       let data = this.data_s;
 
@@ -675,7 +641,7 @@ export default {
         if (nom > -1 || numero > -1) {
           this.data.push(data[i]);
         }
-      }*/
+      }
     },
   },
 };

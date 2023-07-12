@@ -178,6 +178,7 @@ export default {
       width: 1000,
       columns: [],
       data: [],
+      data_s: [],
       row: 5,
       page: 1,
       total_page: 0,
@@ -257,6 +258,8 @@ export default {
               libelle: data[i].libelle,
               jour: data[i].jour,
             });
+
+            this.data_s = this.data
           }
         },
         (response) => {
@@ -336,36 +339,17 @@ export default {
     },
 
     onSearch() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
+      this.value = this.value.toLowerCase();
 
-      let headers = { headers: { Authorization: this.token_admin } };
+      let data = this.data_s;
 
-      this.$http
-        .post(
-          `${this.callback}/produit/list?row=${this.row}&page=1&search=${this.value}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-
-            this.stats[0].value = data.length;
-            this.data = [];
-            console.log(data);
-            for (let i = data.length - 1; i >= 0; i--) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                libelle: data[i].libelle,
-              });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
+      this.data = [];
+      for (let i = 0; i < data.length; i++) {
+        let libelle = data[i].libelle.toLowerCase().indexOf(this.value);
+        if (libelle > -1) {
+          this.data.push(data[i]);
+        }
+      }
     },
 
     showModal() {

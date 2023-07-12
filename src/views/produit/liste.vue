@@ -1,10 +1,23 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="24"
+        :lg="12"
+        :xl="6"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <!-- Widget 1 Card -->
-        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-          :icon="stat.icon" :status="stat.status"></WidgetCounter>
+        <WidgetCounter
+          :title="stat.title"
+          :value="stat.value"
+          :prefix="stat.prefix"
+          :suffix="stat.suffix"
+          :icon="stat.icon"
+          :status="stat.status"
+        ></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
@@ -13,68 +26,104 @@
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <div class="mb-4 text-right">
-            <a-input-search v-model="value" placeholder="Recherche ici" style="width: 300px" @change="onSearch" />
-            <router-link :to="{ name: 'Produit_classement'}">
+            <a-input-search
+              v-model="value"
+              placeholder="Recherche ici"
+              style="width: 300px"
+              @change="onSearch"
+            />
+            <router-link :to="{ name: 'Produit_classement' }">
               <a-button type="primary" style="margin-left: 20px">
                 Classement produit
               </a-button>
             </router-link>
-            <a-button type="primary" style="margin-left: 20px" @click="showModal">
+            <a-button
+              type="primary"
+              style="margin-left: 20px"
+              @click="showModal"
+            >
               Créer un produit
             </a-button>
           </div>
 
-          <a-modal :width="width" title="Creer un produit" :visible="visible" :confirm-loading="confirmLoading"
-            @ok="handleOk" @cancel="handleCancel">
-            <a-form id="components-form-demo-normal-login" :form="form" class="login-form" @submit="produitSubmit"
-              :hideRequiredMark="true">
+          <a-modal
+            :width="width"
+            title="Creer un produit"
+            :visible="visible"
+            :confirm-loading="confirmLoading"
+            @ok="handleOk"
+            @cancel="handleCancel"
+          >
+            <a-form
+              id="components-form-demo-normal-login"
+              :form="form"
+              class="login-form"
+              @submit="produitSubmit"
+              :hideRequiredMark="true"
+            >
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="12" :md="12" class="">
                   <a-form-item class="" label="Nom du produit" :colon="false">
-                    <a-input v-decorator="[
-                      'libelle',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Nom du produit est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="text" placeholder="Nom produit" />
+                    <a-input
+                      v-decorator="[
+                        'libelle',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Nom du produit est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="text"
+                      placeholder="Nom produit"
+                    />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12" :md="12" class="">
-                  <a-form-item class="" label="Montant du produit" :colon="false">
-                    <a-input v-decorator="[
-                      'montant',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Montant du produit est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="text" placeholder="Montant produit" />
+                  <a-form-item
+                    class=""
+                    label="Montant du produit"
+                    :colon="false"
+                  >
+                    <a-input
+                      v-decorator="[
+                        'montant',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Montant du produit est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="text"
+                      placeholder="Montant produit"
+                    />
                   </a-form-item>
                 </a-col>
 
                 <a-col :span="12" :md="12" class="">
                   <a-form-item class="" label="Code secret" :colon="false">
-                    <a-input v-decorator="[
-                      'code_secret',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Code secret est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="number" placeholder="Code secret" />
+                    <a-input
+                      v-decorator="[
+                        'code_secret',
+                        {
+                          rules: [
+                            {
+                              required: true,
+                              message: 'Code secret est vide!',
+                            },
+                          ],
+                        },
+                      ]"
+                      type="number"
+                      placeholder="Code secret"
+                    />
                   </a-form-item>
                 </a-col>
               </a-row>
@@ -83,17 +132,25 @@
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
               <div class="d-flex">
-                <router-link :to="{ name: 'Produit_detail', params: { id: record.key } }"><a-button type="primary"
-                   style="margin-right: 10px" size="small">Detail</a-button>
+                <router-link
+                  :to="{ name: 'Produit_detail', params: { id: record.key } }"
+                  ><a-button
+                    type="primary"
+                    style="margin-right: 10px"
+                    size="small"
+                    >Detail</a-button
+                  >
                 </router-link>
 
-                <a-popconfirm v-if="record.etat == false"
+                <a-popconfirm
+                  v-if="record.etat == false"
                   title="Etes vous Sûr de bloquer?"
                   @confirm="() => deleteProduit(record.key, record.etat)"
                   ><a-button type="danger" size="small">Bloquer</a-button>
                 </a-popconfirm>
-                
-                <a-popconfirm v-if="record.etat == true"
+
+                <a-popconfirm
+                  v-if="record.etat == true"
                   title="Etes vous Sûr de debloquer?"
                   @confirm="() => deleteProduit(record.key, record.etat)"
                   ><a-button type="success" size="small">Debloquer</a-button>
@@ -136,6 +193,7 @@ export default {
       width: 1000,
       columns: [],
       data: [],
+      data_s: [],
       row: 5,
       page: 1,
       total_page: 0,
@@ -221,6 +279,7 @@ export default {
               montant: data[i].montant,
               etat: data[i].isBlocked,
             });
+            this.data_s = this.data;
           }
         },
         (response) => {
@@ -229,107 +288,19 @@ export default {
       );
     },
 
-    next() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-      this.page += 1;
-      this.$http
-        .post(
-          `${this.callback}/produit/list?row=${this.row}&page=${this.page}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let d = response.body.data;
-
-            let data = Object.keys(d).map(function (key) {
-              return d[key];
-            });
-            this.data = [];
-            console.log(data);
-            for (let i = data.length - 1; i >= 0; i--) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                libelle: data[i].libelle,
-              });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-    },
-
-    preview() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-      this.page -= 1;
-      this.$http
-        .post(
-          `${this.callback}/produit/list?row=${this.row}&page=${this.page}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let d = response.body.data;
-
-            let data = Object.keys(d).map(function (key) {
-              return d[key];
-            });
-            this.data = [];
-            console.log(data);
-            for (let i = data.length - 1; i >= 0; i--) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                libelle: data[i].libelle,
-              });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-    },
-
     onSearch() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
+      console.log(this.value);
+      this.value = this.value.toLowerCase();
 
-      let headers = { headers: { Authorization: this.token_admin } };
+      let data = this.data_s;
 
-      this.$http
-        .post(
-          `${this.callback}/produit/list?row=${this.row}&page=1&search=${this.value}`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let data = response.body.data;
-
-            this.stats[0].value = data.length;
-            this.data = [];
-            console.log(data);
-            for (let i = data.length - 1; i >= 0; i--) {
-              this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                libelle: data[i].libelle,
-              });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
+      this.data = [];
+      for (let i = 0; i < data.length; i++) {
+        let libelle = data[i].libelle.toLowerCase().indexOf(this.value);
+        if (libelle > -1) {
+          this.data.push(data[i]);
+        }
+      }
     },
 
     showModal() {
@@ -395,7 +366,11 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .put(`${this.callback}/type-carnet/toggleBlockTypeCarnet`, {typeCarnet : id, isBlocked : etat == true ? false : true}, headers)
+        .put(
+          `${this.callback}/type-carnet/toggleBlockTypeCarnet`,
+          { typeCarnet: id, isBlocked: etat == true ? false : true },
+          headers
+        )
         .then(
           (response) => {
             if (response) {
@@ -409,11 +384,7 @@ export default {
           },
           (response) => {
             if (response) {
-              this.showAlert(
-                "error",
-                "Erreur",
-                "Erreur lors de l'operation"
-              );
+              this.showAlert("error", "Erreur", "Erreur lors de l'operation");
             }
           }
         );

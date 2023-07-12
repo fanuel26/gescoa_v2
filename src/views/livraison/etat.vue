@@ -1,13 +1,44 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col :span="24" :lg="12" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="24"
+        :lg="12"
+        :xl="8"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <!-- Widget 1 Card -->
-        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-          :icon="stat.icon" :status="stat.status"></WidgetCounter>
+        <WidgetCounter
+          :title="stat.title"
+          :value="stat.value"
+          :prefix="stat.prefix"
+          :suffix="stat.suffix"
+          :icon="stat.icon"
+          :status="stat.status"
+        ></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
+
+    <a-modal
+      :width="width"
+      title="Creer un agent collecteur"
+      :visible="visible"
+      :confirm-loading="confirmLoading"
+      @ok="handleOk"
+      @cancel="handleCancel"
+    >
+      <a-row type="flex" :gutter="24">
+        <!-- Billing Information Column -->
+        <ul>
+          <li v-for="item in dataProduit_f" v-bind:key="item.key">
+            {{ item.libelle }}
+          </li>
+        </ul>
+      </a-row>
+    </a-modal>
 
     <a-row :gutter="24">
       <a-col :span="24" :lg="24" :xl="24" class="mb-24">
@@ -19,9 +50,28 @@
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="operation" slot-scope="text, record">
-              <a-popconfirm title="Sûre de livrer?" @confirm="() => deliver(record.key)"><a-button type="primary"
-                  class="mx-2" size="small">Livrer</a-button>
-              </a-popconfirm>
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-button
+                  class="mx-2"
+                  style="margin-right: 10px"
+                  size="small"
+                  @click="getProduit(record.produit)"
+                  >Voir produit</a-button
+                >
+                <a-popconfirm
+                  title="Sûre de livrer?"
+                  @confirm="() => deliver(record.key)"
+                  ><a-button type="primary" class="mx-2" size="small"
+                    >Livrer</a-button
+                  >
+                </a-popconfirm>
+              </div>
             </template>
           </a-table>
         </a-card>
@@ -39,7 +89,11 @@
               /> -->
             </div>
           </template>
-          <a-table :columns="columns_l" :data-source="data_l" :pagination="true">
+          <a-table
+            :columns="columns_l"
+            :data-source="data_l"
+            :pagination="true"
+          >
           </a-table>
         </a-card>
       </a-col>
@@ -56,7 +110,11 @@
               /> -->
             </div>
           </template>
-          <a-table :columns="columns_p" :data-source="data_p" :pagination="true">
+          <a-table
+            :columns="columns_p"
+            :data-source="data_p"
+            :pagination="true"
+          >
           </a-table>
         </a-card>
       </a-col>
@@ -83,9 +141,14 @@ export default {
       data_l: [],
       columns_p: [],
       data_p: [],
+      dataProduit: [],
+      dataProduit_f: [],
       row: 5,
       page: 1,
       nbr: 0,
+      width: 400,
+      visible: false,
+      confirmLoading: false,
       total_page: 0,
       value: null,
       buttonText: "Détail",
@@ -191,7 +254,6 @@ export default {
       },
     ];
 
-
     this.columns_p = [
       {
         title: "Date de creation",
@@ -239,38 +301,59 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http
-        .get(`${this.callback}/collecteur/carnet/ending`, headers)
-        .then(
-          (response) => {
-            let data = response.body.carnetsEnding;
+      this.$http.get(`${this.callback}/collecteur/carnet/ending`, headers).then(
+        (response) => {
+          let data = response.body.carnetsEnding;
 
-            console.log(data)
+          console.log(data);
 
-            this.stats[0].value = 0;
+          this.stats[0].value = 0;
 
-            this.data = [];
+          this.data = [];
 
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].isDeliver == false) {
-                this.stats[0].value += 1
-                this.data.push({
-                  key: data[i]._id,
-                  createdAt: new Date(data[i].createdAt).toLocaleString(),
-                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
-                  numero: data[i].client[0].telephone,
-                  carnet: data[i].uuid,
-                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
-                });
-              }
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].isDeliver == false) {
+              this.stats[0].value += 1;
+              this.data.push({
+                key: data[i]._id,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                numero: data[i].client[0].telephone,
+                carnet: data[i].uuid,
+                collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+                produit: data[i].typeCarnets,
+              });
             }
-
-            console.log(this.data);
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
           }
-        );
+
+          console.log(this.data);
+        },
+        (response) => {
+          this.showAlert("error", "Error", response.body.message);
+        }
+      );
+
+      this.$http.get(`${this.callback}/type-carnet/allByAdmin`, headers).then(
+        (response) => {
+          let data = response.body.typeCarnets.typeCarnets;
+
+          this.stats[0].value = data.length;
+
+          console.log(data);
+          for (let i = data.length - 1; i >= 0; i--) {
+            this.dataProduit.push({
+              key: data[i].id,
+              createdAt: new Date(data[i].createdAt).toLocaleString(),
+              libelle: data[i].libelle,
+              montant: data[i].montant,
+              etat: data[i].isBlocked,
+            });
+          }
+        },
+        (response) => {
+          this.showAlert("error", "Error", response.body.message);
+        }
+      );
     },
 
     listeClientlivrés() {
@@ -279,36 +362,33 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
+      this.$http.get(`${this.callback}/collecteur/carnet/ending`, headers).then(
+        (response) => {
+          let data = response.body.carnetsEnding;
 
-      this.$http
-        .get(`${this.callback}/collecteur/carnet/ending`, headers)
-        .then(
-          (response) => {
-            let data = response.body.carnetsEnding;
+          console.log(data);
+          this.stats[1].value = 0;
 
-            console.log(data)
-            this.stats[1].value = 0;
+          this.data_l = [];
 
-            this.data_l = [];
-
-            for (let i = 0; i < data.length; i++) {
-              if (data[i].isDeliver == true) {
-                this.stats[1].value += 1
-                this.data_l.push({
-                  key: data[i]._id,
-                  createdAt: new Date(data[i].createdAt).toLocaleString(),
-                  nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
-                  numero: data[i].client[0].telephone,
-                  carnet: data[i].uuid,
-                  collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
-                });
-              }
+          for (let i = 0; i < data.length; i++) {
+            if (data[i].isDeliver == true) {
+              this.stats[1].value += 1;
+              this.data_l.push({
+                key: data[i]._id,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].client[0].nom} ${data[i].client[0].prenoms}`,
+                numero: data[i].client[0].telephone,
+                carnet: data[i].uuid,
+                collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+              });
             }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
           }
-        );
+        },
+        (response) => {
+          this.showAlert("error", "Error", response.body.message);
+        }
+      );
     },
 
     listeClientPresque() {
@@ -317,20 +397,19 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-
       this.$http
         .get(`${this.callback}/collecteur/carnet/endingPresque`, headers)
         .then(
           (response) => {
             let data = response.body.carnetsEndingPresque;
 
-            console.log(data)
+            console.log(data);
             this.stats[2].value = 0;
 
             this.data_p = [];
 
             for (let i = 0; i < data.length; i++) {
-              this.stats[1].value += 1
+              this.stats[1].value += 1;
               this.data_p.push({
                 key: data[i]._id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
@@ -347,18 +426,37 @@ export default {
         );
     },
 
-    deliver(id) {
+    getProduit(produit) {
+      console.log(produit);
+      console.log(this.dataProduit);
+      let dt = this.dataProduit;
 
-      console.log(id)
+      this.dataProduit_f = [];
+      for (let i = 0; i < produit.length; i++) {
+        for (let j = 0; j < dt.length; j++) {
+          if (dt[j].key === produit[i]) {
+            this.dataProduit_f.push(dt[j]);
+          }
+        }
+      }
+
+      this.visible = true;
+    },
+
+    deliver(id) {
+      console.log(id);
 
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-
       this.$http
-        .put(`${this.callback}/collecteur/carnet/deliveredCarnet`, { carnet: id }, headers)
+        .put(
+          `${this.callback}/collecteur/carnet/deliveredCarnet`,
+          { carnet: id },
+          headers
+        )
         .then(
           (response) => {
             let data = response.body;
@@ -411,6 +509,14 @@ export default {
             this.showAlert("error", "Error", response.body.message);
           }
         );
+    },
+
+    handleCancel(e) {
+      this.visible = false;
+    },
+
+    handleOk(e) {
+      this.visible = false;
     },
   },
 };

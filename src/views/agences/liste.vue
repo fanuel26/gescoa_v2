@@ -416,7 +416,7 @@ export default {
     },
 
     onSearch() {
-      /*this.value = this.value.toLowerCase();
+      this.value = this.value.toLowerCase();
 
       let data = this.data_s;
 
@@ -426,35 +426,7 @@ export default {
         if (nom > -1) {
           this.data.push(data[i]);
         }
-      }*/
-
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.$http.post(`${this.callback}/agence/list?row=${this.row}&page=1&search=${this.value}`, {}, headers).then(
-        (response) => {
-          let data = response.body.data;
-
-          this.data = [];
-          console.log(data);
-          for (let i = data.length - 1; i >= 0; i--) {
-            this.data.push({
-              key: data[i].id,
-              createdAt: new Date(data[i].createdAt).toLocaleString(),
-              nom: data[i].nom_agence,
-              ville: data[i].quartier.ville.libelle,
-              quartier: data[i].quartier.libelle,
-            });
-
-            this.data_s = this.data;
-          }
-        },
-        (response) => {
-          this.showAlert("error", "Error", response.body.message);
-        }
-      );
+      }
     },
   },
 };
