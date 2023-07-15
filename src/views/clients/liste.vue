@@ -15,12 +15,12 @@
           <template #title>
             <div style="display: flex; align-items: center; justify-content: space-between;">
               <h6>Liste de tous les clients</h6>
-              <!-- <a-input-search
+              <a-input-search
                 v-model="value"
                 placeholder="Recherche ici"
                 style="width: 300px; margin-top: 20px;"
                 @change="onSearch"
-              /> -->
+              />
               <div>
                 <!-- <router-link type="primary" :to="{ name: 'Client_not_visite' }"
                   ><a-button class="mx-2"
@@ -82,6 +82,7 @@ export default {
       stats: [],
       columns: [],
       data: [],
+      data_s: [],
       row: 5,
       page: 1,
       nbr: 0,
@@ -206,98 +207,8 @@ export default {
                 quartier: data[i].quartier?.libelle,
                 collecteur: `${data[i].collecteur?.nom} ${data[i].collecteur?.prenoms}`,
               });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-    },
 
-    next() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.page = this.page + 1;
-
-      this.$http
-        .post(
-          `${this.callback}/client/all`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let dt = response.body.data;
-
-            console.log(dt);
-
-            this.data = [];
-
-            let d = Object.keys(dt).map(function (key) {
-              return dt[key];
-            });
-
-            console.log(d);
-            for (let i = 0; i < d.length; i++) {
-              console.log(d[i]);
-              this.data.push({
-                key: d[i].id,
-                createdAt: d[i].createdAt,
-                nom: d[i].nom,
-                numero: d[i].numero,
-                profession: d[i].profession,
-                quartier: d[i].quartier,
-                collecteur: d[i].collecteur,
-              });
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-    },
-
-    preview() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.page = this.page - 1;
-
-      this.$http
-        .post(
-          `${this.callback}/client/all`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let dt = response.body.data;
-
-            console.log(dt);
-
-            this.data = [];
-
-            let d = Object.keys(dt).map(function (key) {
-              return dt[key];
-            });
-
-            console.log(d);
-            for (let i = 0; i < d.length; i++) {
-              console.log(d[i]);
-              this.data.push({
-                key: d[i].id,
-                createdAt: d[i].createdAt,
-                nom: d[i].nom,
-                numero: d[i].numero,
-                profession: d[i].profession,
-                quartier: d[i].quartier,
-                collecteur: d[i].collecteur,
-              });
+              this.data_s = this.data
             }
           },
           (response) => {
@@ -307,42 +218,7 @@ export default {
     },
 
     onSearch() {
-      let session = localStorage;
-      this.token_admin = session.getItem("token");
-
-      let headers = { headers: { Authorization: this.token_admin } };
-
-      this.$http
-        .post(
-          `${this.callback}/client/list?search=${this.value}&row=${this.row}&page=1`,
-          {},
-          headers
-        )
-        .then(
-          (response) => {
-            let d = response.body.data;
-
-            console.log(response.body);
-            this.data = [];
-            for (let i = 0; i < d.length; i++) {
-              this.data.push({
-                key: d[i].id,
-                createdAt: d[i].createdAt,
-                nom: d[i].nom,
-                numero: d[i].numero,
-                profession: d[i].profession,
-                quartier: d[i].quartier,
-                collecteur: d[i].collecteur,
-              });
-
-              this.data_s = this.data;
-            }
-          },
-          (response) => {
-            this.showAlert("error", "Error", response.body.message);
-          }
-        );
-      /*this.value = this.value.toLowerCase();
+      this.value = this.value.toLowerCase();
 
       let data = this.data_s;
 
@@ -353,7 +229,7 @@ export default {
         if (nom > -1 || numero > -1) {
           this.data.push(data[i]);
         }
-      }*/
+      }
     },
   },
 };

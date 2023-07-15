@@ -115,6 +115,23 @@
             :data-source="data_p"
             :pagination="true"
           >
+            <template slot="operation" slot-scope="text, record">
+              <div
+                style="
+                  display: flex;
+                  justify-content: center;
+                  align-items: center;
+                "
+              >
+                <a-button
+                  class="mx-2"
+                  style="margin-right: 10px"
+                  size="small"
+                  @click="getProduit(record.produit)"
+                  >Voir produit</a-button
+                >
+              </div>
+            </template>
           </a-table>
         </a-card>
       </a-col>
@@ -281,6 +298,11 @@ export default {
         dataIndex: "collecteur",
         key: "collecteur",
       },
+      {
+        title: "Action",
+        key: "Action",
+        scopedSlots: { customRender: "operation" },
+      },
     ];
 
     this.listeClient();
@@ -417,6 +439,7 @@ export default {
                 numero: data[i].client[0].telephone,
                 carnet: data[i].uuid,
                 collecteur: `${data[i].collecteur[0].nom} ${data[i].collecteur[0].prenoms}`,
+                produit: data[i].typeCarnets,
               });
             }
           },

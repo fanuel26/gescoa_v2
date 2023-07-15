@@ -461,6 +461,25 @@ let routes = [
 		layout: "dashboard",
 		component: () => import('../views/launship/point.vue'),
 	},
+	
+	{
+		path: '/controle',
+		name: 'Controle_list',
+		layout: "dashboard",
+		component: () => import('../views/controle/controle.vue'),
+	},
+	{
+		path: '/controle/:id',
+		name: 'Controle_detail',
+		layout: "dashboard",
+		component: () => import('../views/controle/liste.vue'),
+	},
+	{
+		path: '/controleview/:id',
+		name: 'Controle_view',
+		layout: "dashboard",
+		component: () => import('../views/controle/detail.vue'),
+	},
 	{
 		path: '*',
 		component: () => import('../views/404.vue'),
