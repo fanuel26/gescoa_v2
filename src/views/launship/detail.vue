@@ -37,7 +37,7 @@
                       Totsi
                     </a-descriptions-item>
                     <a-descriptions-item label="Mot de passe">
-                      DSHFOOD@1234
+                      testfood@1234
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>

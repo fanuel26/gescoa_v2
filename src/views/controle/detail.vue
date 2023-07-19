@@ -48,11 +48,10 @@
               >
             </template>
             <template slot="operation" slot-scope="text, record">
-              <a-popconfirm
+              <a-popconfirm v-if="record.etat == false"
                 title="Etes vous Sûr de resoudre?"
                 @confirm="() => resolve(record.key)"
                 ><a-button
-                  :disabled="record.etat == true"
                   type="danger"
                   size="small"
                   >Resoudre</a-button
