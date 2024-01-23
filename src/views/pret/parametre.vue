@@ -330,7 +330,7 @@ export default {
   },
 
   mounted() {
-    this.password = `testfood@${Math.floor(
+    this.password = `DSHFOOD@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -449,7 +449,7 @@ export default {
                       "Success",
                       `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                     );
-                    this.password = `testfood@${Math.floor(
+                    this.password = `DSHFOOD@${Math.floor(
                       Math.random() * (9999 - 1000) + 1000
                     )}`;
                   } else {

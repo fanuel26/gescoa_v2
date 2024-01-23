@@ -359,7 +359,7 @@ export default {
         (response) => {
           let data = response.body.typeCarnets.typeCarnets;
 
-          this.stats[0].value = data.length;
+          // this.stats[0].value = data.length;
 
           console.log(data);
           for (let i = data.length - 1; i >= 0; i--) {
@@ -431,7 +431,7 @@ export default {
             this.data_p = [];
 
             for (let i = 0; i < data.length; i++) {
-              this.stats[1].value += 1;
+              this.stats[2].value += 1;
               this.data_p.push({
                 key: data[i]._id,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),

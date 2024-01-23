@@ -1,23 +1,10 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <!-- Widget 1 Card -->
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
+        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
+          :icon="stat.icon" :status="stat.status"></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
@@ -29,51 +16,33 @@
             <h6>Liste des controllers</h6>
           </template>
           <div class="d-flex justify-content-between align-items-center mb-24">
-            <div>
-              <a-button class="mx-2" @click="showModal"
-                >Creation du controller</a-button
-              >
+            <div style="display: flex; justify-content: space-between;">
+              <a-button class="mx-2" @click="showModal">Creation du controller</a-button>
+              <!-- <a-button class="mx-2" type="primary" @click="exportDataFromJSON(data)">Export</a-button> -->
             </div>
-            <a-modal
-              :width="width"
-              title="Creer un controller"
-              :visible="visible"
-              :confirm-loading="confirmLoading"
-              @ok="handleOk"
-              @cancel="handleCancel"
-            >
+            <a-modal :width="width" title="Creer un controller" :visible="visible" :confirm-loading="confirmLoading"
+              @ok="handleOk" @cancel="handleCancel">
               <a-row type="flex" :gutter="24">
                 <!-- Billing Information Column -->
                 <a-col :span="16" :md="16" class="">
-                  <a-form
-                    id="components-form-demo-normal-login"
-                    :form="form"
-                    class="login-form"
-                    @submit="chefSubmit"
-                    :hideRequiredMark="true"
-                  >
+                  <a-form id="components-form-demo-normal-login" :form="form" class="login-form" @submit="chefSubmit"
+                    :hideRequiredMark="true">
                     <a-row type="flex" :gutter="24">
                       <a-col :span="12" :md="12" class="">
                         <a-form-item class="" label="Agence" :colon="false">
-                          <a-select
-                            v-decorator="[
-                              'agence',
-                              {
-                                initialValue: agence,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'agence est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                          >
-                            <a-select-option
-                              v-for="ag in agences"
-                              :value="ag.id"
-                              :key="ag.id"
-                            >
+                          <a-select v-decorator="[
+                            'agence',
+                            {
+                              initialValue: agence,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'agence est vide!',
+                                },
+                              ],
+                            },
+                          ]">
+                            <a-select-option v-for="ag in agences" :value="ag.id" :key="ag.id">
                               {{ ag.libelle }}
                             </a-select-option>
                           </a-select>
@@ -81,25 +50,19 @@
                       </a-col>
                       <a-col :span="12" :md="12" class="">
                         <a-form-item class="" label="Quartier" :colon="false">
-                          <a-select
-                            v-decorator="[
-                              'quartier',
-                              {
-                                initialValue: quartier,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'quartier est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                          >
-                            <a-select-option
-                              v-for="ag in quartiers"
-                              :value="ag.id"
-                              :key="ag.id"
-                            >
+                          <a-select v-decorator="[
+                            'quartier',
+                            {
+                              initialValue: quartier,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'quartier est vide!',
+                                },
+                              ],
+                            },
+                          ]">
+                            <a-select-option v-for="ag in quartiers" :value="ag.id" :key="ag.id">
                               {{ ag.libelle }}
                             </a-select-option>
                           </a-select>
@@ -107,103 +70,67 @@
                       </a-col>
                       <!-- Billing Information Column -->
                       <a-col :span="12" :md="12" class="">
-                        <a-form-item
-                          class=""
-                          label="Nom controller"
-                          :colon="false"
-                        >
-                          <a-input
-                            v-model="nom"
-                            v-decorator="[
-                              'nom',
-                              {
-                                initialValue: nom,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Nom du chef est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                            type="text"
-                            placeholder="Nom agent chef"
-                          />
+                        <a-form-item class="" label="Nom controller" :colon="false">
+                          <a-input v-model="nom" v-decorator="[
+                            'nom',
+                            {
+                              initialValue: nom,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Nom du chef est vide!',
+                                },
+                              ],
+                            },
+                          ]" type="text" placeholder="Nom agent chef" />
                         </a-form-item>
                       </a-col>
                       <a-col :span="12" :md="12" class="">
-                        <a-form-item
-                          class=""
-                          label="Prenom controller"
-                          :colon="false"
-                        >
-                          <a-input
-                            v-model="prenom"
-                            v-decorator="[
-                              'prenom',
-                              {
-                                initialValue: prenom,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Prenom du chef est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                            type="text"
-                            placeholder="Prenom agent chef"
-                          />
+                        <a-form-item class="" label="Prenom controller" :colon="false">
+                          <a-input v-model="prenom" v-decorator="[
+                            'prenom',
+                            {
+                              initialValue: prenom,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Prenom du chef est vide!',
+                                },
+                              ],
+                            },
+                          ]" type="text" placeholder="Prenom agent chef" />
                         </a-form-item>
                       </a-col>
                       <a-col :span="12" :md="12" class="">
-                        <a-form-item
-                          class=""
-                          label="Numero de téléphone"
-                          :colon="false"
-                        >
-                          <a-input
-                            v-model="telephone"
-                            v-decorator="[
-                              'telephone',
-                              {
-                                initialValue: telephone,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Numero de téléphone est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                            type="number"
-                            placeholder="Numero de téléphone"
-                          />
+                        <a-form-item class="" label="Numero de téléphone" :colon="false">
+                          <a-input v-model="telephone" v-decorator="[
+                            'telephone',
+                            {
+                              initialValue: telephone,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Numero de téléphone est vide!',
+                                },
+                              ],
+                            },
+                          ]" type="number" placeholder="Numero de téléphone" />
                         </a-form-item>
                       </a-col>
                       <a-col :span="12" :md="12" class="">
-                        <a-form-item
-                          class=""
-                          label="Adresse email"
-                          :colon="false"
-                        >
-                          <a-input
-                            v-model="email"
-                            v-decorator="[
-                              'email',
-                              {
-                                initialValue: email,
-                                rules: [
-                                  {
-                                    required: true,
-                                    message: 'Email est vide!',
-                                  },
-                                ],
-                              },
-                            ]"
-                            type="email"
-                            placeholder="Adresse email"
-                          />
+                        <a-form-item class="" label="Adresse email" :colon="false">
+                          <a-input v-model="email" v-decorator="[
+                            'email',
+                            {
+                              initialValue: email,
+                              rules: [
+                                {
+                                  required: true,
+                                  message: 'Email est vide!',
+                                },
+                              ],
+                            },
+                          ]" type="email" placeholder="Adresse email" />
                         </a-form-item>
                       </a-col>
                     </a-row>
@@ -212,10 +139,7 @@
                 <a-col :span="8" :md="8" class="mt-4">
                   <a-card :bordered="false" class="card-billing-info">
                     <div class="col-info">
-                      <a-descriptions
-                        title="Information du controller"
-                        :column="1"
-                      >
+                      <a-descriptions title="Information du controller" :column="1">
                         <a-descriptions-item label="Nom">
                           {{ nom }}
                         </a-descriptions-item>
@@ -240,28 +164,17 @@
           </div>
           <a-table :columns="columns" :data-source="data">
             <template slot="operation" slot-scope="text, record">
-              <div
-                style="
+              <div style="
                   display: flex;
                   align-items: center;
                   justify-content: start;
-                "
-              >
-                <router-link
-                  :to="{ name: 'Controle_view', params: { id: record.key } }"
-                  ><a-button type="primary" size="small"
-                    >Détail</a-button
-                  ></router-link
-                >
-                <a-popconfirm
-                  v-bind:title="
-                    'Sûre de changer? Mot de passe: ' +
-                    password
-                  "
-                  @confirm="() => passwordSubmit(record.key)"
-                  ><a-button size="small" style="margin-left: 10px;"
-                    >Changer Password</a-button
-                  >
+                ">
+                <router-link :to="{ name: 'Controle_view', params: { id: record.key } }"><a-button type="primary"
+                    size="small">Détail</a-button></router-link>
+                <a-popconfirm v-bind:title="'Sûre de changer? Mot de passe: ' +
+                  password
+                  " @confirm="() => passwordSubmit(record.key)"><a-button size="small"
+                    style="margin-left: 10px;">Changer Password</a-button>
                 </a-popconfirm>
               </div>
             </template>
@@ -275,6 +188,7 @@
 <script>
 // Counter Widgets
 import WidgetCounter from "../../components/Widgets/WidgetCounter";
+import exportFromJSON from "export-from-json";
 
 const columns = [
   {
@@ -310,7 +224,7 @@ const columns = [
   },
 ];
 export default {
-  created() {},
+  created() { },
   components: {
     WidgetCounter,
   },
@@ -341,7 +255,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `testfood@${Math.floor(
+    this.password = `DSHFOOD@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -374,6 +288,17 @@ export default {
       console.log(data);
       let dt = JSON.stringify(data);
       localStorage.setItem("dataController", dt);
+    },
+
+    exportDataFromJSON(data) {
+      if (!data) return;
+      try {
+        const fileName = "exported-data";
+        const exportType = exportFromJSON.types["xls"];
+        exportFromJSON({ data, fileName, exportType });
+      } catch (e) {
+        throw new Error("Parsing failed!");
+      }
     },
 
     listAgence() {
@@ -449,7 +374,7 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       let data_param = {
-        newPassword : this.password,
+        newPassword: this.password,
       };
 
       this.$http
@@ -469,7 +394,7 @@ export default {
                 "Success",
                 `Mot de passe generer avec succes! Mot de passe: ${this.password}`
               );
-              this.password = `testfood@${Math.floor(
+              this.password = `DSHFOOD@${Math.floor(
                 Math.random() * (9999 - 1000) + 1000
               )}`;
             } else {

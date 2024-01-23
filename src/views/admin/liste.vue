@@ -135,44 +135,24 @@
                     <a-col :span="12" :md="12" class="">
                       <a-form-item
                         class=""
-                        label="Nom d'utilisateur"
+                        label="Numero de téléphone"
                         :colon="false"
                       >
                         <a-input
-                        v-model="username"
+                          v-model="telephone"
                           v-decorator="[
-                            'username',
+                            'telephone',
                             {
                               rules: [
                                 {
                                   required: true,
-                                  message: 'Nom d\'utilisateur est vide!',
+                                  message: 'Numero de téléphone est vide!',
                                 },
                               ],
                             },
                           ]"
-                          type="text"
-                          placeholder="Nom d'utilisateur"
-                        />
-                      </a-form-item>
-                    </a-col>
-
-                    <a-col :span="12" :md="12" class="">
-                      <a-form-item class="" label="Code secret" :colon="false">
-                        <a-input
-                          v-decorator="[
-                            'code_secret',
-                            {
-                              rules: [
-                                {
-                                  required: true,
-                                  message: 'Code secret est vide!',
-                                },
-                              ],
-                            },
-                          ]"
-                          type="numbr"
-                          placeholder="Code secret"
+                          type="number"
+                          placeholder="numero de téléphone"
                         />
                       </a-form-item>
                     </a-col>
@@ -195,8 +175,8 @@
                       <a-descriptions-item label="Adresse email">
                         {{ email }}
                       </a-descriptions-item>
-                      <a-descriptions-item label="Nom d'utilisateur">
-                        {{ username }}
+                      <a-descriptions-item label="Numero de téléphone">
+                        {{ telephone }}
                       </a-descriptions-item>
                       <a-descriptions-item label="Mot de passe">
                         {{ password }}
@@ -219,7 +199,7 @@
                     ></router-link
                   ></a-col
                 >
-                <a-col :span="12">
+                <!-- <a-col :span="12">
                   <a-popconfirm
                     v-if="record.status == 1"
                     title="Sûre de bloquer?"
@@ -237,7 +217,7 @@
                       >Debloquer</a-button
                     >
                   </a-popconfirm>
-                </a-col>
+                </a-col> -->
               </a-row>
             </template>
           </a-table>
@@ -288,15 +268,17 @@ export default {
       nom: null,
       prenom: null,
       username: null,
+      telephone: null,
       email: null,
       code_secret: null,
       password: null,
     };
   },
   mounted() {
-    this.password = `testfood@${Math.floor(
+    this.password = `DSHFOOD@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
+    this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
 
     this.columns = [
       {
@@ -343,9 +325,10 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/admin/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.admins;
+          console.log(data);
 
           this.stats[0].value = data.length;
           this.data = [];
@@ -354,10 +337,10 @@ export default {
             this.data.push({
               key: data[i].id,
               createdAt: new Date(data[i].createdAt).toLocaleString(),
-              nom: `${data[i].nom} ${data[i].prenom}`,
-              numero: `(+228) ${data[i].numero}`,
+              nom: `${data[i].nom} ${data[i].prenoms}`,
+              numero: `(+228) ${data[i].telephone}`,
               email: data[i].email,
-              status: data[i].is_active,
+              status: true,
             });
           }
         },
@@ -395,20 +378,15 @@ export default {
       e.preventDefault();
       this.form.validateFields((err, values) => {
         if (!err) {
-          if (values.code_secret == localStorage.getItem("code_secret")) {
-            console.log(values);
-            this.confirmLoading = true;
-            this.AdminSubmit(values);
-            setTimeout(() => {
-              this.listeAdmin();
-              this.visible = false;
-              this.confirmLoading = false;
-              this.form.resetFields();
-            }, 2000);
-          } else {
-            s;
-            this.showAlert("error", "Erreur", "Code secret incorrect");
-          }
+          console.log(values);
+          this.confirmLoading = true;
+          this.AdminSubmit(values);
+          setTimeout(() => {
+            this.listeAdmin();
+            this.visible = false;
+            this.confirmLoading = false;
+            this.form.resetFields();
+          }, 2000);
         } else {
           console.log("error");
         }
@@ -427,26 +405,28 @@ export default {
 
       let data_create = {
         nom: this.nom,
-        prenom: this.prenom,
+        prenoms: this.prenom,
         email: this.email,
-        id_type_administrateur: 4,
-        username: this.username,
+        telephone: this.telephone,
         password: this.password,
+        menu: '{}'
       };
 
-      this.$http.post(`${this.callback}/register`, data_create, headers).then(
-        (response) => {
-          console.log(response);
-          if (response.body.status == true) {
-            this.showAlert("success", "Success", "Admin creer avec success");
-          } else {
+      this.$http
+        .post(`${this.callback}/admin/create`, data_create, headers)
+        .then(
+          (response) => {
+            console.log(response);
+            if (response.body.status == 200) {
+              this.showAlert("success", "Success", "Admin creer avec success");
+            } else {
+              this.showAlert("error", "Error", response.body.message);
+            }
+          },
+          (response) => {
             this.showAlert("error", "Error", response.body.message);
           }
-        },
-        (response) => {
-          this.showAlert("error", "Error", response.body.message);
-        }
-      );
+        );
     },
   },
 };

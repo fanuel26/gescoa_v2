@@ -68,7 +68,7 @@ export default {
         };
     },
     mounted() {
-        this.password = `testfood@${Math.floor(
+        this.password = `DSHFOOD@${Math.floor(
             Math.random() * (9999 - 1000) + 1000
         )}`;
 
@@ -95,7 +95,7 @@ export default {
                 key: "agence",
             },
             {
-                title: "Nombre vendus",
+                title: "Cotisation Unique",
                 dataIndex: "classement",
                 key: "classement",
             },
@@ -216,7 +216,7 @@ export default {
                         let data = response.body.topCollecteurByCotisationsUnik;
 
                         console.log(response.body);
-                        this.stats[0].value = response.body.topCollecteurByCarnetSell.length;
+                        this.stats[0].value = response.body.topCollecteurByCotisationsUnik.length;
                         //   this.total_page = response.body.total_pages;
                         this.data = [];
                         this.data_g = data

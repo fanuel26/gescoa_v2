@@ -10,7 +10,7 @@
       <div style="width: 100vw; display: flex; justify-content: center">
         <a-col :span="24" :md="12" :lg="6" :xl="6" class="col-form mt-4">
           <a-card>
-            <h3 class="mb-15 text-center text-primary mt-4">testfood</h3>
+            <h3 class="mb-15 text-center text-primary mt-4">DSHFOOD</h3>
             <h5 class="font-regular text-center text-muted">
               Entrez le numero de téléphone et le mot de passe pour se connecter
             </h5>
@@ -114,6 +114,7 @@ export default {
                 session.setItem("username", `${response.body.adminInfo.admin.nom} ${response.body.adminInfo.admin.prenoms}`);
                 session.setItem("code_secret", response.body.adminInfo.admin.codeSecret);
                 session.setItem("infoAdmin", JSON.stringify(response.body.adminInfo.admin) );
+                session.setItem("menu", response.body.adminInfo.admin.menu);
 
                 this.$router.push({ name: "Dashboard" });
               } else {

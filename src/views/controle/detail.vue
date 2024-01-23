@@ -1,23 +1,10 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col
-        :span="24"
-        :lg="12"
-        :xl="6"
-        class="mb-24"
-        v-for="(stat, index) in stats"
-        :key="index"
-      >
+      <a-col :span="24" :lg="12" :xl="6" class="mb-24" v-for="(stat, index) in stats" :key="index">
         <!-- Widget 1 Card -->
-        <WidgetCounter
-          :title="stat.title"
-          :value="stat.value"
-          :prefix="stat.prefix"
-          :suffix="stat.suffix"
-          :icon="stat.icon"
-          :status="stat.status"
-        ></WidgetCounter>
+        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
+          :icon="stat.icon" :status="stat.status"></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
@@ -26,36 +13,25 @@
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <template #title>
-            <div
-              style="
+            <div style="
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-              "
-            >
+              ">
               <h6>Liste des controles du collecteur</h6>
 
+              <a-button class="mx-2" type="primary" danger @click="exportDataFromJSON(data)">Export</a-button>
               <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
             </div>
           </template>
           <a-table :columns="columns" :data-source="data" :pagination="true">
             <template slot="etat" slot-scope="text, record">
-              <span class="text-success" v-if="record.etat == true"
-                >Success</span
-              >
-              <span class="text-danger" v-if="record.etat == false"
-                >Problème</span
-              >
+              <span class="text-success" v-if="record.etat == true">Success</span>
+              <span class="text-danger" v-if="record.etat == false">Problème</span>
             </template>
             <template slot="operation" slot-scope="text, record">
-              <a-popconfirm v-if="record.etat == false"
-                title="Etes vous Sûr de resoudre?"
-                @confirm="() => resolve(record.key)"
-                ><a-button
-                  type="danger"
-                  size="small"
-                  >Resoudre</a-button
-                >
+              <a-popconfirm v-if="record.etat == false" title="Etes vous Sûr de resoudre?"
+                @confirm="() => resolve(record.key)"><a-button type="danger" size="small">Resoudre</a-button>
               </a-popconfirm>
             </template>
           </a-table>
@@ -68,7 +44,7 @@
 <script>
 // Counter Widgets
 import WidgetCounter from "../../components/Widgets/WidgetCounter";
-
+import exportFromJSON from 'export-from-json'
 const columns = [
   {
     title: "Date de creation",
@@ -114,7 +90,7 @@ const columns = [
   },
 ];
 export default {
-  created() {},
+  created() { },
   components: {
     WidgetCounter,
   },
@@ -179,6 +155,19 @@ export default {
       });
     },
 
+    exportDataFromJSON(data) {
+      if (!data) { message.warning('Data not found') }
+      else {
+        try {
+          const fileName = "exported-data";
+          const exportType = exportFromJSON.types["xls"];
+          exportFromJSON({ data, fileName, exportType });
+        } catch (e) {
+          throw new Error("Parsing failed!");
+        }
+      }
+    },
+
     listDemande() {
       let session = localStorage;
       this.token_admin = session.getItem("token");
@@ -205,7 +194,7 @@ export default {
                 this.dette += data[i].montantDette;
               }
 
-              
+
               this.stats[1].value = this.dette;
 
               this.data.push({

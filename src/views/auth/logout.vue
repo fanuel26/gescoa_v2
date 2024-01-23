@@ -13,10 +13,7 @@ export default {
   mounted() {
     let session = localStorage;
 
-    session.clear("token");
-    session.clear("id");
-    session.clear("username");
-    session.clear("code_secret");
+    session.clear();
 
     this.$router.push({ name: "Home" });
   },

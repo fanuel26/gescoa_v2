@@ -13,7 +13,7 @@
           class="header-solid h-full"
           :bodyStyle="{ paddingTop: 0, paddingBottom: '16px' }"
         >
-          <div class="text-right mb-4">
+          <div class="text-right" style="margin-bottom: 10px">
             <a-button @click="$router.go(-1)">Retour</a-button>
           </div>
           <template #title>
@@ -28,16 +28,16 @@
                       {{ admin.nom }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Prenom">
-                      {{ admin.prenom }}
+                      {{ admin.prenoms }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Adresse email">
                       {{ admin.email }}
                     </a-descriptions-item>
-                    <a-descriptions-item label="Nom d'utilisateur">
-                      {{ admin.username }}
+                    <a-descriptions-item label="Numero de téléphone">
+                      {{ admin.telephone }}
                     </a-descriptions-item>
                     <a-descriptions-item label="Code secret">
-                      {{ admin.code_secret }}
+                      {{ admin.codeSecret }}
                     </a-descriptions-item>
                   </a-descriptions>
                 </div>
@@ -56,39 +56,7 @@
                   :hideRequiredMark="true"
                 >
                   <a-row :gutter="24">
-                    <a-col :span="8">
-                      <div class="d-flex">
-                        <a-switch
-                          checked-children=""
-                          un-checked-children=""
-                          :checked="state.carnet"
-                          v-model="state.carnet"
-                        />
-                        <p class="mx-2">Carnets produit</p>
-                      </div>
-                    </a-col>
-                    <a-col :span="8">
-                      <div class="d-flex">
-                        <a-switch
-                          checked-children=""
-                          un-checked-children=""
-                          :checked="state.epargne"
-                          v-model="state.epargne"
-                        />
-                        <p class="mx-2">Compte épargne</p>
-                      </div>
-                    </a-col>
-                    <a-col :span="8">
-                      <div class="d-flex">
-                        <a-switch
-                          checked-children=""
-                          un-checked-children=""
-                          :checked="state.pret"
-                          v-model="state.pret"
-                        />
-                        <p class="mx-2">Prêt</p>
-                      </div>
-                    </a-col>
+                    
                     <a-col :span="8">
                       <div class="d-flex">
                         <a-switch
@@ -120,17 +88,6 @@
                           v-model="state.collecteur"
                         />
                         <p class="mx-2">Agent collecteur</p>
-                      </div>
-                    </a-col>
-                    <a-col :span="8">
-                      <div class="d-flex">
-                        <a-switch
-                          checked-children=""
-                          un-checked-children=""
-                          :checked="state.superviseur"
-                          v-model="state.superviseur"
-                        />
-                        <p class="mx-2">Agent superviseur</p>
                       </div>
                     </a-col>
                     <a-col :span="8">
@@ -194,10 +151,10 @@
                         <a-switch
                           checked-children=""
                           un-checked-children=""
-                          :checked="state.launship"
-                          v-model="state.launship"
+                          :checked="state.controlleur"
+                          v-model="state.controlleur"
                         />
-                        <p class="mx-2">Launship-Box</p>
+                        <p class="mx-2">Controlleur</p>
                       </div>
                     </a-col>
                     <a-col :span="8">
@@ -205,10 +162,21 @@
                         <a-switch
                           checked-children=""
                           un-checked-children=""
-                          :checked="state.dashboard"
-                          v-model="state.dashboard"
+                          :checked="state.etat"
+                          v-model="state.etat"
                         />
-                        <p class="mx-2">Tableau de bord</p>
+                        <p class="mx-2">Etat carnet</p>
+                      </div>
+                    </a-col>
+                    <a-col :span="8">
+                      <div class="d-flex">
+                        <a-switch
+                          checked-children=""
+                          un-checked-children=""
+                          :checked="state.parametre"
+                          v-model="state.parametre"
+                        />
+                        <p class="mx-2">Parametre Carnet</p>
                       </div>
                     </a-col>
                   </a-row>
@@ -454,7 +422,7 @@ export default {
   },
 
   mounted() {
-    this.password = `testfood@${Math.floor(
+    this.password = `DSHFOOD@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -477,33 +445,30 @@ export default {
 
       let headers = { headers: { Authorization: this.token_admin } };
 
-      this.$http.post(`${this.callback}/liste`, {}, headers).then(
+      this.$http.get(`${this.callback}/admin/all`, headers).then(
         (response) => {
-          let data = response.body.data;
+          let data = response.body.admins;
 
           for (let i = 0; i < data.length; i++) {
             if (data[i].id == this.$route.params.id) {
               console.log(data[i]);
               this.admin = data[i];
-              if (data[i].adminAttributes == null) {
+              if (data[i].menu) {
+                this.state = JSON.parse(data[i].menu);
+              } else {
                 this.state = {
-                  carnet: true,
-                  epargne: true,
                   produit: true,
                   client: true,
                   collecteur: true,
-                  superviseur: true,
                   livreur: true,
                   agence: true,
                   chef: true,
                   admin: true,
                   ville: true,
-                  launship: true,
-                  pret: true,
-                  dashboard: true,
+                  controlleur: true,
+                  etat: true,
+                  parametre: true,
                 };
-              } else {
-                this.state = JSON.parse(data[i].adminAttributes);
               }
 
               console.log(this.state)
@@ -618,7 +583,7 @@ export default {
                             "Success",
                             `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                           );
-                          this.password = `testfood@${Math.floor(
+                          this.password = `DSHFOOD@${Math.floor(
                             Math.random() * (9999 - 1000) + 1000
                           )}`;
                         } else {
@@ -697,16 +662,18 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/update-admin/${this.$route.params.id}`,
-          { admin_attributes: `${JSON.stringify(this.state)}` },
+        .put(
+          `${this.callback}/admin/updateMenuAdmin`,
+          { admin: this.$route.params.id, menu: `${JSON.stringify(this.state)}` },
           headers
         )
         .then(
           (response) => {
             let data = response.body;
 
-            if (data) {
+            console.log(data)
+
+            if (data.status == 200) {
               this.showAlert("success", "Success", "Role definit avec success");
               this.detailadmin();
             }

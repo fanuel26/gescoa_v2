@@ -19,7 +19,7 @@
     <div class="brand">
       <router-link :to="{ name: 'Dashboard' }">
         <!-- <img src="/images/logo1.png" class="img-fluid w-100 h-75" alt=""/> -->
-        <h3 class="text-primary">testfood</h3>
+        <h3 class="text-primary">DSHFOOD</h3>
       </router-link>
     </div>
     <hr />
@@ -413,7 +413,7 @@
           </a-badge>
         </router-link>
       </a-menu-item>
-      <!-- <a-menu-item v-if="type.admin == true">
+      <a-menu-item v-if="type.admin == true">
         <router-link :to="{ name: 'Admin' }">
           <span class="icon">
             <svg
@@ -437,7 +437,7 @@
           </span>
           <span class="label">Administration</span>
         </router-link>
-      </a-menu-item> -->
+      </a-menu-item>
       <a-menu-item v-if="type.ville == true">
         <router-link :to="{ name: 'Deploiement' }">
           <span class="icon">
@@ -481,7 +481,7 @@
           <span class="label">Livraison statistique</span>
         </router-link>
       </a-menu-item> -->
-      <a-menu-item>
+      <a-menu-item v-if="type.controlleur == true">
         <router-link :to="{ name: 'Controle_list' }">
           <span class="icon">
             <svg
@@ -502,7 +502,7 @@
           <span class="label">Controlleur</span>
         </router-link>
       </a-menu-item>
-      <a-menu-item>
+      <a-menu-item v-if="type.etat == true">
         <router-link :to="{ name: 'Etat' }">
           <span class="icon">
             <svg
@@ -566,7 +566,7 @@
           <span class="label">Launship-Box</span>
         </router-link>
       </a-menu-item> -->
-      <a-menu-item>
+      <a-menu-item v-if="type.parametre == true">
         <router-link :to="{ name: 'Parametre_carnet' }">
           <span class="icon">
             <svg
@@ -715,24 +715,19 @@ export default {
   },
 
   mounted() {
-    this.type = {
-      carnet: true,
-      epargne: true,
-      pret: true,
-      produit: true,
-      client: true,
-      collecteur: true,
-      superviseur: true,
-      livreur: true,
-      agence: true,
-      chef: true,
-      admin: true,
-      ville: true,
-      launship: true,
-      dashboard: true,
-    };
 
     let session = localStorage;
+
+    if (session.getItem('menu') != undefined) {
+      this.type = JSON.parse(session.getItem('menu'));
+    } else {
+      this.type = {admin: true}
+    }
+
+    console.log('type +++++++++++++++++++++++')
+    console.log(this.type)
+    console.log('type +++++++++++++++++++++++')
+
     this.token_admin = session.getItem("token");
 
     let headers = { headers: { Authorization: this.token_admin } };

@@ -172,6 +172,7 @@ export default {
 
 					if (data.status == 200) {
 						let dt = data.topCollecteurByCotisations
+            
 						console.log(dt)
 						for (let i = 0; i < dt.length; i++) {
 							this.data.push({

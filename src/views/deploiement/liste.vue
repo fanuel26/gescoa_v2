@@ -533,11 +533,9 @@ export default {
 
     changePays(value) {
       let data = this.dataVilles;
-      alert(data)
       this.villes = []
       for (let i = 0; i < data.length; i++) {
         if (data[i].id_pays?.id == value) {
-          alert(data[i].id)
           this.villes.push(data[i]);
         }
       }

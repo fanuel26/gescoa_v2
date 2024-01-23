@@ -29,6 +29,7 @@
             <h6>
               Liste des transactions
             </h6>
+            <!-- <a-segmented :value="valueSegment" :options="dataSegment" /> -->
           </template>
           <div>
             <div style="display: flex; justify-content: end; margin-bottom: 10px;">
@@ -196,6 +197,7 @@
 // Counter Widgets
 import WidgetCounter from "../../components/Widgets/WidgetCounter";
 
+
 const columns = [
   {
     title: "Date de creation",
@@ -212,6 +214,11 @@ const columns = [
     title: "Numéro de téléphone",
     dataIndex: "numero",
     key: "numero",
+  },
+  {
+    title: "Nom agence",
+    dataIndex: "agence",
+    key: "agence",
   },
   {
     title: "Montant envoyé (Fcfa)",
@@ -245,6 +252,7 @@ export default {
       visible: false,
       confirmLoading: false,
 
+      dataSegment: ['Non validé', 'Validé'],
       nom: null,
       prenom: null,
       numero: null,
@@ -253,6 +261,7 @@ export default {
       password: null,
 
       type: 0,
+      valueSegment: 0,
     };
   },
   mounted() {
@@ -298,8 +307,9 @@ export default {
             this.data = [];
             for (let i = 0; i < data.length; i++) {
               this.data.push({
-                key: data[i].id,
-                agentId: data[i].agent.id,
+                key: data[i]._id,
+                agentId: data[i].agent._id,
+                agence: data[i].agent.agence[0].libelle,
                 createdAt: new Date(data[i].createdAt).toLocaleString(),
                 nom: `${data[i].agent.nom} ${data[i].agent.prenoms}`,
                 numero: `(+228) ${data[i].agent.telephone}`,
@@ -342,7 +352,8 @@ export default {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
-      console.log(this.id);
+      console.log(id);
+      console.log(agentId);
 
       let headers = { headers: { Authorization: this.token_admin } };
 

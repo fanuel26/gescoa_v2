@@ -225,7 +225,7 @@ export default {
 
   mounted() {
     this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
-    this.password = `testfood@${Math.floor(
+    this.password = `DSHFOOD@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -277,7 +277,7 @@ export default {
           let data = response.body.agents;
           // this.caissiers = data;
           for (let i = 0; i < data.length; i++) {
-            if (data[i].id = this.$route.params.id) {
+            if (data[i].id == this.$route.params.id) {
               console.log(data[i])
               this.caissier = data[i];
             }
@@ -410,7 +410,7 @@ export default {
                     "Success",
                     `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                   );
-                  this.password = `testfood@${Math.floor(
+                  this.password = `DSHFOOD@${Math.floor(
                     Math.random() * (9999 - 1000) + 1000
                   )}`;
                 } else {
