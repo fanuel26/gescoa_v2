@@ -26,7 +26,7 @@
       <a-col :span="12" :lg="12" :xl="24" class="mb-24">
         <a-card class="card card-body border-0">
           <template #title>
-            <div class="d-flex justify-content-between">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
               <h6>Classement de tous les clients par nombre de carnet</h6>
               <a-input-search
                 v-model="value"
@@ -37,30 +37,8 @@
               <a-button class="mx-2" @click="$router.go(-1)">Retour</a-button>
             </div>
           </template>
-          <a-table :columns="columns" :data-source="data" :pagination="false">
-            <template slot="operation" slot-scope="text, record">
-              <router-link
-                :to="{ name: 'Client_detail', params: { id: record.key } }"
-                ><a-button type="primary" size="small"
-                  >Détail</a-button
-                ></router-link
-              >
-            </template>
+          <a-table :columns="columns" :data-source="data" :pagination="true">
           </a-table>
-
-          <div class="d-flex justify-content-between align-items-center mt-4">
-            <div>
-              <p>Page {{ page }}/{{ total_page }}</p>
-            </div>
-            <div>
-              <a-button class="mx-2" @click="preview()" v-if="page > 1">
-                Retour
-              </a-button>
-              <a-button class="mx-2" @click="next()" v-if="page != total_page">
-                Suivant
-              </a-button>
-            </div>
-          </div>
         </a-card>
       </a-col>
     </a-row>
@@ -132,11 +110,6 @@ export default {
         dataIndex: "nbr_carnet",
         key: "nbr_carnet",
       },
-      {
-        title: "Action",
-        key: "Action",
-        scopedSlots: { customRender: "operation" },
-      },
     ];
 
     this.listeClient();
@@ -156,32 +129,31 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .post(
-          `${this.callback}/v2/classement/general/client/by-carnet-count?row=${this.row}&page=${this.page}`,
-          {},
+        .get(
+          `${this.callback}/statistic/classement/topClientByCarnetBuy`,
           headers
         )
         .then(
           (response) => {
-            let data = response.body.data;
+            let data = response.body.topClientByCarnetsBuy;
 
-            console.log(response);
-            this.nbr = response.body.total;
+            console.log(data);
+            this.nbr = data.length;
 
             // this.stats[0].value = this.nbr;
-            this.total_page = response.body.total_pages;
+            // this.total_page = response.body.total_pages;
 
             console.log(this.nbr);
             this.data = [];
 
             for (let i = 0; i < data.length; i++) {
               this.data.push({
-                key: data[i].id,
-                createdAt: new Date(data[i].createdAt).toLocaleString(),
-                nom: data[i].nom,
-                numero: data[i].numero,
-                profession: data[i].profession,
-                nbr_carnet: data[i].nb_carnet,
+                key: data[i]._id[0].id,
+                createdAt: new Date(data[i]._id[0].createdAt).toLocaleString(),
+                nom: data[i]._id[0].nom,
+                numero: data[i]._id[0].telephone,
+                profession: data[i]._id[0].profession,
+                nbr_carnet: data[i].totalCarnetAcheter,
               });
             }
           },

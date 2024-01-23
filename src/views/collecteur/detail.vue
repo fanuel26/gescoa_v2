@@ -352,6 +352,33 @@
         </a-card>
       </a-col>
       <!-- / Your Transactions Column -->
+
+      
+      <a-col :span="12" :lg="12" :xl="24" class="mb-24">
+        <a-card class="card card-body border-0">
+          <template #title>
+            <div class="d-flex justify-content-between">
+              <h6>Liste des clients du collecteur</h6>
+            </div>
+          </template>
+          <a-table :columns="columns" :data-source="data" :pagination="true">
+          </a-table>
+
+          <!-- <div class="d-flex justify-content-between align-items-center mt-4">
+            <div>
+              <p>Page {{ page }}/{{ total_page }}</p>
+            </div>
+            <div>
+              <a-button class="mx-2" @click="preview()" v-if="page > 1">
+                Retour
+              </a-button>
+              <a-button class="mx-2" @click="next()" v-if="page != total_page">
+                Suivant
+              </a-button>
+            </div>
+          </div> -->
+        </a-card>
+      </a-col>
     </a-row>
 
     <a-modal title="Statistique d'une periode daté" :visible="visible" @cancel="handleCancel">
@@ -401,6 +428,8 @@ export default {
       callback: process.env.VUE_APP_API_BASE_URL,
       token_admin: null,
       visible: false,
+      columns: [],
+      data: [],
       stats: [],
       stats_date: [],
       collecteur: {},
@@ -416,9 +445,44 @@ export default {
 
   mounted() {
     this.code_secret = Math.floor(Math.random() * (9999 - 1000) + 1000);
-    this.password = `gescov@${Math.floor(
+    this.password = `dshfood@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
+
+    
+    this.columns = [
+      {
+        title: "Date de creation",
+        dataIndex: "createdAt",
+        key: "createdAt",
+        scopedSlots: { customRender: "name" },
+      },
+      {
+        title: "Nom/Prénom client",
+        dataIndex: "nom",
+        key: "nom",
+      },
+      {
+        title: "Numéro de téléphone",
+        dataIndex: "numero",
+        key: "numero",
+      },
+      // {
+      //   title: "Adresse email",
+      //   dataIndex: "email",
+      //   key: "email",
+      // },
+      {
+        title: "Quartier",
+        dataIndex: "quartier",
+        key: "quartier",
+      },
+      {
+        title: "Collecteur en charge",
+        dataIndex: "collecteur",
+        key: "collecteur",
+      },
+    ];
 
     this.stats_date = [
       {
@@ -582,6 +646,7 @@ export default {
 
     this.listeCollecteur();
     this.detailCollecteur();
+    this.listClient()
   },
 
   methods: {
@@ -608,6 +673,42 @@ export default {
           },
           (response) => {
             this.showAlert("error", "Erreur", response.body.message);
+          }
+        );
+    },
+
+    listClient() {
+      let session = localStorage;
+      this.token_admin = session.getItem("token");
+
+      let headers = { headers: { Authorization: this.token_admin } };
+
+      this.$http
+        .get(
+          `${this.callback}/client/all/byCollecteur/forAgent/${this.$route.params.id}`,
+          {},
+          headers
+        )
+        .then(
+          (response) => {
+            let data = response.body.clients;
+
+            this.data = [];
+
+            for (let i = 0; i < data.length; i++) {
+              this.data.push({
+                key: data[i].id,
+                createdAt: new Date(data[i].createdAt).toLocaleString(),
+                nom: `${data[i].nom} ${data[i].prenoms}`,
+                numero: data[i].telephone,
+                // email: data[i].email,
+                quartier: data[i].quartier?.libelle,
+                collecteur: `${data[i].collecteur?.nom} ${data[i].collecteur?.prenoms}`,
+              });
+            }
+          },
+          (response) => {
+            this.showAlert("error", "Error", response.body.message);
           }
         );
     },
@@ -747,7 +848,7 @@ export default {
                     "Success",
                     `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                   );
-                  this.password = `gescov@${Math.floor(
+                  this.password = `dshfood@${Math.floor(
                     Math.random() * (9999 - 1000) + 1000
                   )}`;
                 } else {

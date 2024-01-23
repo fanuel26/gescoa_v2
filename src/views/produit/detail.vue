@@ -58,7 +58,7 @@
                   >
                     <a-row type="flex" :gutter="24">
                       <!-- Billing Information Column -->
-                      <a-col :span="16" :md="16" class="">
+                      <a-col :span="10" :md="10" class="">
                         <a-form-item
                           class=""
                           label="Nom du produit"
@@ -82,10 +82,10 @@
                           />
                         </a-form-item>
                       </a-col>
-                      <!-- <a-col :span="8" :md="8" class="">
+                      <a-col :span="8" :md="8" class="">
                         <a-form-item
                           class=""
-                          label="Montant"
+                          label="Montant (Fcfa)"
                           :colon="false"
                         >
                           <a-input
@@ -105,8 +105,8 @@
                             placeholder="Montant produit"
                           />
                         </a-form-item>
-                      </a-col> -->
-                      <a-col :span="8" :md="8" class="">
+                      </a-col>
+                      <a-col :span="6" :md="6" class="">
                         <a-form-item
                           class=""
                           label="Code secret"
@@ -235,7 +235,7 @@ export default {
             this.token_admin = session.getItem("token");
             let headers = { headers: { Authorization: this.token_admin } };
 
-            const data = { libelle: values.libelle };
+            const data = { libelle: values.libelle, montant: parseInt(values.montant) };
 
             this.$http
               .put(`${this.callback}/type-carnet/update/${this.$route.params.id}`, data, headers)

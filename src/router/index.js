@@ -135,6 +135,13 @@ let routes = [
 		layout: "dashboard",
 		component: () => import('../views/produit/detail.vue'),
 	},
+	
+	{
+		path: '/produit-classement',
+		name: 'Produit_classement',
+		layout: "dashboard",
+		component: () => import('../views/produit/classement.vue'),
+	},
 	{
 		path: '/stockage',
 		name: 'Produit_stock',
@@ -250,6 +257,12 @@ let routes = [
 		name: 'Collecteur_classement',
 		layout: "dashboard",
 		component: () => import('../views/collecteur/collecteur_classement.vue'),
+	},
+	{
+		path: '/dashboard/collecteur/cotisation',
+		name: 'Collecteur_cotisation',
+		layout: "dashboard",
+		component: () => import('../views/collecteur/collecteur_cotisation.vue'),
 	},
 	{
 		path: '/dashboard/collecteur/archived',
