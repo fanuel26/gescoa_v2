@@ -1,16 +1,36 @@
 <template>
   <div>
     <a-row :gutter="24">
-      <a-col :span="24" :lg="12" :xl="8" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="24"
+        :lg="12"
+        :xl="8"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <!-- Widget 1 Card -->
-        <WidgetCounter :title="stat.title" :value="stat.value" :prefix="stat.prefix" :suffix="stat.suffix"
-          :icon="stat.icon" :status="stat.status"></WidgetCounter>
+        <WidgetCounter
+          :title="stat.title"
+          :value="stat.value"
+          :prefix="stat.prefix"
+          :suffix="stat.suffix"
+          :icon="stat.icon"
+          :status="stat.status"
+        ></WidgetCounter>
         <!-- / Widget 1 Card -->
       </a-col>
     </a-row>
 
     <a-row :gutter="24">
-      <a-col :span="12" :lg="12" :xl="24" class="mb-24" v-for="(stat, index) in stats" :key="index">
+      <a-col
+        :span="12"
+        :lg="12"
+        :xl="24"
+        class="mb-24"
+        v-for="(stat, index) in stats"
+        :key="index"
+      >
         <a-card class="card card-body border-0">
           <div style="display: flex; justify-content: end; align-items: center">
             <!-- <div>
@@ -19,88 +39,44 @@
             <a-button @click="$router.go(-1)">Retour</a-button>
           </div>
 
-          <a-modal :width="width" title="Creer un carnet" :visible="visible" :confirm-loading="confirmLoading"
-            @ok="handleOk" @cancel="handleCancel">
-            <a-form :form="form" class="carnet-form" @submit="CarnetSubmit" :hideRequiredMark="true">
-              <a-row type="flex" :gutter="24">
-                <!-- Billing Information Column -->
-                <a-col :span="24" :md="24" class="">
-                  <a-form-item label="Produits">
-                    <a-select mode="multiple" v-model="produit" search-placeholder="Selectionnez le produit"
-                      :options="produitData">
-                    </a-select>
-                  </a-form-item>
-                </a-col>
-                <a-col :span="8" :md="8" class="">
-                  <a-form-item class="" label="Nom du carnet" :colon="false">
-                    <a-input v-decorator="[
-                      'libelle',
-                      {
-                        initialValue: null,
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Nom du carnet est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="text" placeholder="Nom carnet" />
-                  </a-form-item>
-                </a-col>
-
-                <a-col :span="8" :md="8" class="">
-                  <a-form-item class="" label="Mise du jour (Fcfa)" :colon="false">
-                    <a-input v-decorator="[
-                      'prix',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Prix définitive est vide!',
-                          },
-                        ],
-                      },
-                    ]" v-model="prix_w" @change="calcule_total" type="number" placeholder="Prix définitive" />
-                  </a-form-item>
-                </a-col>
-
-                <a-col :span="8" :md="8" class="">
-                  <a-form-item class="" label="Gain carnet" :colon="false">
-                    <a-input v-model="gain" v-decorator="[
-                      'benefice_carnet',
-                      {
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Gain carnet est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="number" placeholder="Gain carnet" />
-                  </a-form-item>
-                </a-col>
-
-                <a-col :span="8" :md="8" class="">
-                  <a-form-item class="" label="Code secret" :colon="false">
-                    <a-input v-decorator="[
-                      'code_secret',
-                      {
-                        initialValue: null,
-                        rules: [
-                          {
-                            required: true,
-                            message: 'Code secret est vide!',
-                          },
-                        ],
-                      },
-                    ]" type="number" placeholder="Code secret" />
-                  </a-form-item>
-                </a-col>
-              </a-row>
-            </a-form>
-          </a-modal>
-          <a-table :columns="columns" :data-source="data" :pagination="true" style="margin-top: 20px">
+          <a-table
+            :columns="columns"
+            :data-source="data"
+            :pagination="true"
+            style="margin-top: 20px"
+          >
+            <template slot="operation" slot-scope="text, record">
+              <div class="d-flex">
+                <a-button type="primary" @click="openModal(record)" size="small"
+                  >Détail</a-button
+                >
+              </div>
+            </template>
           </a-table>
+
+          <a-modal
+            :width="width"
+            title="Parametre carnet"
+            :visible="visible"
+            :confirm-loading="confirmLoading"
+            @ok="handleOk"
+            @cancel="handleCancel"
+          >
+            <div>
+              <a-button
+                type="primary"
+                style="margin-left: 10px"
+                v-for="item in typeCarnet"
+                :key="item"
+                @click="getParametre(item.id)"
+              >
+                {{ item.libelle }}
+              </a-button>
+            </div>
+            <div style="margin-top: 20px">
+              <a-card class="p-4"></a-card>
+            </div>
+          </a-modal>
         </a-card>
       </a-col>
     </a-row>
@@ -126,7 +102,7 @@ export default {
       token_admin: null,
       stats: [],
       stats_carnet: [],
-      width: 1000,
+      width: 700,
       columns: [],
       data: [],
       data_s: [],
@@ -150,6 +126,9 @@ export default {
       prix_achat: 0,
       total: 0,
       prix_w: 0,
+
+      typeCarnet: [],
+      idCarnet: 0,
     };
   },
   mounted() {
@@ -185,11 +164,11 @@ export default {
         dataIndex: "nbr_sell",
         key: "nbr_sell",
       },
-      // {
-      //   title: "Action",
-      //   key: "Action",
-      //   scopedSlots: { customRender: "operation" },
-      // },
+      {
+        title: "Action",
+        key: "Action",
+        scopedSlots: { customRender: "operation" },
+      },
     ];
 
     this.stats = [
@@ -210,33 +189,67 @@ export default {
     this.listeCarnet();
   },
   methods: {
-    listeProduit() {
+    openModal(data) {
+      console.log(data.data);
+      this.typeCarnet = data.data.typeCarnets;
+      this.idCarnet = data.data.id;
+      console.log(this.idCarnet);
+
+      this.showModal();
+    },
+
+    getParametre(idTypeCarnet) {
+      console.log(idTypeCarnet);
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .get(`${this.callback}/type-carnet/all`, headers)
+        .get(
+          `${this.callback}/set-parametre/collecteur/parametreByCarnet?carnet=${this.idCarnet}&typeCarnet=${idTypeCarnet}`,
+          headers
+        )
         .then(
           (response) => {
             let data = response.body.data;
-            this.produitData = [];
-            for (let i = 0; i < data.length; i++) {
-              this.produitData.push({
-                value: data[i].libelle,
-                title: data[i].libelle,
-                id: data[i].id,
-                key: data[i].id,
-                prix_achat: data[i].prix_achat,
-                prix_vente: data[i].prix_vente,
-              });
-            }
+            console.log(data);
           },
           (response) => {
-            flash(response.body.message, "Erreur", "fa fa-times", "danger");
+            this.showAlert(
+              "error",
+              "Erreur",
+              "Aucun parametre trouver!"
+            );
           }
         );
+    },
+
+    listeProduit() {
+      let session = localStorage;
+      this.token_admin = session.getItem("token");
+
+      let headers = { headers: { Authorization: this.token_admin } };
+
+      this.$http.get(`${this.callback}/type-carnet/all`, headers).then(
+        (response) => {
+          let data = response.body.data;
+          this.produitData = [];
+          for (let i = 0; i < data.length; i++) {
+            this.produitData.push({
+              value: data[i].libelle,
+              title: data[i].libelle,
+              id: data[i].id,
+              key: data[i].id,
+              prix_achat: data[i].prix_achat,
+              prix_vente: data[i].prix_vente,
+            });
+          }
+        },
+        (response) => {
+          flash(response.body.message, "Erreur", "fa fa-times", "danger");
+        }
+      );
     },
 
     listeCarnet() {
@@ -246,12 +259,15 @@ export default {
       let headers = { headers: { Authorization: this.token_admin } };
 
       this.$http
-        .get(`${this.callback}/collecteur/carnet/all/byClient/${this.$route.params.id}`, headers)
+        .get(
+          `${this.callback}/collecteur/carnet/all/byClient/${this.$route.params.id}`,
+          headers
+        )
         .then(
           (response) => {
             let data = response.body.carnets.carnets;
 
-            console.log(data)
+            console.log(data);
 
             this.stats[0].value = data.length;
 
@@ -271,6 +287,7 @@ export default {
                 somme: data[i].montant,
                 nbr_sell: data[i].nbrCotisation,
                 status: data[i].status,
+                data: data[i],
               });
 
               this.data_s = this.data;
@@ -445,3 +462,9 @@ export default {
   },
 };
 </script>
+
+<style>
+.p-4 {
+  padding: 10px;
+}
+</style>

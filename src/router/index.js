@@ -28,6 +28,12 @@ let routes = [
 		component: () => import('../views/parametre_carnet/liste.vue'),
 	},
 	{
+		path: '/parametre/montant',
+		name: 'Parametre_montant',
+		layout: "dashboard",
+		component: () => import('../views/parametre_carnet/montant.vue'),
+	},
+	{
 		path: '/dashboard/classement/collecteur',
 		name: 'Classement_collecteur',
 		layout: "dashboard",

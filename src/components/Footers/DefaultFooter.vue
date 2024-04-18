@@ -46,7 +46,7 @@
 		<!-- Copyright Notice -->
 		<p class="copyright">
 			Copyright © 2023
-			by <a href="https://creative-tim.com">DSHFOOD</a>.
+			by <a href="https://creative-tim.com">GWS</a>.
 		</p>
 		<!-- / Copyright Notice -->
 

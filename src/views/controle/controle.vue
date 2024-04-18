@@ -255,7 +255,7 @@ export default {
     };
   },
   mounted() {
-    this.password = `DSHFOOD@${Math.floor(
+    this.password = `N2A@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -394,7 +394,7 @@ export default {
                 "Success",
                 `Mot de passe generer avec succes! Mot de passe: ${this.password}`
               );
-              this.password = `DSHFOOD@${Math.floor(
+              this.password = `N2A@${Math.floor(
                 Math.random() * (9999 - 1000) + 1000
               )}`;
             } else {

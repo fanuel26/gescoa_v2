@@ -219,6 +219,71 @@
                 </div>
               </a-form>
             </a-col>
+
+            <a-col :span="12" :md="12" class="mb-24">
+              <!-- Profile Information Card -->
+
+              <template>
+                <h6 class="font-semibold m-0">Changer le montant carnet</h6>
+              </template>
+              <a-form
+                id="components-form-demo-normal-login"
+                :form="form_montant"
+                class="login-form"
+                @submit="montantSubmit"
+                :hideRequiredMark="true"
+              >
+                <a-form-item
+                  class=""
+                  label="Montant carnet (Fcfa)"
+                  :colon="false"
+                >
+                  <a-input
+                    v-decorator="[
+                      'montantCarnet',
+                      {
+                        initialValue: montantCarnet,
+                        rules: [
+                          {
+                            required: true,
+                            message: 'montantCarnet est vide!',
+                          },
+                        ],
+                      },
+                    ]"
+                    type="text"
+                    placeholder="Montant carnet"
+                  />
+                </a-form-item>
+
+                <a-form-item class="" label="Code secret" :colon="false">
+                  <a-input
+                    v-decorator="[
+                      'code_secret',
+                      {
+                        rules: [
+                          {
+                            required: true,
+                            message: 'Code secret incorrect!',
+                          },
+                        ],
+                      },
+                    ]"
+                    type="text"
+                    placeholder="Code secret"
+                  />
+                </a-form-item>
+                <div class="mb-4 text-right">
+                  <a-button
+                    type="primary"
+                    html-type="submit"
+                    class="login-form-button"
+                  >
+                    Modifier
+                  </a-button>
+                </div>
+              </a-form>
+            </a-col>
           </a-row>
         </a-card>
       </a-col>
@@ -327,6 +392,7 @@ export default {
       name: "normal_login",
     });
     this.form_password = this.$form.createForm(this, { name: "normal_login" });
+    this.form_montant = this.$form.createForm(this, { name: "form_montant" });
   },
   data() {
     return {
@@ -339,11 +405,14 @@ export default {
 
       code_secret: null,
       password: null,
+
+      montantCarnet: 0,
+      idParametre: 0
     };
   },
 
   mounted() {
-    this.password = `DSHFOOD@${Math.floor(
+    this.password = `N2A@${Math.floor(
       Math.random() * (9999 - 1000) + 1000
     )}`;
 
@@ -364,22 +433,24 @@ export default {
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
-      // let headers = { headers: { Authorization: this.token_admin } };
+      let headers = { headers: { Authorization: this.token_admin } };
 
-      this.compte = JSON.parse(session.getItem('infoAdmin'))
+      this.compte = JSON.parse(session.getItem("infoAdmin"));
 
-      // this.$http.post(`${this.callback}/info`, {}, headers).then(
-      //   (response) => {
-      //     let data = response.body.data;
+      this.$http.get(`${this.callback}/parametre/montantSell`, headers).then(
+        (response) => {
+          let data = response.body.data;
 
-      //     this.compte = data;
+          // this.compte = data;
+          this.montantCarnet = data.montantCarnet;
+          this.idParametre = data.id
 
-      //     console.log(data);
-      //   },
-      //   (response) => {
-      //     flash(response.body.message, "Erreur", "fa fa-times", "danger");
-      //   }
-      // );
+          console.log(data);
+        },
+        (response) => {
+          flash(response.body.message, "Erreur", "fa fa-times", "danger");
+        }
+      );
     },
 
     codeSubmit(e) {
@@ -435,6 +506,52 @@ export default {
       });
     },
 
+    montantSubmit(e) {
+      console.log('coucou')
+      e.preventDefault();
+      this.form_montant.validateFields((err, values) => {
+        if (!err) {
+          console.log(values);
+          if (values.code_secret == localStorage.getItem("code_secret")) {
+            let session = localStorage;
+            this.token_admin = session.getItem("token");
+
+            let headers = { headers: { Authorization: this.token_admin } };
+
+            let data_param = {
+              montantCarnet: values.montantCarnet,
+            };
+
+            this.$http
+              .put(`${this.callback}/parametre/update/${this.idParametre}`, data_param, headers)
+              .then(
+                (response) => {
+                  let data = response.body;
+                  console.log(data);
+
+                  if (data.status == 200) {
+                    this.showAlert(
+                      "success",
+                      "Success",
+                      data.message
+                    );
+                  } else {
+                    this.showAlert("error", "Erreur", data.message);
+                  }
+                },
+                (response) => {
+                  this.showAlert("error", "Erreur", response.body.message);
+                }
+              );
+          } else {
+            this.showAlert("error", "Erreur", "Code secret incorrect");
+          }
+        } else {
+          console.log("error");
+        }
+      });
+    },
+
     passwordSubmit(e) {
       e.preventDefault();
       this.form_password.validateFields((err, values) => {
@@ -464,7 +581,7 @@ export default {
                       "Success",
                       `Mot de passe generer avec succes! Mot de passe: ${values.password}`
                     );
-                    this.password = `DSHFOOD@${Math.floor(
+                    this.password = `N2A@${Math.floor(
                       Math.random() * (9999 - 1000) + 1000
                     )}`;
                   } else {
