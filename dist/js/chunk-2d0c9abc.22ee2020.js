@@ -1,0 +1,2 @@
+(window["webpackJsonp"]=window["webpackJsonp"]||[]).push([["chunk-2d0c9abc"],{"59ac":function(t,a,e){"use strict";e.r(a);var n=function(){var t=this,a=t.$createElement,e=t._self._c||a;return e("div")},c=[],l={data(){return{token_admin:"",callback:"http://demo.iziway.tk/api/auth/admin"}},mounted(){let t=localStorage;t.clear(),this.$router.push({name:"Home"})}},u=l,o=e("2877"),r=Object(o["a"])(u,n,c,!1,null,null,null);a["default"]=r.exports}}]);
+//# sourceMappingURL=chunk-2d0c9abc.22ee2020.js.map
