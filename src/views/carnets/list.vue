@@ -59,7 +59,7 @@
             title="Parametre carnet"
             :visible="visible"
             :confirm-loading="confirmLoading"
-            @ok="handleOk"
+            @ok="handleOkCarnet"
             @cancel="handleCancel"
           >
             <div>
@@ -74,7 +74,16 @@
               </a-button>
             </div>
             <div style="margin-top: 20px">
-              <a-card class="p-4"></a-card>
+              <a-card class="p-4" v-if="infoCarnet">
+                <a-descriptions title="Information supplementaire carnet">
+                  <a-descriptions-item label="Couleur"
+                    >{{ infoCarnet.couleur }}</a-descriptions-item
+                  >
+                  <a-descriptions-item label="Taille"
+                    >{{ infoCarnet.taille }}</a-descriptions-item
+                  >
+                </a-descriptions>
+              </a-card>
             </div>
           </a-modal>
         </a-card>
@@ -129,6 +138,7 @@ export default {
 
       typeCarnet: [],
       idCarnet: 0,
+      infoCarnet: null
     };
   },
   mounted() {
@@ -200,6 +210,7 @@ export default {
 
     getParametre(idTypeCarnet) {
       console.log(idTypeCarnet);
+      this.infoCarnet = null;
       let session = localStorage;
       this.token_admin = session.getItem("token");
 
@@ -207,20 +218,17 @@ export default {
 
       this.$http
         .get(
-          `${this.callback}/set-parametre/collecteur/parametreByCarnet?carnet=${this.idCarnet}&typeCarnet=${idTypeCarnet}`,
+          `${this.callback}/set-parametre/parametreByCarnet?carnet=${this.idCarnet}&typeCarnet=${idTypeCarnet}`,
           headers
         )
         .then(
           (response) => {
             let data = response.body.data;
             console.log(data);
+            this.infoCarnet = data
           },
           (response) => {
-            this.showAlert(
-              "error",
-              "Erreur",
-              "Aucun parametre trouver!"
-            );
+            this.showAlert("error", "Erreur", "Aucun parametre trouver!");
           }
         );
     },
@@ -378,6 +386,10 @@ export default {
     },
 
     handleCancel(e) {
+      this.visible = false;
+    },
+
+    handleOkCarnet(e) {
       this.visible = false;
     },
 
